@@ -50,7 +50,7 @@ void Dashboard::paint(QPainter *painter){
 
     //all arc
     painter->save();
-    pen.setWidth(m_ArcWidth);
+    pen.setWidth(m_ArcWidth - 5);
     pen.setColor(m_InnerColor);
     painter->setPen(pen);
     painter->drawArc(rect.adjusted(m_ArcWidth, m_ArcWidth, -m_ArcWidth, -m_ArcWidth), startAngle * 16, spanAngle * 16);
@@ -69,7 +69,7 @@ void Dashboard::paint(QPainter *painter){
     painter->setFont(font);
     pen.setColor(m_TextColor);
     painter->setPen(pen);
-    painter->drawText(rect.adjusted(m_SpeedometerSize/30, m_SpeedometerSize/30, -m_SpeedometerSize/30, -m_SpeedometerSize/4), Qt::AlignCenter  ,QString::number((m_Speed),'f',1));
+    painter->drawText(rect.adjusted(m_SpeedometerSize/30, m_SpeedometerSize/30, -m_SpeedometerSize/30, -m_SpeedometerSize/30), Qt::AlignCenter  ,QString::number((m_Speed),'f',1));
     painter->restore();
 
     painter->save();
@@ -112,7 +112,7 @@ void Dashboard::paint(QPainter *painter){
 
     // Set up the pen with the gradient
     QPen gradientPen;
-    gradientPen.setWidth(m_InnerArcWidth);
+    gradientPen.setWidth(m_InnerArcWidth - 35);
     gradientPen.setBrush(gradient);
     gradientPen.setCapStyle(Qt::FlatCap);
 
@@ -120,7 +120,7 @@ void Dashboard::paint(QPainter *painter){
     painter->save();
     painter->setPen(gradientPen);
     qreal valueToAngle = ((m_Speed - m_LowestRange)/(m_HighestRange - m_LowestRange)) * spanAngle;
-    painter->drawArc(rect.adjusted(m_InnerArcPos, m_InnerArcPos, -m_InnerArcPos, -m_InnerArcPos), startAngle * 16, valueToAngle * 16);
+    painter->drawArc(rect.adjusted(m_InnerArcPos + 10, m_InnerArcPos + 10, -m_InnerArcPos - 10, -m_InnerArcPos - 10), startAngle * 16, valueToAngle * 16);
     painter->restore();
 }
 
