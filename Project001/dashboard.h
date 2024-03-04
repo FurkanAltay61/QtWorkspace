@@ -80,6 +80,8 @@ private:
     QColor  m_InnerColor;
     QColor  m_TextColor;
     QColor  m_BackgroundColor;
+    int     m_InnerArcWidth;
+    int     m_InnerArcPos;
 };
 
 #endif // DASHBOARD_H

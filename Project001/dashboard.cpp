@@ -1,5 +1,6 @@
 #include "dashboard.h"
 #include <QPainter>
+#include <cmath>
 
 Dashboard::Dashboard(QQuickItem *parent)
     :QQuickPaintedItem(parent),
@@ -13,21 +14,16 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_OuterColor(QColor(12,16,247)),
     m_InnerColor(QColor(51,88,255,80)),
     m_TextColor(QColor(255,255,255)),
-    m_BackgroundColor(Qt::transparent)
+    m_BackgroundColor(Qt::transparent),
+    m_InnerArcWidth(50),
+    m_InnerArcPos(45)
 {
     connect(&m_timer,&QTimer::timeout, this, &Dashboard::updateDashboard);
-    m_timer.start(1);
+    m_timer.start(100);
 }
 
+
 void Dashboard::updateDashboard() {
-
-    if(m_val < 100)
-        setOuterColor(QColor(128,255,0));
-    else if(m_val > 100 && m_val < 180)
-        setOuterColor(QColor(255,255,0));
-    else if(m_val > 180)
-        setOuterColor(QColor(255,0,0));
-
     if(m_val >= 240)
         m_direction = false;
     else if(m_val <= 0.1)
@@ -40,6 +36,7 @@ void Dashboard::updateDashboard() {
 
 void Dashboard::paint(QPainter *painter){
     QRectF rect = this->boundingRect();
+
     painter->setRenderHint(QPainter::Antialiasing);
     QPen pen = painter->pen();
     pen.setCapStyle(Qt::FlatCap);
@@ -60,7 +57,9 @@ void Dashboard::paint(QPainter *painter){
     painter->restore();
 
     //inner pie
-    int pieSize = m_SpeedometerSize/5;
+    int pieSize = m_SpeedometerSize/4;
+    painter->setBrush(QBrush(QColor("black")));
+    painter->drawEllipse(rect.center(), pieSize, pieSize);
     painter->save();
     pen.setWidth(m_ArcWidth/2);
     pen.setColor(m_OuterColor);
@@ -71,7 +70,7 @@ void Dashboard::paint(QPainter *painter){
 
     //text which shows the value
     painter->save();
-    QFont font("Halvetica",30,QFont::Bold);
+    QFont font("Halvetica",15,QFont::Bold);
     painter->setFont(font);
     pen.setColor(m_TextColor);
     painter->setPen(pen);
@@ -80,11 +79,11 @@ void Dashboard::paint(QPainter *painter){
 
     //current active progress
     painter->save();
-    pen.setWidth(m_ArcWidth);
+    pen.setWidth(m_InnerArcWidth);
     pen.setColor(m_OuterColor);
     qreal valueToAngle = ((m_Speed - m_LowestRange)/(m_HighestRange - m_LowestRange)) * spanAngle;
     painter->setPen(pen);
-    painter->drawArc(rect.adjusted(m_ArcWidth, m_ArcWidth, -m_ArcWidth, -m_ArcWidth), startAngle * 16, valueToAngle * 16);
+    painter->drawArc(rect.adjusted(m_InnerArcPos, m_InnerArcPos, -m_InnerArcPos, -m_InnerArcPos), startAngle * 16, valueToAngle * 16);
     painter->restore();
 }
 
