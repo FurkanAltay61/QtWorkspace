@@ -36,6 +36,7 @@ public:
     QColor  getInnerColor();
     QColor  getTextColor();
     QColor  getBackgroundColor();
+    QPointF calculatePosition(const QRectF &rect, qreal angle, qreal offset);
 
     void    setSpeedometerSize(qreal size);
     void    setStartAngle(qreal startAngle);

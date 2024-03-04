@@ -1,6 +1,7 @@
 #include "dashboard.h"
 #include <QPainter>
 #include <cmath>
+#include <QtMath>
 
 Dashboard::Dashboard(QQuickItem *parent)
     :QQuickPaintedItem(parent),
@@ -11,7 +12,7 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_HighestRange(240),
     m_Speed(2430),
     m_ArcWidth(10),
-    m_OuterColor(QColor(12,16,247)),
+    m_OuterColor(QColor(Qt::red)),
     m_InnerColor(QColor(51,88,255,80)),
     m_TextColor(QColor(255,255,255)),
     m_BackgroundColor(Qt::transparent),
@@ -19,7 +20,7 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_InnerArcPos(45)
 {
     connect(&m_timer,&QTimer::timeout, this, &Dashboard::updateDashboard);
-    m_timer.start(100);
+    m_timer.start(16);
 }
 
 
@@ -52,20 +53,14 @@ void Dashboard::paint(QPainter *painter){
     pen.setWidth(m_ArcWidth);
     pen.setColor(m_InnerColor);
     painter->setPen(pen);
-    // painter->drawRect(rect);
     painter->drawArc(rect.adjusted(m_ArcWidth, m_ArcWidth, -m_ArcWidth, -m_ArcWidth), startAngle * 16, spanAngle * 16);
     painter->restore();
 
     //inner pie
     int pieSize = m_SpeedometerSize/4;
-    painter->setBrush(QBrush(QColor("black")));
+    painter->setBrush(QBrush(QColor(m_InnerColor)));
     painter->drawEllipse(rect.center(), pieSize, pieSize);
     painter->save();
-    pen.setWidth(m_ArcWidth/2);
-    pen.setColor(m_OuterColor);
-    painter->setBrush(m_InnerColor);
-    painter->setPen(pen);
-    painter->drawPie(rect.adjusted(pieSize, pieSize, -pieSize, -pieSize), startAngle * 16, spanAngle * 16);
     painter->restore();
 
     //text which shows the value
@@ -77,16 +72,64 @@ void Dashboard::paint(QPainter *painter){
     painter->drawText(rect.adjusted(m_SpeedometerSize/30, m_SpeedometerSize/30, -m_SpeedometerSize/30, -m_SpeedometerSize/4), Qt::AlignCenter  ,QString::number((m_Speed),'f',1));
     painter->restore();
 
-    //current active progress
     painter->save();
-    pen.setWidth(m_InnerArcWidth);
-    pen.setColor(m_OuterColor);
+    QColor tickMarkColor = Qt::white;
+    painter->setPen(tickMarkColor);
+
+    // Draw tick marks and speed values
+    int interval = 20;  // Interval between tick marks
+    int numTicks = (m_HighestRange - m_LowestRange) / interval;
+    QFontMetrics metrics(painter->font());
+
+    for (int i = 0; i <= numTicks; ++i) {
+        int speedValue = m_LowestRange + i * interval;
+        qreal angle = startAngle + ((speedValue - m_LowestRange) / (m_HighestRange - m_LowestRange)) * spanAngle;
+
+        // Calculate position for the tick mark
+        QPointF tickPos = calculatePosition(rect, angle, m_InnerArcPos - m_InnerArcWidth / 3 );
+        QPointF textPos = calculatePosition(rect, angle, m_InnerArcPos - m_InnerArcWidth / 2 - metrics.height());
+
+        // Draw the tick mark
+        painter->drawLine(tickPos, QPointF(tickPos.x() + 10 * cos(qDegreesToRadians(angle)), tickPos.y() - 10 * sin(qDegreesToRadians(angle))));  // 10 is the length of the tick mark
+
+        // Prepare to draw the text
+        QString text = QString::number(speedValue);
+        QRect textRect = metrics.boundingRect(text);
+        textRect.moveCenter(textPos.toPoint());
+
+        // Adjust for alignment and draw the text
+        painter->drawText(textRect, Qt::AlignCenter, text);
+    }
+    painter->restore();
+
+    //current active progress
+    // Set up the gradient
+    QLinearGradient gradient(0,0,255,0);
+    gradient.setColorAt(0.0, QColor(m_OuterColor.red(), m_OuterColor.green(), m_OuterColor.blue(), 0)); // Start with fully transparent
+    gradient.setColorAt(0.5, QColor(m_OuterColor.red(), m_OuterColor.green(), m_OuterColor.blue(), 127)); // Half-way point with semi-transparency
+    gradient.setColorAt(1.0, QColor(m_OuterColor.red(), m_OuterColor.green(), m_OuterColor.blue(), 200)); // End with fully opaque
+
+
+    // Set up the pen with the gradient
+    QPen gradientPen;
+    gradientPen.setWidth(m_InnerArcWidth);
+    gradientPen.setBrush(gradient);
+    gradientPen.setCapStyle(Qt::FlatCap);
+
+    // Draw the arc with the gradient pen
+    painter->save();
+    painter->setPen(gradientPen);
     qreal valueToAngle = ((m_Speed - m_LowestRange)/(m_HighestRange - m_LowestRange)) * spanAngle;
-    painter->setPen(pen);
     painter->drawArc(rect.adjusted(m_InnerArcPos, m_InnerArcPos, -m_InnerArcPos, -m_InnerArcPos), startAngle * 16, valueToAngle * 16);
     painter->restore();
 }
 
+QPointF Dashboard::calculatePosition(const QRectF &rect, qreal angle, qreal offset) {
+    qreal radian = qDegreesToRadians(angle);
+    qreal x = rect.center().x() + (rect.width() / 2.5 - offset) * cos(radian);
+    qreal y = rect.center().y() - (rect.height() / 2.5 - offset) * sin(radian);
+    return QPointF(x, y);
+}
 
 qreal Dashboard::getSpeedometerSize()
 {
