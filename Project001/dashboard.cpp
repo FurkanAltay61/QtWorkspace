@@ -10,14 +10,21 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_AlignAngle(260), // it should be 360 - m_StartAngle*3 for good looking
     m_LowestRange(0),
     m_HighestRange(240),
-    m_Speed(2430),
-    m_ArcWidth(10),
+    m_Speed(0),
+    m_ArcWidth(5),
     m_OuterColor(QColor(Qt::blue)),
     m_InnerColor(QColor(51,88,255,80)),
     m_TextColor(QColor(255,255,255)),
     m_BackgroundColor(Qt::transparent),
     m_InnerArcWidth(50),
-    m_InnerArcPos(45)
+    m_InnerArcPos(45),
+    m_ProgressBarPos(55),
+    m_ProgressBarThickness(13),
+    m_InnerCircleSize(75),
+    m_Interval(20),
+    m_TextBarSize(10),
+    m_TickPosOffset(28.5),
+    m_TextPosOffset(20)
 {
     connect(&m_timer,&QTimer::timeout, this, &Dashboard::updateDashboard);
     m_timer.start(50);
@@ -56,21 +63,20 @@ void Dashboard::paint(QPainter *painter){
     painter->drawArc(rect.adjusted(m_ArcWidth, m_ArcWidth, -m_ArcWidth, -m_ArcWidth), startAngle * 16, spanAngle * 16);
     painter->restore();
 
-    //inner pie
+    //inner circle
     painter->save();
-    int pieSize = m_SpeedometerSize/4;
     painter->setBrush(QBrush(QColor(m_InnerColor)));
-    painter->drawEllipse(rect.center(), pieSize, pieSize);
+    painter->drawEllipse(rect.center(), m_InnerCircleSize, m_InnerCircleSize);
     painter->restore();
 
     //text which shows the value
     painter->save();
-    QFont font("Halvetica",15,QFont::Bold);
+    QFont font("Halvetica",m_TextBarSize,QFont::Bold);
     painter->setFont(font);
     pen.setColor(m_TextColor);
     painter->setPen(pen);
-    painter->drawText(rect.adjusted(m_SpeedometerSize/30, m_SpeedometerSize/30,
-                                    -m_SpeedometerSize/30, -m_SpeedometerSize/30),
+    painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
+                                    -m_TextBarSize, -m_TextBarSize),
                                     Qt::AlignCenter, QString::number((m_Speed),'f',1));
     painter->restore();
 
@@ -79,17 +85,16 @@ void Dashboard::paint(QPainter *painter){
     painter->setPen(tickMarkColor);
 
     // Draw tick marks and speed values
-    int interval = 20;  // Interval between tick marks
-    int numTicks = (m_HighestRange - m_LowestRange) / interval;
+    int numTicks = (m_HighestRange - m_LowestRange) / m_Interval;
     QFontMetrics metrics(painter->font());
 
     for (int i = 0; i <= numTicks; ++i) {
-        int speedValue = m_LowestRange + i * interval;
+        int speedValue = m_LowestRange + i * m_Interval;
         qreal angle = startAngle + ((speedValue - m_LowestRange) / (m_HighestRange - m_LowestRange)) * spanAngle;
 
         // Calculate position for the tick mark
-        QPointF tickPos = calculatePosition(rect, angle, m_InnerArcPos - m_InnerArcWidth / 3 );
-        QPointF textPos = calculatePosition(rect, angle, m_InnerArcPos - m_InnerArcWidth / 2 - metrics.height());
+        QPointF tickPos = calculatePosition(rect, angle, m_TickPosOffset);
+        QPointF textPos = calculatePosition(rect, angle, m_TextPosOffset - metrics.height());
 
         // Draw the tick mark
         painter->drawLine(tickPos, QPointF(tickPos.x() + 10 * cos(qDegreesToRadians(angle)), tickPos.y() - 10 * sin(qDegreesToRadians(angle))));  // 10 is the length of the tick mark
@@ -115,14 +120,14 @@ void Dashboard::paint(QPainter *painter){
 
     // Set up the pen with the gradient
     QPen gradientPen;
-    gradientPen.setWidth(m_InnerArcWidth - 35);
+    gradientPen.setWidth(m_ProgressBarThickness);
     gradientPen.setBrush(gradient);
     gradientPen.setCapStyle(Qt::FlatCap);
 
     // Draw the arc with the gradient pen
     painter->setPen(gradientPen);
     qreal valueToAngle = ((m_Speed - m_LowestRange)/(m_HighestRange - m_LowestRange)) * spanAngle;
-    painter->drawArc(rect.adjusted(m_InnerArcPos + 10, m_InnerArcPos + 10, -m_InnerArcPos - 10, -m_InnerArcPos - 10), startAngle * 16, valueToAngle * 16);
+    painter->drawArc(rect.adjusted(m_ProgressBarPos, m_ProgressBarPos, -m_ProgressBarPos, -m_ProgressBarPos), startAngle * 16, valueToAngle * 16);
     painter->restore();
 }
 
@@ -190,6 +195,44 @@ QColor Dashboard::getBackgroundColor()
 {
     return m_BackgroundColor;
 }
+
+int Dashboard::getInnerArcWidth(){
+    return m_InnerArcWidth;
+}
+
+int Dashboard::getInnerArcPos(){
+    return m_InnerArcPos;
+}
+
+qreal Dashboard::getProgressBarPos(){
+    return m_ProgressBarPos;
+}
+
+qreal Dashboard::getProgressBarThickness(){
+    return m_ProgressBarThickness;
+}
+
+qreal Dashboard::getInnerCircleSize(){
+    return m_InnerCircleSize;
+}
+
+int Dashboard::getInterval(){
+    return m_Interval;
+}
+
+qreal Dashboard::getTextBarSize(){
+    return m_TextBarSize;
+}
+
+qreal Dashboard::getTickPosOffset(){
+    return m_TickPosOffset;
+}
+
+qreal Dashboard::getTextPosOffset(){
+    return m_TextPosOffset;
+}
+
+
 
 
 
@@ -300,4 +343,87 @@ void Dashboard::setBackgroundColor(QColor backgroundColor)
     m_BackgroundColor = backgroundColor;
 
     emit backgroundColorChanged();
+}
+
+
+
+void Dashboard::setInnerArcWidth(int InnerArcWidth){
+    if(m_InnerArcWidth == InnerArcWidth)
+        return;
+
+    m_InnerArcWidth = InnerArcWidth;
+
+    emit innerArcWidthChanged();
+}
+
+void Dashboard::setInnerArcPos(int InnerArcPos){
+    if(m_InnerArcPos == InnerArcPos)
+        return;
+
+    m_InnerArcPos = InnerArcPos;
+
+    emit innerArcPosChanged();
+}
+
+void Dashboard::setProgressBarPos(qreal ProgressBarPos){
+    if(m_ProgressBarPos == ProgressBarPos)
+        return;
+
+    m_ProgressBarPos = ProgressBarPos;
+
+    emit progressBarPosChanged();
+}
+
+void Dashboard::setProgressBarThickness(qreal ProgressBarThickness){
+    if(m_ProgressBarThickness == ProgressBarThickness)
+        return;
+
+    m_ProgressBarThickness = ProgressBarThickness;
+
+    emit progressBarThicknessChanged();
+}
+
+void Dashboard::setInnerCircleSize(qreal InnerCircleSize){
+    if(m_InnerCircleSize == InnerCircleSize)
+        return;
+
+    m_InnerCircleSize = InnerCircleSize;
+
+    emit innerCircleSizeChanged();
+}
+
+void Dashboard::setInterval(int Interval){
+    if(m_Interval == Interval)
+        return;
+
+    m_Interval = Interval;
+
+    emit intervalChanged();
+}
+
+void Dashboard::setTextBarSize(qreal TextBarSize){
+    if(m_TextBarSize == TextBarSize)
+        return;
+
+    m_TextBarSize = TextBarSize;
+
+    emit textBarSizeChanged();
+}
+
+void Dashboard::setTickPosOffset(qreal TickPosOffset){
+    if(m_TickPosOffset == TickPosOffset)
+        return;
+
+    m_TickPosOffset = TickPosOffset;
+
+    emit tickPosOffsetChanged();
+}
+
+void Dashboard::setTextPosOffset(qreal TextPosOffset){
+    if(m_TextPosOffset == TextPosOffset)
+        return;
+
+    m_TextPosOffset = TextPosOffset;
+
+    emit textPosOffsetChanged();
 }

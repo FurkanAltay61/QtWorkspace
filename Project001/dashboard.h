@@ -22,6 +22,19 @@ class Dashboard : public QQuickPaintedItem
     Q_PROPERTY(QColor textColor READ getTextColor WRITE setTextColor NOTIFY textColorChanged)
     Q_PROPERTY(QColor backgroundColor READ getBackgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
 
+    Q_PROPERTY(int   innerArcWidth READ getInnerArcWidth WRITE setInnerArcWidth NOTIFY innerArcWidthChanged)
+    Q_PROPERTY(int   innerArcPos READ getInnerArcPos WRITE setInnerArcPos NOTIFY innerArcPosChanged)
+    Q_PROPERTY(qreal progressBarPos READ getProgressBarPos WRITE setProgressBarPos NOTIFY progressBarPosChanged)
+    Q_PROPERTY(qreal progressBarThickness READ getProgressBarThickness WRITE setProgressBarThickness NOTIFY progressBarThicknessChanged)
+    Q_PROPERTY(qreal innerCircleSize READ getInnerCircleSize WRITE setInnerCircleSize NOTIFY innerCircleSizeChanged)
+    Q_PROPERTY(int   interval READ getInterval WRITE setInterval NOTIFY intervalChanged)
+    Q_PROPERTY(qreal textBarSize READ getTextBarSize WRITE setTextBarSize NOTIFY textBarSizeChanged)
+    Q_PROPERTY(qreal tickPosOffset READ getTickPosOffset WRITE setTickPosOffset NOTIFY tickPosOffsetChanged)
+    Q_PROPERTY(qreal textPosOffset READ getTextPosOffset WRITE setTextPosOffset NOTIFY textPosOffsetChanged)
+
+
+
+
 public:
     Dashboard(QQuickItem *parent = 0);
     virtual void paint(QPainter *painter);
@@ -37,6 +50,17 @@ public:
     QColor  getInnerColor();
     QColor  getTextColor();
     QColor  getBackgroundColor();
+
+    int     getInnerArcWidth();
+    int     getInnerArcPos();
+    qreal   getProgressBarPos();
+    qreal   getProgressBarThickness();
+    qreal   getInnerCircleSize();
+    int     getInterval();
+    qreal   getTextBarSize();
+    qreal   getTickPosOffset();
+    qreal   getTextPosOffset();
+
     QPointF calculatePosition(const QRectF &rect, qreal angle, qreal offset);
 
     void    setSpeedometerSize(qreal size);
@@ -50,6 +74,16 @@ public:
     void    setInnerColor(QColor innerColor);
     void    setTextColor(QColor textColor);
     void    setBackgroundColor(QColor backgroundColor);
+
+    void    setInnerArcWidth(int InnerArcWidth);
+    void    setInnerArcPos(int InnerArcPos);
+    void    setProgressBarPos(qreal ProgressBarPos);
+    void    setProgressBarThickness(qreal ProgressBarThickness);
+    void    setInnerCircleSize(qreal InnerCircleSize);
+    void    setInterval(int Interval);
+    void    setTextBarSize(qreal TextBarSize);
+    void    setTickPosOffset(qreal TickPosOffset);
+    void    setTextPosOffset(qreal TextPosOffset);
 
 public slots:
     void updateDashboard();
@@ -67,6 +101,16 @@ signals:
     void    textColorChanged();
     void    backgroundColorChanged();
 
+    void    innerArcWidthChanged();
+    void    innerArcPosChanged();
+    void    progressBarPosChanged();
+    void    progressBarThicknessChanged();
+    void    innerCircleSizeChanged();
+    void    intervalChanged();
+    void    textBarSizeChanged();
+    void    tickPosOffsetChanged();
+    void    textPosOffsetChanged();
+
 private:
     QTimer  m_timer;
     qreal   m_val;
@@ -82,8 +126,16 @@ private:
     QColor  m_InnerColor;
     QColor  m_TextColor;
     QColor  m_BackgroundColor;
+
     int     m_InnerArcWidth;
     int     m_InnerArcPos;
+    qreal   m_ProgressBarPos;
+    qreal   m_ProgressBarThickness;
+    qreal   m_InnerCircleSize;
+    int     m_Interval;
+    qreal   m_TextBarSize;
+    qreal   m_TickPosOffset;
+    qreal   m_TextPosOffset;
 };
 
 #endif // DASHBOARD_H
