@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QQuickPaintedItem>
 #include <QTimer>
+#include <QGradient>
 
 class Dashboard : public QQuickPaintedItem
 {

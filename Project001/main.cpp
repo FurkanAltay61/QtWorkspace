@@ -15,13 +15,6 @@ int main(int argc, char *argv[])
 
     const QUrl mainQmlUrl(QStringLiteral("qrc:/main.qml"));
 
-    // Connect before loading the QML to ensure the slot is connected in time.
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [&](QObject *obj, const QUrl &objUrl) {
-        if (mainQmlUrl != objUrl) {
-            return;
-        }
-    });
-
     // Now load the QML file
     engine.load(mainQmlUrl);
 
