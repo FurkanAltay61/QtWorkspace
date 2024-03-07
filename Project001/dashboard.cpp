@@ -5,7 +5,7 @@
 
 Dashboard::Dashboard(QQuickItem *parent)
     :QQuickPaintedItem(parent),
-    m_SpeedometerSize(300), // touch screen is 800 x 480
+    m_SpeedometerSize(200), // touch screen is 800 x 480
     m_StartAngle(-140),
     m_AlignAngle(260), // it should be 360 - m_StartAngle*3 for good looking
     m_LowestRange(0),
@@ -18,9 +18,9 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_BackgroundColor(Qt::transparent),
     m_InnerArcWidth(50),
     m_InnerArcPos(45),
-    m_ProgressBarPos(55),
+    m_ProgressBarPos(m_SpeedometerSize / 4.7),
     m_ProgressBarThickness(13),
-    m_InnerCircleSize(75),
+    m_InnerCircleSize(m_SpeedometerSize / 4),
     m_Interval(20),
     m_TextBarSize(10),
     m_TickPosOffset(28.5),

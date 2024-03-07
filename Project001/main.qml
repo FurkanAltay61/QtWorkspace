@@ -9,19 +9,17 @@ Window {
     height: 600
     title: qsTr("Speedometer")
     color: "black"
-    //visibility:  "FullScreen"
+    visibility:  "FullScreen"
 
 
     Dashboard
     {
         x : 0
         y : 0
-        objectName: "dashboardMeter"
-        //anchors.horizontalCenter:  parent.horizontalCenter
+        id: "speedometer"
         width: speedometerSize
         height: speedometerSize
         startAngle: startAngle
-   //     alignAngle: alignAngle
         lowestRange: lowestRange
         highestRange: highestRange
         speed: speed
@@ -34,14 +32,115 @@ Window {
 
     Dashboard
     {
-        x : 300
+        x : 200
         y : 0
-        objectName: "dashboardMeter"
-        //anchors.horizontalCenter:  parent.horizontalCenter
         width: speedometerSize
         height: speedometerSize
         startAngle: startAngle
-   //     alignAngle: alignAngle
+        lowestRange: lowestRange
+        highestRange: 8
+        interval: 1
+        speed: speed / 30
+        arcWidth: arcWidth
+        outerColor: outerColor
+        innerColor: innerColor
+        textColor: textColor
+        backgroundColor: backgroundColor
+    }
+
+    Dashboard
+    {
+        x : 400
+        y : 0
+        width: speedometerSize
+        height: speedometerSize
+        startAngle: startAngle
+        lowestRange: lowestRange
+        highestRange: highestRange
+        speed: speed
+        arcWidth: arcWidth
+        outerColor: outerColor
+        innerColor: innerColor
+        textColor: textColor
+        backgroundColor: backgroundColor
+    }
+
+
+    Dashboard
+    {
+        x : 600
+        y : 0
+        width: speedometerSize
+        height: speedometerSize
+        startAngle: startAngle
+        lowestRange: lowestRange
+        highestRange: highestRange
+        speed: speed
+        arcWidth: arcWidth
+        outerColor: outerColor
+        innerColor: innerColor
+        textColor: textColor
+        backgroundColor: backgroundColor
+    }
+
+    Dashboard
+    {
+        x : 800
+        y : 0
+        width: speedometerSize
+        height: speedometerSize
+        startAngle: startAngle
+        lowestRange: lowestRange
+        highestRange: highestRange
+        speed: speed
+        arcWidth: arcWidth
+        outerColor: outerColor
+        innerColor: innerColor
+        textColor: textColor
+        backgroundColor: backgroundColor
+    }
+
+    Dashboard
+    {
+        x : 0
+        y : 200
+        width: speedometerSize
+        height: speedometerSize
+        startAngle: startAngle
+        lowestRange: lowestRange
+        highestRange: highestRange
+        speed: speed
+        arcWidth: arcWidth
+        outerColor: outerColor
+        innerColor: innerColor
+        textColor: textColor
+        backgroundColor: backgroundColor
+    }
+
+    Dashboard
+    {
+        x : 200
+        y : 200
+        width: speedometerSize
+        height: speedometerSize
+        startAngle: startAngle
+        lowestRange: lowestRange
+        highestRange: highestRange
+        speed: speed
+        arcWidth: arcWidth
+        outerColor: outerColor
+        innerColor: innerColor
+        textColor: textColor
+        backgroundColor: backgroundColor
+    }
+
+    Dashboard
+    {
+        x : 400
+        y : 200
+        width: speedometerSize
+        height: speedometerSize
+        startAngle: startAngle
         lowestRange: lowestRange
         highestRange: highestRange
         speed: speed
@@ -55,13 +154,10 @@ Window {
     Dashboard
     {
         x : 600
-        y : 0
-        objectName: "dashboardMeter"
-        //anchors.horizontalCenter:  parent.horizontalCenter
+        y : 200
         width: speedometerSize
         height: speedometerSize
         startAngle: startAngle
-   //     alignAngle: alignAngle
         lowestRange: lowestRange
         highestRange: highestRange
         speed: speed
@@ -71,17 +167,33 @@ Window {
         textColor: textColor
         backgroundColor: backgroundColor
     }
+
+
+    Dashboard
+    {
+        x : 800
+        y : 200
+        width: speedometerSize
+        height: speedometerSize
+        startAngle: startAngle
+        lowestRange: lowestRange
+        highestRange: highestRange
+        speed: speed
+        arcWidth: arcWidth
+        outerColor: outerColor
+        innerColor: innerColor
+        textColor: textColor
+        backgroundColor: backgroundColor
+    }
+
 
     Dashboard
     {
         x : 0
-        y : 300
-        objectName: "dashboardMeter"
-        //anchors.horizontalCenter:  parent.horizontalCenter
+        y : 400
         width: speedometerSize
         height: speedometerSize
         startAngle: startAngle
-   //     alignAngle: alignAngle
         lowestRange: lowestRange
         highestRange: highestRange
         speed: speed
@@ -94,14 +206,28 @@ Window {
 
     Dashboard
     {
-        x : 300
-        y : 300
-        objectName: "dashboardMeter"
-        //anchors.horizontalCenter:  parent.horizontalCenter
+        x : 200
+        y : 400
         width: speedometerSize
         height: speedometerSize
         startAngle: startAngle
-   //     alignAngle: alignAngle
+        lowestRange: lowestRange
+        highestRange: highestRange
+        speed: speed
+        arcWidth: arcWidth
+        outerColor: outerColor
+        innerColor: innerColor
+        textColor: textColor
+        backgroundColor: backgroundColor
+    }
+
+    Dashboard
+    {
+        x : 400
+        y : 400
+        width: speedometerSize
+        height: speedometerSize
+        startAngle: startAngle
         lowestRange: lowestRange
         highestRange: highestRange
         speed: speed
@@ -115,13 +241,27 @@ Window {
     Dashboard
     {
         x : 600
-        y : 300
-        objectName: "dashboardMeter"
-        //anchors.horizontalCenter:  parent.horizontalCenter
+        y : 400
         width: speedometerSize
         height: speedometerSize
         startAngle: startAngle
-   //     alignAngle: alignAngle
+        lowestRange: lowestRange
+        highestRange: highestRange
+        speed: speed
+        arcWidth: arcWidth
+        outerColor: outerColor
+        innerColor: innerColor
+        textColor: textColor
+        backgroundColor: backgroundColor
+    }
+
+    Dashboard
+    {
+        x : 800
+        y : 400
+        width: speedometerSize
+        height: speedometerSize
+        startAngle: startAngle
         lowestRange: lowestRange
         highestRange: highestRange
         speed: speed
