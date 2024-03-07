@@ -31,9 +31,7 @@ class Dashboard : public QQuickPaintedItem
     Q_PROPERTY(qreal textBarSize READ getTextBarSize WRITE setTextBarSize NOTIFY textBarSizeChanged)
     Q_PROPERTY(qreal tickPosOffset READ getTickPosOffset WRITE setTickPosOffset NOTIFY tickPosOffsetChanged)
     Q_PROPERTY(qreal textPosOffset READ getTextPosOffset WRITE setTextPosOffset NOTIFY textPosOffsetChanged)
-
-
-
+    Q_PROPERTY(qreal tickMarkLength READ getTickMarkLength WRITE setTickMarkLength NOTIFY tickMarkLengthChanged)
 
 public:
     Dashboard(QQuickItem *parent = 0);
@@ -60,6 +58,7 @@ public:
     qreal   getTextBarSize();
     qreal   getTickPosOffset();
     qreal   getTextPosOffset();
+    qreal   getTickMarkLength();
 
     QPointF calculatePosition(const QRectF &rect, qreal angle, qreal offset);
 
@@ -84,6 +83,7 @@ public:
     void    setTextBarSize(qreal TextBarSize);
     void    setTickPosOffset(qreal TickPosOffset);
     void    setTextPosOffset(qreal TextPosOffset);
+    void    setTickMarkLength(qreal TickMarkLength);
 
 public slots:
     void updateDashboard();
@@ -110,6 +110,7 @@ signals:
     void    textBarSizeChanged();
     void    tickPosOffsetChanged();
     void    textPosOffsetChanged();
+    void    tickMarkLengthChanged();
 
 private:
     QTimer  m_timer;
@@ -136,6 +137,7 @@ private:
     qreal   m_TextBarSize;
     qreal   m_TickPosOffset;
     qreal   m_TextPosOffset;
+    qreal   m_TickMarkLength;
 };
 
 #endif // DASHBOARD_H

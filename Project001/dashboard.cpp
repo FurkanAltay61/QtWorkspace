@@ -18,13 +18,14 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_BackgroundColor(Qt::transparent),
     m_InnerArcWidth(50),
     m_InnerArcPos(45),
-    m_ProgressBarPos(m_SpeedometerSize / 4.7),
+    m_ProgressBarPos(42.5),
     m_ProgressBarThickness(13),
-    m_InnerCircleSize(m_SpeedometerSize / 4),
+    m_InnerCircleSize(50),
     m_Interval(20),
     m_TextBarSize(10),
     m_TickPosOffset(28.5),
-    m_TextPosOffset(20)
+    m_TextPosOffset(20),
+    m_TickMarkLength(10)
 {
     connect(&m_timer,&QTimer::timeout, this, &Dashboard::updateDashboard);
     m_timer.start(50);
@@ -97,7 +98,7 @@ void Dashboard::paint(QPainter *painter){
         QPointF textPos = calculatePosition(rect, angle, m_TextPosOffset - metrics.height());
 
         // Draw the tick mark
-        painter->drawLine(tickPos, QPointF(tickPos.x() + 10 * cos(qDegreesToRadians(angle)), tickPos.y() - 10 * sin(qDegreesToRadians(angle))));  // 10 is the length of the tick mark
+        painter->drawLine(tickPos, QPointF(tickPos.x() + m_TickMarkLength * cos(qDegreesToRadians(angle)), tickPos.y() - m_TickMarkLength * sin(qDegreesToRadians(angle))));  // 10 is the length of the tick mark
 
         // Prepare to draw the text
         QString text = QString::number(speedValue);
@@ -230,6 +231,10 @@ qreal Dashboard::getTickPosOffset(){
 
 qreal Dashboard::getTextPosOffset(){
     return m_TextPosOffset;
+}
+
+qreal Dashboard::getTickMarkLength(){
+    return m_TickMarkLength;
 }
 
 
@@ -426,4 +431,13 @@ void Dashboard::setTextPosOffset(qreal TextPosOffset){
     m_TextPosOffset = TextPosOffset;
 
     emit textPosOffsetChanged();
+}
+
+void Dashboard::setTickMarkLength(qreal TickMarkLength){
+    if(m_TickMarkLength == TickMarkLength)
+        return;
+
+    m_TickMarkLength = TickMarkLength;
+
+    emit tickMarkLengthChanged();
 }
