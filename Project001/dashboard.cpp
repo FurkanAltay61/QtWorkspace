@@ -30,8 +30,20 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_ProgBarArcPos(38),
     m_Unit("NULL")
 {
-    connect(&m_timer,&QTimer::timeout, this, &Dashboard::updateDashboard);
-    m_timer.start(50);
+    //connect(&m_timer,&QTimer::timeout, this, &Dashboard::updateDashboard);
+    //m_timer.start(50);
+}
+
+void Dashboard::onDataReceived(const QString &data){
+    qDebug() << "Received data:" << data;
+    if(m_val >= 240)
+        m_direction = false;
+    else if(m_val <= 0.1)
+        m_direction = true;
+
+    m_val += m_direction ? 1 : -1;
+
+    setSpeed(m_val);
 }
 
 

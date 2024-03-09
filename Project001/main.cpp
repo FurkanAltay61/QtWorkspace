@@ -3,6 +3,9 @@
 #include <QTimer>
 #include <dashboard.h>
 #include <unistd.h>
+#include <tcpclient.h>
+#include <QThread>
+#include <QQmlContext>
 
 int main(int argc, char *argv[])
 {
@@ -10,13 +13,23 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
     QGuiApplication app(argc, argv);
+    Dashboard mydashboard;
     qmlRegisterType<Dashboard>("Dashboardqml", 1, 0, "Dashboard");
     QQmlApplicationEngine engine;
+    TcpClient client("192.168.0.10", (quint16)35000);
+    QThread clientThread;
+    client.moveToThread(&clientThread);
+    clientThread.start();
+    QObject::connect(&client, &TcpClient::dataSent,&mydashboard,&Dashboard::onDataReceived);
 
-    const QUrl mainQmlUrl(QStringLiteral("qrc:/main.qml"));
-
-    // Now load the QML file
-    engine.load(mainQmlUrl);
+    engine.rootContext()->setContextProperty("mydashboard",&mydashboard);
+    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+        &app, [url](QObject *obj, const QUrl &objUrl) {
+            if (!obj && url == objUrl)
+                QCoreApplication::exit(-1);
+        }, Qt::QueuedConnection);
+    engine.load(url);
 
     // Check if the engine loaded the QML file successfully
     if (engine.rootObjects().isEmpty()) {

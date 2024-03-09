@@ -6,7 +6,8 @@ QT += quick
 
 SOURCES += \
         dashboard.cpp \
-        main.cpp
+        main.cpp \
+        tcpclient.cpp
 
 RESOURCES += qml.qrc
 
@@ -22,4 +23,5 @@ else: unix:!android: target.path = /home/pi/$${TARGET}
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    dashboard.h
+    dashboard.h \
+    tcpclient.h

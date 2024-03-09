@@ -99,6 +99,7 @@ public:
 
 public slots:
     void updateDashboard();
+    void onDataReceived(const QString &data);
 
 signals:
     void    speedometerSizeChanged();

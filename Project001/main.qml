@@ -9,7 +9,7 @@ Window {
     height: 600
     title: qsTr("Speedometer")
     color: "black"
-    visibility:  "FullScreen"
+    //visibility:  "FullScreen"
 
 
     Dashboard
@@ -22,7 +22,7 @@ Window {
         startAngle: startAngle
         lowestRange: lowestRange
         highestRange: highestRange
-        speed: speed
+        speed: mydashboard.speed
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -51,7 +51,7 @@ Window {
         lowestRange: lowestRange
         highestRange: 8
         interval: 1
-        speed: speed / 30
+        speed: mydashboard.speed / 30
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -79,7 +79,7 @@ Window {
         startAngle: startAngle
         lowestRange: lowestRange
         highestRange: highestRange
-        speed: speed
+        speed: mydashboard.speed
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -100,7 +100,7 @@ Window {
         startAngle: startAngle
         lowestRange: lowestRange
         highestRange: 120
-        speed: speed / 2
+        speed: mydashboard.speed / 2
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -121,7 +121,7 @@ Window {
         startAngle: startAngle
         lowestRange: lowestRange
         highestRange: highestRange
-        speed: speed
+        speed: mydashboard.speed
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -141,7 +141,7 @@ Window {
         startAngle: startAngle
         lowestRange: lowestRange
         highestRange: highestRange
-        speed: speed
+        speed: mydashboard.speed
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -161,7 +161,7 @@ Window {
         startAngle: startAngle
         lowestRange: lowestRange
         highestRange: highestRange
-        speed: speed
+        speed: mydashboard.speed
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -181,7 +181,7 @@ Window {
         startAngle: startAngle
         lowestRange: lowestRange
         highestRange: highestRange
-        speed: speed
+        speed: mydashboard.speed
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -201,7 +201,7 @@ Window {
         startAngle: startAngle
         lowestRange: lowestRange
         highestRange: highestRange
-        speed: speed
+        speed: mydashboard.speed
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
