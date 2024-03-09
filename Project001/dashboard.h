@@ -32,6 +32,10 @@ class Dashboard : public QQuickPaintedItem
     Q_PROPERTY(qreal tickPosOffset READ getTickPosOffset WRITE setTickPosOffset NOTIFY tickPosOffsetChanged)
     Q_PROPERTY(qreal textPosOffset READ getTextPosOffset WRITE setTextPosOffset NOTIFY textPosOffsetChanged)
     Q_PROPERTY(qreal tickMarkLength READ getTickMarkLength WRITE setTickMarkLength NOTIFY tickMarkLengthChanged)
+    Q_PROPERTY(qreal arcTextSize READ getArcTextSize WRITE setArcTextSize NOTIFY arcTextSizeChanged)
+    Q_PROPERTY(qreal progBarArcPos READ getProgBarArcPos WRITE setProgBarArcPos NOTIFY progBarArcPosChanged)
+    Q_PROPERTY(QString unit READ getUnit WRITE setUnit NOTIFY unitChanged)
+    Q_PROPERTY(QString gaugeName READ getGaugeName WRITE setGaugeName NOTIFY gaugeNameChanged)
 
 public:
     Dashboard(QQuickItem *parent = 0);
@@ -59,6 +63,10 @@ public:
     qreal   getTickPosOffset();
     qreal   getTextPosOffset();
     qreal   getTickMarkLength();
+    qreal   getArcTextSize();
+    qreal   getProgBarArcPos();
+    QString getUnit();
+    QString getGaugeName();
 
     QPointF calculatePosition(const QRectF &rect, qreal angle, qreal offset);
 
@@ -84,6 +92,10 @@ public:
     void    setTickPosOffset(qreal TickPosOffset);
     void    setTextPosOffset(qreal TextPosOffset);
     void    setTickMarkLength(qreal TickMarkLength);
+    void    setArcTextSize(qreal ArcTextSize);
+    void    setProgBarArcPos(qreal ProgBarArcPos);
+    void    setUnit(QString unit);
+    void    setGaugeName(QString GaugeName);
 
 public slots:
     void updateDashboard();
@@ -111,6 +123,10 @@ signals:
     void    tickPosOffsetChanged();
     void    textPosOffsetChanged();
     void    tickMarkLengthChanged();
+    void    arcTextSizeChanged();
+    void    progBarArcPosChanged();
+    void    unitChanged();
+    void    gaugeNameChanged();
 
 private:
     QTimer  m_timer;
@@ -138,6 +154,10 @@ private:
     qreal   m_TickPosOffset;
     qreal   m_TextPosOffset;
     qreal   m_TickMarkLength;
+    qreal   m_ArcTextSize;
+    qreal   m_ProgBarArcPos;
+    QString m_Unit;
+    QString m_GaugeName;
 };
 
 #endif // DASHBOARD_H

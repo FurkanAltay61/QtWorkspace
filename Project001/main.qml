@@ -28,12 +28,17 @@ Window {
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        progressBarPos: progressBarPos + 5
-        innerCircleSize: innerCircleSize + 35
+        progressBarPos: progressBarPos + 16
+        innerCircleSize: innerCircleSize + 25
         textBarSize: textBarSize + 10
         tickMarkLength: tickMarkLength + 10
-        textPosOffset: textPosOffset - 10
-        progressBarThickness: progressBarThickness + 10
+        tickPosOffset: tickPosOffset + 10
+        textPosOffset: textPosOffset - 5
+        progressBarThickness: progressBarThickness + 8
+        arcTextSize: arcTextSize + 2
+        progBarArcPos: progBarArcPos + 10
+        unit: "km/h"
+        gaugeName: "Speed"
     }
 
     Dashboard
@@ -52,12 +57,17 @@ Window {
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        progressBarPos: progressBarPos + 5
-        innerCircleSize: innerCircleSize + 35
+        progressBarPos: progressBarPos + 16
+        innerCircleSize: innerCircleSize + 25
         textBarSize: textBarSize + 10
         tickMarkLength: tickMarkLength + 10
-        textPosOffset: textPosOffset - 10
-        progressBarThickness: progressBarThickness + 10
+        tickPosOffset: tickPosOffset + 10
+        textPosOffset: textPosOffset - 5
+        progressBarThickness: progressBarThickness + 8
+        arcTextSize: arcTextSize + 2
+        progBarArcPos: progBarArcPos + 10
+        unit: "x1000"
+        gaugeName: "Rpm"
     }
 
     Dashboard
@@ -75,6 +85,9 @@ Window {
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
+
+        unit: "%"
+        gaugeName: "Engine Load"
     }
 
 
@@ -86,13 +99,17 @@ Window {
         height: speedometerSize
         startAngle: startAngle
         lowestRange: lowestRange
-        highestRange: highestRange
-        speed: speed
+        highestRange: 120
+        speed: speed / 2
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
+        interval: 30
+
+        unit: "°C"
+        gaugeName: "Coolant Temp"
     }
 
     Dashboard
@@ -110,6 +127,9 @@ Window {
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
+
+        unit: "kPa"
+        gaugeName: "Intake Pressure"
     }
 
     Dashboard
@@ -127,6 +147,9 @@ Window {
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
+
+        unit: "°C"
+        gaugeName: "Intake Temp"
     }
 
     Dashboard
@@ -144,6 +167,9 @@ Window {
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
+
+        unit: "g/s"
+        gaugeName: "Maf"
     }
 
     Dashboard
@@ -161,6 +187,9 @@ Window {
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
+
+        unit: "%"
+        gaugeName: "Throttle Pos"
     }
 
     Dashboard

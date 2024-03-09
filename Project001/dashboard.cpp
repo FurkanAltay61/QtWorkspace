@@ -25,7 +25,10 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_TextBarSize(10),
     m_TickPosOffset(28.5),
     m_TextPosOffset(20),
-    m_TickMarkLength(10)
+    m_TickMarkLength(10),
+    m_ArcTextSize(8),
+    m_ProgBarArcPos(38),
+    m_Unit("NULL")
 {
     connect(&m_timer,&QTimer::timeout, this, &Dashboard::updateDashboard);
     m_timer.start(50);
@@ -79,6 +82,24 @@ void Dashboard::paint(QPainter *painter){
     painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
                                     -m_TextBarSize, -m_TextBarSize),
                                     Qt::AlignCenter, QString::number((m_Speed),'f',1));
+    font.setPointSize(7);
+    painter->setFont(font);
+    painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
+                                    -m_TextBarSize, -m_TextBarSize + 50),
+                                    Qt::AlignCenter, m_Unit);
+
+    painter->setFont(font);
+    painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
+                                    -m_TextBarSize, -m_TextBarSize + 100),
+                      Qt::AlignCenter, m_GaugeName);
+
+    painter->restore();
+
+    painter->save();
+    pen.setWidth(1);
+    pen.setColor(Qt::white);
+    painter->setPen(pen);
+    painter->drawArc(rect.adjusted(m_ProgBarArcPos, m_ProgBarArcPos, -m_ProgBarArcPos, -m_ProgBarArcPos), startAngle * 16, spanAngle * 16);
     painter->restore();
 
     painter->save();
@@ -87,6 +108,8 @@ void Dashboard::paint(QPainter *painter){
 
     // Draw tick marks and speed values
     int numTicks = (m_HighestRange - m_LowestRange) / m_Interval;
+    font.setPointSize(m_ArcTextSize);
+    painter->setFont(font);
     QFontMetrics metrics(painter->font());
 
     for (int i = 0; i <= numTicks; ++i) {
@@ -237,7 +260,21 @@ qreal Dashboard::getTickMarkLength(){
     return m_TickMarkLength;
 }
 
+qreal Dashboard::getArcTextSize(){
+    return m_ArcTextSize;
+}
 
+qreal Dashboard::getProgBarArcPos(){
+    return m_ProgBarArcPos;
+}
+
+QString Dashboard::getUnit(){
+    return m_Unit;
+}
+
+QString Dashboard::getGaugeName(){
+    return m_GaugeName;
+}
 
 
 
@@ -441,3 +478,37 @@ void Dashboard::setTickMarkLength(qreal TickMarkLength){
 
     emit tickMarkLengthChanged();
 }
+
+
+void Dashboard::setArcTextSize(qreal ArcTextSize){
+    if(m_ArcTextSize == ArcTextSize)
+        return;
+    m_ArcTextSize = ArcTextSize;
+
+    emit arcTextSizeChanged();
+}
+
+void Dashboard::setProgBarArcPos(qreal ProgBarArcPos){
+    if(m_ProgBarArcPos == ProgBarArcPos)
+        return;
+    m_ProgBarArcPos = ProgBarArcPos;
+
+    emit progBarArcPosChanged();
+}
+
+void Dashboard::setUnit(QString Unit){
+    if(m_Unit == Unit)
+        return;
+    m_Unit = Unit;
+
+    emit unitChanged();
+}
+
+void Dashboard::setGaugeName(QString GaugeName){
+    if(m_GaugeName == GaugeName)
+        return;
+    m_GaugeName = GaugeName;
+
+    emit gaugeNameChanged();
+}
+
