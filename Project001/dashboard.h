@@ -15,13 +15,11 @@ class Dashboard : public QQuickPaintedItem
     Q_PROPERTY(qreal alignAngle READ getAlignAngle WRITE setAlignAngle NOTIFY alignAngleChanged)
     Q_PROPERTY(qreal lowestRange READ getLowestRange WRITE setLowestRange NOTIFY lowestRangeChanged)
     Q_PROPERTY(qreal highestRange READ getHighestRange WRITE setHighestRange NOTIFY highestRangeChanged)
-    Q_PROPERTY(qreal speed READ getSpeed WRITE setSpeed NOTIFY speedChanged)
     Q_PROPERTY(int arcWidth READ getArcWidth WRITE setArcWidth NOTIFY arcWidthChanged)
     Q_PROPERTY(QColor outerColor READ getOuterColor WRITE setOuterColor NOTIFY outerColorChanged)
     Q_PROPERTY(QColor innerColor READ getInnerColor WRITE setInnerColor NOTIFY innerColorChanged)
     Q_PROPERTY(QColor textColor READ getTextColor WRITE setTextColor NOTIFY textColorChanged)
     Q_PROPERTY(QColor backgroundColor READ getBackgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
-
     Q_PROPERTY(int   innerArcWidth READ getInnerArcWidth WRITE setInnerArcWidth NOTIFY innerArcWidthChanged)
     Q_PROPERTY(int   innerArcPos READ getInnerArcPos WRITE setInnerArcPos NOTIFY innerArcPosChanged)
     Q_PROPERTY(qreal progressBarPos READ getProgressBarPos WRITE setProgressBarPos NOTIFY progressBarPosChanged)
@@ -41,6 +39,16 @@ class Dashboard : public QQuickPaintedItem
     Q_PROPERTY(qreal unitTextSize READ getUnitTextSize WRITE setUnitTextSize NOTIFY unitTextSizeChanged)
     Q_PROPERTY(qreal gaugeNameTextSize READ getGaugeNameTextSize WRITE setGaugeNameTextSize NOTIFY gaugeNameTextSizeChanged)
 
+    Q_PROPERTY(qreal speed READ getSpeed WRITE setSpeed NOTIFY speedChanged)
+    Q_PROPERTY(double engineload READ getEngineLoad WRITE setEngineLoad NOTIFY engineLoadChanged)
+    Q_PROPERTY(int coolanttemp READ getCoolantTemp WRITE setCoolantTemp NOTIFY coolantTempChanged)
+    Q_PROPERTY(int intakepressure READ getIntakePressure WRITE setIntakePressure NOTIFY intakePressureChanged)
+    Q_PROPERTY(double rpm READ getRpm WRITE setRpm NOTIFY rpmChanged)
+    Q_PROPERTY(int intaketemp READ getIntakeTemp WRITE setIntakeTemp NOTIFY intakeTempChanged)
+    Q_PROPERTY(double maf READ getMaf WRITE setMaf NOTIFY mafChanged)
+    Q_PROPERTY(double throttlepos READ getThrottlePos WRITE setThrottlePos NOTIFY throttlePosChanged)
+
+
 public:
     Dashboard(QQuickItem *parent = 0);
     virtual void paint(QPainter *painter);
@@ -50,7 +58,6 @@ public:
     qreal   getAlignAngle();
     qreal   getLowestRange();
     qreal   getHighestRange();
-    qreal   getSpeed();
     int     getArcWidth();
     QColor  getOuterColor();
     QColor  getInnerColor();
@@ -76,6 +83,15 @@ public:
     qreal   getUnitTextSize();
     qreal   getGaugeNameTextSize();
 
+    qreal   getSpeed();
+    double  getEngineLoad();
+    int     getCoolantTemp();
+    int     getIntakePressure();
+    double  getRpm();
+    int     getIntakeTemp();
+    double  getMaf();
+    double  getThrottlePos();
+
     QPointF calculatePosition(const QRectF &rect, qreal angle, qreal offset);
 
     void    setSpeedometerSize(qreal size);
@@ -83,7 +99,6 @@ public:
     void    setAlignAngle(qreal angle);
     void    setLowestRange(qreal losbwestRange);
     void    setHighestRange(qreal highestRange);
-    void    setSpeed(qreal speed);
     void    setArcWidth(int arcWidth);
     void    setOuterColor(QColor outerColor);
     void    setInnerColor(QColor innerColor);
@@ -109,9 +124,26 @@ public:
     void    setUnitTextSize(qreal UnitTextSize);
     void    setGaugeNameTextSize(qreal GaugeNameTextSize);
 
+    void    setSpeed(qreal Speed);
+    void    setEngineLoad(double EngineLoad);
+    void    setCoolantTemp(int CoolantTemp);
+    void    setIntakePressure(int IntakePressure);
+    void    setRpm(double Rpm);
+    void    setIntakeTemp(int IntakeTemp);
+    void    setMaf(double Maf);
+    void    setThrottlePos(double ThrottlePos);
+
 public slots:
     void updateDashboard();
+    void speedReceived(const int speed);
     void onDataReceived(const QString &data);
+    void engineLoadReceived(const double EngineLoad);
+    void coolantTempReceived(const int CoolantTemp);
+    void intakePressReceived(const int IntakePressure);
+    void rpmReceived(const double Rpm);
+    void IntakeTempReceived(const int IntakeTemp);
+    void MassAirFlowReceived(const double Maf);
+    void ThrottlePosReceived(const double ThrottlePos);
 
 signals:
     void    speedometerSizeChanged();
@@ -119,7 +151,6 @@ signals:
     void    alignAngleChanged();
     void    lowestRangeChanged();
     void    highestRangeChanged();
-    void    speedChanged();
     void    arcWidthChanged();
     void    outerColorChanged();
     void    innerColorChanged();
@@ -145,6 +176,15 @@ signals:
     void    unitTextSizeChanged();
     void    gaugeNameTextSizeChanged();
 
+    void    speedChanged();
+    void    engineLoadChanged();
+    void    coolantTempChanged();
+    void    intakePressureChanged();
+    void    rpmChanged();
+    void    intakeTempChanged();
+    void    mafChanged();
+    void    throttlePosChanged();
+
 private:
     QTimer  m_timer;
     qreal   m_val;
@@ -154,7 +194,6 @@ private:
     qreal   m_AlignAngle;
     qreal   m_LowestRange;
     qreal   m_HighestRange;
-    qreal   m_Speed;
     int     m_ArcWidth;
     QColor  m_OuterColor;
     QColor  m_InnerColor;
@@ -179,6 +218,16 @@ private:
     qreal   m_GaugeNameOffset;
     qreal   m_UnitTextSize;
     qreal   m_GaugeNameTextSize;
+
+    qreal   m_Speed;
+    double  m_EngineLoad;
+    int     m_CoolantTemp;
+    int     m_IntakePressure;
+    double  m_Rpm;
+    int     m_IntakeTemp;
+    double  m_Maf;
+    double  m_ThrottlePos;
+
 };
 
 #endif // DASHBOARD_H

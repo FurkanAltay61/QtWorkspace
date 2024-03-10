@@ -10,7 +10,6 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_AlignAngle(260), // it should be 360 - m_StartAngle*3 for good looking
     m_LowestRange(0),
     m_HighestRange(240),
-    m_Speed(0),
     m_ArcWidth(5),
     m_OuterColor(QColor(Qt::blue)),
     m_InnerColor(QColor(51,88,255,80)),
@@ -32,7 +31,16 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_UnitOffset(50),
     m_GaugeNameOffset(100),
     m_UnitTextSize(7),
-    m_GaugeNameTextSize(10)
+    m_GaugeNameTextSize(10),
+    m_Speed(0),
+    m_EngineLoad(0),
+    m_CoolantTemp(0),
+    m_IntakePressure(0),
+    m_Rpm(0),
+    m_IntakeTemp(0),
+    m_Maf(0),
+    m_ThrottlePos(0)
+
 {
     //connect(&m_timer,&QTimer::timeout, this, &Dashboard::updateDashboard);
     //m_timer.start(50);
@@ -49,6 +57,32 @@ void Dashboard::onDataReceived(const QString &data){
 
     setSpeed(m_val);
 }
+
+void Dashboard::engineLoadReceived(const double load){
+    setEngineLoad(load);
+}
+void Dashboard::coolantTempReceived(const int cooltemp){
+    setCoolantTemp(cooltemp);
+}
+void Dashboard::intakePressReceived(const int inpress){
+    setIntakePressure(inpress);
+}
+void Dashboard::rpmReceived(const double rpm){
+    setRpm(rpm);
+}
+void Dashboard::speedReceived(const int speed){
+    setSpeed(speed);
+}
+void Dashboard::IntakeTempReceived(const int intemp){
+    setIntakeTemp(intemp);
+}
+void Dashboard::MassAirFlowReceived(const double maf){
+    setMaf(maf);
+}
+void Dashboard::ThrottlePosReceived(const double throtpos){
+    setThrottlePos(throtpos);
+}
+
 
 
 void Dashboard::updateDashboard() {
@@ -207,11 +241,6 @@ qreal Dashboard::getHighestRange()
     return m_HighestRange;
 }
 
-qreal Dashboard::getSpeed()
-{
-    return m_Speed;
-}
-
 int Dashboard::getArcWidth()
 {
     return m_ArcWidth;
@@ -304,10 +333,43 @@ qreal Dashboard::getGaugeNameOffset(){
 qreal Dashboard::getUnitTextSize(){
     return m_UnitTextSize;
 }
+
 qreal Dashboard::getGaugeNameTextSize(){
     return m_GaugeNameTextSize;
 }
 
+qreal Dashboard::getSpeed()
+{
+    return m_Speed;
+}
+
+double Dashboard::getEngineLoad(){
+    return m_EngineLoad;
+}
+
+int Dashboard::getCoolantTemp(){
+    return m_CoolantTemp;
+}
+
+int Dashboard::getIntakePressure(){
+    return m_IntakePressure;
+}
+
+double Dashboard::getRpm(){
+    return m_Rpm;
+}
+
+int Dashboard::getIntakeTemp(){
+    return m_IntakeTemp;
+}
+
+double Dashboard::getMaf(){
+    return m_Maf;
+}
+
+double Dashboard::getThrottlePos(){
+    return m_ThrottlePos;
+}
 
 
 
@@ -358,16 +420,6 @@ void Dashboard::setHighestRange(qreal highestRange)
     m_HighestRange = highestRange;
 
     emit highestRangeChanged();
-}
-
-void Dashboard::setSpeed(qreal speed)
-{
-    if(m_Speed == speed)
-        return;
-
-    m_Speed = speed;
-    update();
-    emit speedChanged();
 }
 
 void Dashboard::setArcWidth(int arcWidth)
@@ -575,3 +627,86 @@ void Dashboard::setGaugeNameTextSize(qreal GaugeNameTextSize){
 
     emit gaugeNameTextSizeChanged();
 }
+
+
+
+void Dashboard::setSpeed(qreal speed)
+{
+    if(m_Speed == speed)
+        return;
+
+    m_Speed = speed;
+    update();
+    emit speedChanged();
+}
+
+void Dashboard::setEngineLoad(double EngineLoad)
+{
+    if(m_EngineLoad == EngineLoad)
+        return;
+
+    m_EngineLoad = EngineLoad;
+    update();
+    emit engineLoadChanged();
+}
+
+void Dashboard::setCoolantTemp(int CoolantTemp)
+{
+    if(m_CoolantTemp == CoolantTemp)
+        return;
+
+    m_CoolantTemp = CoolantTemp;
+    update();
+    emit coolantTempChanged();
+}
+
+void Dashboard::setIntakePressure(int IntakePressure)
+{
+    if(m_IntakePressure == IntakePressure)
+        return;
+
+    m_IntakePressure = IntakePressure;
+    update();
+    emit intakePressureChanged();
+}
+
+void Dashboard::setRpm(double Rpm)
+{
+    if(m_Rpm == Rpm)
+        return;
+
+    m_Rpm = Rpm;
+    update();
+    emit rpmChanged();
+}
+
+void Dashboard::setIntakeTemp(int IntakeTemp)
+{
+    if(m_IntakeTemp == IntakeTemp)
+        return;
+
+    m_IntakeTemp = IntakeTemp;
+    update();
+    emit intakeTempChanged();
+}
+
+void Dashboard::setMaf(double Maf)
+{
+    if(m_Maf == Maf)
+        return;
+
+    m_Maf = Maf;
+    update();
+    emit mafChanged();
+}
+
+void Dashboard::setThrottlePos(double ThrottlePos)
+{
+    if(m_ThrottlePos == ThrottlePos)
+        return;
+
+    m_ThrottlePos = ThrottlePos;
+    update();
+    emit throttlePosChanged();
+}
+

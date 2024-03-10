@@ -26,7 +26,7 @@ void TcpClient::connectToServer() {
     qDebug() << "Connected to the server!";
     // Setup OBD-II communication
     writeData("AT E0\rAT L0\rAT H0\rAT S1\rAT AT 1\rAT ST 32\r");
-    sendTimer->start(50); // Example: Send data every 50 ms
+    sendTimer->start(100); // Example: Send data every 50 ms
     prevtime = std::chrono::high_resolution_clock::now();
 }
 
@@ -82,24 +82,31 @@ void TcpClient::processMessage(const QByteArray& message) {
         if (pid == "04") {
             double load = (100.0 * parsedstr[2].toInt(nullptr, 16)) / 255.0;
             qDebug() << "Engine load :" << load;
+            emit engineLoadSent(load);
         } else if (pid == "05") {
             int cooltemp = parsedstr[2].toInt(nullptr, 16) - 40;
             qDebug() << "Coolant temperature :" << cooltemp << "°C";
+            emit coolantTempSent(cooltemp);
         } else if (pid == "0B") {
             int intakepressure = parsedstr[2].toInt(nullptr, 16);
             qDebug() << "Intake manifold absolute pressure :" << intakepressure << "kPa";
+            emit intakePressSent(intakepressure);
         } else if (pid == "0C") {
             double rpm = (256 * parsedstr[2].toInt(nullptr, 16) + parsedstr[3].toInt(nullptr, 16)) / 4.0;
             qDebug() << "Engine rpm :" << rpm << "rpm";
+            emit rpmSent(rpm);
         } else if (pid == "0D") {
             int speed = parsedstr[2].toInt(nullptr, 16);
             qDebug() << "Vehicle speed :" << speed << "km/h";
+            emit speedSent(speed);
         } else if (pid == "0F") {
             int intaketemp = parsedstr[2].toInt(nullptr, 16) - 40;
             qDebug() << "Intake air temperature :" << intaketemp << "°C";
+            emit IntakeTempSent(intaketemp);
         } else if (pid == "10") {
             double flowrate = (256 * parsedstr[2].toInt(nullptr, 16) + parsedstr[3].toInt(nullptr, 16)) / 100.0;
             qDebug() << "Mass air flow-rate :" << flowrate << "g/s";
+            emit MassAirFlowSent(flowrate);
         } else if (pid == "11") {
             double throttlepos = (100.0 * parsedstr[2].toInt(nullptr, 16)) / 255.0;
             qDebug() << "Throttle position :" << throttlepos;

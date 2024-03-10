@@ -41,6 +41,15 @@ private slots:
 
 signals:
     void dataSent(const QString &data);
+    void engineLoadSent(const double load);
+    void coolantTempSent(const int cooltemp);
+    void intakePressSent(const int inpress);
+    void rpmSent(const double rpm);
+    void speedSent(const int speed);
+    void IntakeTempSent(const int intemp);
+    void MassAirFlowSent(const double maf);
+    void ThrottlePosSent(const double throtpos);
+
 
 private:
     QTcpSocket* tcpSocket;
