@@ -36,6 +36,10 @@ class Dashboard : public QQuickPaintedItem
     Q_PROPERTY(qreal progBarArcPos READ getProgBarArcPos WRITE setProgBarArcPos NOTIFY progBarArcPosChanged)
     Q_PROPERTY(QString unit READ getUnit WRITE setUnit NOTIFY unitChanged)
     Q_PROPERTY(QString gaugeName READ getGaugeName WRITE setGaugeName NOTIFY gaugeNameChanged)
+    Q_PROPERTY(qreal unitOffset READ getUnitOffset WRITE setUnitOffset NOTIFY unitOffsetChanged)
+    Q_PROPERTY(qreal gaugeNameOffset READ getGaugeNameOffset WRITE setGaugeNameOffset NOTIFY gaugeNameOffsetChanged)
+    Q_PROPERTY(qreal unitTextSize READ getUnitTextSize WRITE setUnitTextSize NOTIFY unitTextSizeChanged)
+    Q_PROPERTY(qreal gaugeNameTextSize READ getGaugeNameTextSize WRITE setGaugeNameTextSize NOTIFY gaugeNameTextSizeChanged)
 
 public:
     Dashboard(QQuickItem *parent = 0);
@@ -67,6 +71,10 @@ public:
     qreal   getProgBarArcPos();
     QString getUnit();
     QString getGaugeName();
+    qreal   getUnitOffset();
+    qreal   getGaugeNameOffset();
+    qreal   getUnitTextSize();
+    qreal   getGaugeNameTextSize();
 
     QPointF calculatePosition(const QRectF &rect, qreal angle, qreal offset);
 
@@ -96,6 +104,10 @@ public:
     void    setProgBarArcPos(qreal ProgBarArcPos);
     void    setUnit(QString unit);
     void    setGaugeName(QString GaugeName);
+    void    setUnitOffset(qreal UnitOffset);
+    void    setGaugeNameOffset(qreal GaugeNameOffset);
+    void    setUnitTextSize(qreal UnitTextSize);
+    void    setGaugeNameTextSize(qreal GaugeNameTextSize);
 
 public slots:
     void updateDashboard();
@@ -128,6 +140,10 @@ signals:
     void    progBarArcPosChanged();
     void    unitChanged();
     void    gaugeNameChanged();
+    void    unitOffsetChanged();
+    void    gaugeNameOffsetChanged();
+    void    unitTextSizeChanged();
+    void    gaugeNameTextSizeChanged();
 
 private:
     QTimer  m_timer;
@@ -159,6 +175,10 @@ private:
     qreal   m_ProgBarArcPos;
     QString m_Unit;
     QString m_GaugeName;
+    qreal   m_UnitOffset;
+    qreal   m_GaugeNameOffset;
+    qreal   m_UnitTextSize;
+    qreal   m_GaugeNameTextSize;
 };
 
 #endif // DASHBOARD_H

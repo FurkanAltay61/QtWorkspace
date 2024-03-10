@@ -28,7 +28,11 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_TickMarkLength(10),
     m_ArcTextSize(8),
     m_ProgBarArcPos(38),
-    m_Unit("NULL")
+    m_Unit("NULL"),
+    m_UnitOffset(50),
+    m_GaugeNameOffset(100),
+    m_UnitTextSize(7),
+    m_GaugeNameTextSize(10)
 {
     //connect(&m_timer,&QTimer::timeout, this, &Dashboard::updateDashboard);
     //m_timer.start(50);
@@ -94,15 +98,16 @@ void Dashboard::paint(QPainter *painter){
     painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
                                     -m_TextBarSize, -m_TextBarSize),
                                     Qt::AlignCenter, QString::number((m_Speed),'f',1));
-    font.setPointSize(7);
+    font.setPointSize(m_UnitTextSize);
     painter->setFont(font);
     painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
-                                    -m_TextBarSize, -m_TextBarSize + 50),
+                                    -m_TextBarSize, -m_TextBarSize + m_UnitOffset),
                                     Qt::AlignCenter, m_Unit);
 
+    font.setPointSize(m_GaugeNameTextSize);
     painter->setFont(font);
     painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
-                                    -m_TextBarSize, -m_TextBarSize + 100),
+                                    -m_TextBarSize, -m_TextBarSize + m_GaugeNameOffset),
                       Qt::AlignCenter, m_GaugeName);
 
     painter->restore();
@@ -287,6 +292,22 @@ QString Dashboard::getUnit(){
 QString Dashboard::getGaugeName(){
     return m_GaugeName;
 }
+
+qreal Dashboard::getUnitOffset(){
+    return m_UnitOffset;
+}
+
+qreal Dashboard::getGaugeNameOffset(){
+    return m_GaugeNameOffset;
+}
+
+qreal Dashboard::getUnitTextSize(){
+    return m_UnitTextSize;
+}
+qreal Dashboard::getGaugeNameTextSize(){
+    return m_GaugeNameTextSize;
+}
+
 
 
 
@@ -524,3 +545,33 @@ void Dashboard::setGaugeName(QString GaugeName){
     emit gaugeNameChanged();
 }
 
+void Dashboard::setUnitOffset(qreal UnitOffset){
+    if(m_UnitOffset == UnitOffset)
+        return;
+    m_UnitOffset = UnitOffset;
+
+    emit unitOffsetChanged();
+}
+
+void Dashboard::setGaugeNameOffset(qreal GaugeNameOffset){
+    if(m_GaugeNameOffset == GaugeNameOffset)
+        return;
+    m_GaugeNameOffset = GaugeNameOffset;
+
+    emit gaugeNameOffsetChanged();
+}
+
+void Dashboard::setUnitTextSize(qreal UnitTextSize){
+    if(m_UnitTextSize == UnitTextSize)
+        return;
+    m_UnitTextSize = UnitTextSize;
+
+    emit unitTextSizeChanged();
+}
+void Dashboard::setGaugeNameTextSize(qreal GaugeNameTextSize){
+    if(m_GaugeNameTextSize == GaugeNameTextSize)
+        return;
+    m_GaugeNameTextSize = GaugeNameTextSize;
+
+    emit gaugeNameTextSizeChanged();
+}

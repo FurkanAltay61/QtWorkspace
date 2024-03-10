@@ -11,12 +11,17 @@ Window {
     color: "black"
     //visibility:  "FullScreen"
 
+    FpsCounter {
+        x : 10
+        y : 10
+    }
+
 
     Dashboard
     {
         x : 212
         y : 150
-        id: "speedometer"
+        gaugeName: "Speed"
         width: speedometerSize + 100
         height: speedometerSize + 100
         startAngle: startAngle
@@ -38,13 +43,17 @@ Window {
         arcTextSize: arcTextSize + 2
         progBarArcPos: progBarArcPos + 10
         unit: "km/h"
-        gaugeName: "Speed"
+        unitOffset: unitOffset + 10
+        gaugeNameOffset: gaugeNameOffset + 75
+        unitTextSize: unitTextSize
+        gaugeNameTextSize: gaugeNameTextSize + 5
     }
 
     Dashboard
     {
         x : 512
         y : 150
+        gaugeName: "Rpm"
         width: speedometerSize + 100
         height: speedometerSize + 100
         startAngle: startAngle
@@ -67,27 +76,34 @@ Window {
         arcTextSize: arcTextSize + 2
         progBarArcPos: progBarArcPos + 10
         unit: "x1000"
-        gaugeName: "Rpm"
+        unitOffset: unitOffset + 10
+        gaugeNameOffset: gaugeNameOffset + 75
+        unitTextSize: unitTextSize
+        gaugeNameTextSize: gaugeNameTextSize + 5
     }
 
     Dashboard
     {
         x : 100
         y : 12
+        gaugeName: "Engine Load"
         width: speedometerSize
         height: speedometerSize
         startAngle: startAngle
         lowestRange: lowestRange
-        highestRange: highestRange
-        speed: mydashboard.speed
+        highestRange: 100
+        interval: 10
+        speed: mydashboard.speed / 2.4
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-
+        progressBarPos: progressBarPos + 2
+        innerCircleSize: innerCircleSize - 5
+        progressBarThickness: progressBarThickness
         unit: "%"
-        gaugeName: "Engine Load"
+        gaugeNameTextSize: gaugeNameTextSize - 2
     }
 
 
@@ -95,6 +111,7 @@ Window {
     {
         x : 12
         y : 200
+        gaugeName: "Coolant Temp"
         width: speedometerSize
         height: speedometerSize
         startAngle: startAngle
@@ -107,89 +124,108 @@ Window {
         textColor: textColor
         backgroundColor: backgroundColor
         interval: 30
+        innerCircleSize: innerCircleSize - 5
+        progressBarPos: progressBarPos + 2
+        gaugeNameTextSize: gaugeNameTextSize - 2
 
         unit: "°C"
-        gaugeName: "Coolant Temp"
+
     }
 
     Dashboard
     {
         x : 100
         y : 388
+        gaugeName: "Intake Pressure"
         width: speedometerSize
         height: speedometerSize
         startAngle: startAngle
         lowestRange: lowestRange
-        highestRange: highestRange
+        highestRange: 255
+        interval: 25
         speed: mydashboard.speed
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-
+        innerCircleSize: innerCircleSize - 5
+        progressBarPos: progressBarPos + 2
+        gaugeNameTextSize: gaugeNameTextSize - 2
         unit: "kPa"
-        gaugeName: "Intake Pressure"
+
     }
 
     Dashboard
     {
         x : 724
         y : 12
+        gaugeName: "Intake Temp"
         width: speedometerSize
         height: speedometerSize
         startAngle: startAngle
-        lowestRange: lowestRange
-        highestRange: highestRange
+        lowestRange: -40
+        highestRange: 255
+        interval: 25
         speed: mydashboard.speed
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-
+        innerCircleSize: innerCircleSize - 5
+        progressBarPos: progressBarPos + 2
+        gaugeNameTextSize: gaugeNameTextSize - 2
         unit: "°C"
-        gaugeName: "Intake Temp"
+
     }
 
     Dashboard
     {
         x : 812
         y : 200
+        gaugeName: "Maf"
         width: speedometerSize
         height: speedometerSize
         startAngle: startAngle
         lowestRange: lowestRange
-        highestRange: highestRange
+        highestRange: 255
+        interval: 25
         speed: mydashboard.speed
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-
+        innerCircleSize: innerCircleSize - 5
+        progressBarPos: progressBarPos + 2
+        gaugeNameTextSize: gaugeNameTextSize - 2
         unit: "g/s"
-        gaugeName: "Maf"
+
     }
 
     Dashboard
     {
         x : 724
         y : 388
+        gaugeName: "Throttle Pos"
         width: speedometerSize
         height: speedometerSize
         startAngle: startAngle
         lowestRange: lowestRange
-        highestRange: highestRange
+        highestRange: 100
+        interval: 10
         speed: mydashboard.speed
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-
+        innerCircleSize: innerCircleSize - 5
+        progressBarPos: progressBarPos + 2
+        gaugeNameTextSize: gaugeNameTextSize - 2
         unit: "%"
-        gaugeName: "Throttle Pos"
+
     }
 
     Dashboard
@@ -207,111 +243,10 @@ Window {
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
+        gaugeNameTextSize: gaugeNameTextSize - 2
+        progressBarPos: progressBarPos + 2
     }
 
-
-    // Dashboard
-    // {
-    //     x : 800
-    //     y : 200
-    //     width: speedometerSize
-    //     height: speedometerSize
-    //     startAngle: startAngle
-    //     lowestRange: lowestRange
-    //     highestRange: highestRange
-    //     speed: speed
-    //     arcWidth: arcWidth
-    //     outerColor: outerColor
-    //     innerColor: innerColor
-    //     textColor: textColor
-    //     backgroundColor: backgroundColor
-    // }
-
-
-    // Dashboard
-    // {
-    //     x : 0
-    //     y : 400
-    //     width: speedometerSize
-    //     height: speedometerSize
-    //     startAngle: startAngle
-    //     lowestRange: lowestRange
-    //     highestRange: highestRange
-    //     speed: speed
-    //     arcWidth: arcWidth
-    //     outerColor: outerColor
-    //     innerColor: innerColor
-    //     textColor: textColor
-    //     backgroundColor: backgroundColor
-    // }
-
-    // Dashboard
-    // {
-    //     x : 200
-    //     y : 400
-    //     width: speedometerSize
-    //     height: speedometerSize
-    //     startAngle: startAngle
-    //     lowestRange: lowestRange
-    //     highestRange: highestRange
-    //     speed: speed
-    //     arcWidth: arcWidth
-    //     outerColor: outerColor
-    //     innerColor: innerColor
-    //     textColor: textColor
-    //     backgroundColor: backgroundColor
-    // }
-
-    // Dashboard
-    // {
-    //     x : 400
-    //     y : 400
-    //     width: speedometerSize
-    //     height: speedometerSize
-    //     startAngle: startAngle
-    //     lowestRange: lowestRange
-    //     highestRange: highestRange
-    //     speed: speed
-    //     arcWidth: arcWidth
-    //     outerColor: outerColor
-    //     innerColor: innerColor
-    //     textColor: textColor
-    //     backgroundColor: backgroundColor
-    // }
-
-    // Dashboard
-    // {
-    //     x : 600
-    //     y : 400
-    //     width: speedometerSize
-    //     height: speedometerSize
-    //     startAngle: startAngle
-    //     lowestRange: lowestRange
-    //     highestRange: highestRange
-    //     speed: speed
-    //     arcWidth: arcWidth
-    //     outerColor: outerColor
-    //     innerColor: innerColor
-    //     textColor: textColor
-    //     backgroundColor: backgroundColor
-    // }
-
-    // Dashboard
-    // {
-    //     x : 800
-    //     y : 400
-    //     width: speedometerSize
-    //     height: speedometerSize
-    //     startAngle: startAngle
-    //     lowestRange: lowestRange
-    //     highestRange: highestRange
-    //     speed: speed
-    //     arcWidth: arcWidth
-    //     outerColor: outerColor
-    //     innerColor: innerColor
-    //     textColor: textColor
-    //     backgroundColor: backgroundColor
-    // }
 
 
 }
