@@ -28,6 +28,7 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_ArcTextSize(8),
     m_ProgBarArcPos(38),
     m_Unit("NULL"),
+    m_GaugeName("NULL"),
     m_UnitOffset(50),
     m_GaugeNameOffset(100),
     m_UnitTextSize(7),
@@ -39,7 +40,8 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_Rpm(0),
     m_IntakeTemp(0),
     m_Maf(0),
-    m_ThrottlePos(0)
+    m_ThrottlePos(0),
+    m_Val(0)
 
 {
     //connect(&m_timer,&QTimer::timeout, this, &Dashboard::updateDashboard);
@@ -131,7 +133,7 @@ void Dashboard::paint(QPainter *painter){
     painter->setPen(pen);
     painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
                                     -m_TextBarSize, -m_TextBarSize),
-                                    Qt::AlignCenter, QString::number((m_Speed),'f',1));
+                                    Qt::AlignCenter, QString::number((m_Val),'f',1));
     font.setPointSize(m_UnitTextSize);
     painter->setFont(font);
     painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
@@ -201,7 +203,7 @@ void Dashboard::paint(QPainter *painter){
 
     // Draw the arc with the gradient pen
     painter->setPen(gradientPen);
-    qreal valueToAngle = ((m_Speed - m_LowestRange)/(m_HighestRange - m_LowestRange)) * spanAngle;
+    qreal valueToAngle = ((m_Val - m_LowestRange)/(m_HighestRange - m_LowestRange)) * spanAngle;
     painter->drawArc(rect.adjusted(m_ProgressBarPos, m_ProgressBarPos, -m_ProgressBarPos, -m_ProgressBarPos), startAngle * 16, valueToAngle * 16);
     painter->restore();
 }
@@ -369,6 +371,10 @@ double Dashboard::getMaf(){
 
 double Dashboard::getThrottlePos(){
     return m_ThrottlePos;
+}
+
+qreal  Dashboard::getVal(){
+    return m_Val;
 }
 
 
@@ -636,7 +642,7 @@ void Dashboard::setSpeed(qreal speed)
         return;
 
     m_Speed = speed;
-    update();
+    //update();
     emit speedChanged();
 }
 
@@ -646,7 +652,7 @@ void Dashboard::setEngineLoad(double EngineLoad)
         return;
 
     m_EngineLoad = EngineLoad;
-    update();
+    //update();
     emit engineLoadChanged();
 }
 
@@ -656,7 +662,7 @@ void Dashboard::setCoolantTemp(int CoolantTemp)
         return;
 
     m_CoolantTemp = CoolantTemp;
-    update();
+    //update();
     emit coolantTempChanged();
 }
 
@@ -666,7 +672,7 @@ void Dashboard::setIntakePressure(int IntakePressure)
         return;
 
     m_IntakePressure = IntakePressure;
-    update();
+    //update();
     emit intakePressureChanged();
 }
 
@@ -676,7 +682,7 @@ void Dashboard::setRpm(double Rpm)
         return;
 
     m_Rpm = Rpm;
-    update();
+    //update();
     emit rpmChanged();
 }
 
@@ -686,7 +692,7 @@ void Dashboard::setIntakeTemp(int IntakeTemp)
         return;
 
     m_IntakeTemp = IntakeTemp;
-    update();
+    //update();
     emit intakeTempChanged();
 }
 
@@ -696,7 +702,7 @@ void Dashboard::setMaf(double Maf)
         return;
 
     m_Maf = Maf;
-    update();
+    //update();
     emit mafChanged();
 }
 
@@ -706,7 +712,16 @@ void Dashboard::setThrottlePos(double ThrottlePos)
         return;
 
     m_ThrottlePos = ThrottlePos;
-    update();
+    //update();
     emit throttlePosChanged();
+}
+
+void Dashboard::setVal(double mval){
+    if(m_Val == mval)
+        return;
+
+    m_Val = mval;
+    update();
+    emit valChanged();
 }
 

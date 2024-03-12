@@ -47,6 +47,7 @@ class Dashboard : public QQuickPaintedItem
     Q_PROPERTY(int intaketemp READ getIntakeTemp WRITE setIntakeTemp NOTIFY intakeTempChanged)
     Q_PROPERTY(double maf READ getMaf WRITE setMaf NOTIFY mafChanged)
     Q_PROPERTY(double throttlepos READ getThrottlePos WRITE setThrottlePos NOTIFY throttlePosChanged)
+    Q_PROPERTY(qreal val READ getVal WRITE setVal NOTIFY valChanged)
 
 
 public:
@@ -92,6 +93,8 @@ public:
     double  getMaf();
     double  getThrottlePos();
 
+    qreal   getVal();
+
     QPointF calculatePosition(const QRectF &rect, qreal angle, qreal offset);
 
     void    setSpeedometerSize(qreal size);
@@ -132,6 +135,8 @@ public:
     void    setIntakeTemp(int IntakeTemp);
     void    setMaf(double Maf);
     void    setThrottlePos(double ThrottlePos);
+
+    void    setVal(qreal val);
 
 public slots:
     void updateDashboard();
@@ -184,6 +189,7 @@ signals:
     void    intakeTempChanged();
     void    mafChanged();
     void    throttlePosChanged();
+    void    valChanged();
 
 private:
     QTimer  m_timer;
@@ -227,6 +233,7 @@ private:
     int     m_IntakeTemp;
     double  m_Maf;
     double  m_ThrottlePos;
+    qreal   m_Val;
 
 };
 

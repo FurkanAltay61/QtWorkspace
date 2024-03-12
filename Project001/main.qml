@@ -11,9 +11,48 @@ Window {
     color: "black"
     //visibility:  "FullScreen"
 
+    property real initialSpeedometerSize : 200
+    property real initialStartAngle : -140
+    property real initialAlignAngle : 260
+    property real initialLowestRange : 0
+    property real initialHighestRange : 240
+    property int initialArcWidth : 5
+    property color initialOuterColor : "blue"
+    property color initialInnerColor : Qt.rgba(51,88,255,80)
+    property color initialTextColor : Qt.rgba(255,255,255)
+    property color initialBackgroundColor : Qt.transparent
+    property int   initialInnerArcWidth : 50
+    property int   initialInnerArcPos : 45
+    property real initialProgressBarPos : 42.5
+    property real initialProgressBarThickness : 13
+    property real initialInnerCircleSize : 50
+    property int   initialInterval : 20
+    property real initialTextBarSize : 10
+    property real initialTickPosOffset : 28.5
+    property real initialTextPosOffset : 20
+    property real initialTickMarkLength : 10
+    property real initialArcTextSize : 8
+    property real initialProgBarArcPos : 38
+    property string initialUnit : "NULL"
+    property string initialGaugeName : "NULL"
+    property real initialUnitOffset : 50
+    property real initialGaugeNameOffset : 100
+    property real initialUnitTextSize : 7
+    property real initialGaugeNameTextSize : 10
+
+    property real initialSpeed : 0
+    property double initialEngineLoad : 0
+    property int initialCoolantTemp : 0
+    property int initialIntakePressure : 0
+    property double initialRpm : 0
+    property int initialIntakeTemp : 0
+    property double initialMaf : 0
+    property double initialThrottlePos : 0
+    property real initialVal : 0
+
     FpsCounter {
-        x : 10
-        y : 10
+        id : fpsItem
+        anchors.right: parent.right
     }
 
 
@@ -27,26 +66,26 @@ Window {
         startAngle: startAngle
         lowestRange: lowestRange
         highestRange: highestRange
-        speed: mydashboard.speed
+        val: mydashboard.speed
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        progressBarPos: progressBarPos + 16
-        innerCircleSize: innerCircleSize + 25
-        textBarSize: textBarSize + 10
-        tickMarkLength: tickMarkLength + 10
-        tickPosOffset: tickPosOffset + 10
-        textPosOffset: textPosOffset - 5
-        progressBarThickness: progressBarThickness + 8
-        arcTextSize: arcTextSize + 2
-        progBarArcPos: progBarArcPos + 10
+        progressBarPos: initialProgressBarPos + 16
+        innerCircleSize: initialInnerCircleSize + 25
+        textBarSize: initialTextBarSize + 10
+        tickMarkLength: initialTickMarkLength + 10
+        tickPosOffset: initialTickPosOffset + 10
+        textPosOffset: initialTextPosOffset - 5
+        progressBarThickness: initialProgressBarThickness + 8
+        arcTextSize: initialArcTextSize + 2
+        progBarArcPos: initialProgBarArcPos + 10
         unit: "km/h"
-        unitOffset: unitOffset + 10
-        gaugeNameOffset: gaugeNameOffset + 75
+        unitOffset: initialUnitOffset + 10
+        gaugeNameOffset: initialGaugeNameOffset + 75
         unitTextSize: unitTextSize
-        gaugeNameTextSize: gaugeNameTextSize + 5
+        gaugeNameTextSize: initialGaugeNameTextSize + 5
     }
 
     Dashboard
@@ -58,28 +97,28 @@ Window {
         height: speedometerSize + 100
         startAngle: startAngle
         lowestRange: lowestRange
-        highestRange: 8
-        interval: 1
-        speed: mydashboard.speed / 30
+        highestRange: 8000
+        interval: 1000
+        val: mydashboard.rpm
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        progressBarPos: progressBarPos + 16
-        innerCircleSize: innerCircleSize + 25
-        textBarSize: textBarSize + 10
-        tickMarkLength: tickMarkLength + 10
-        tickPosOffset: tickPosOffset + 10
-        textPosOffset: textPosOffset - 5
-        progressBarThickness: progressBarThickness + 8
-        arcTextSize: arcTextSize + 2
-        progBarArcPos: progBarArcPos + 10
+        progressBarPos: initialProgressBarPos + 16
+        innerCircleSize: initialInnerCircleSize + 25
+        textBarSize: initialTextBarSize + 10
+        tickMarkLength: initialTickMarkLength + 10
+        tickPosOffset: initialTickPosOffset + 10
+        textPosOffset: initialTextPosOffset - 5
+        progressBarThickness: initialProgressBarThickness + 8
+        arcTextSize: initialArcTextSize + 2
+        progBarArcPos: initialProgBarArcPos + 10
         unit: "x1000"
-        unitOffset: unitOffset + 10
-        gaugeNameOffset: gaugeNameOffset + 75
+        unitOffset: initialUnitOffset + 10
+        gaugeNameOffset: initialGaugeNameOffset + 75
         unitTextSize: unitTextSize
-        gaugeNameTextSize: gaugeNameTextSize + 5
+        gaugeNameTextSize: initialGaugeNameTextSize + 5
     }
 
     Dashboard
@@ -93,17 +132,17 @@ Window {
         lowestRange: lowestRange
         highestRange: 100
         interval: 10
-        speed: mydashboard.speed / 2.4
+        val: mydashboard.engineload
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        progressBarPos: progressBarPos + 2
-        innerCircleSize: innerCircleSize - 5
+        progressBarPos: initialProgressBarPos + 2
+        innerCircleSize: initialInnerCircleSize - 5
         progressBarThickness: progressBarThickness
         unit: "%"
-        gaugeNameTextSize: gaugeNameTextSize - 2
+        gaugeNameTextSize: initialGaugeNameTextSize - 2
     }
 
 
@@ -117,16 +156,16 @@ Window {
         startAngle: startAngle
         lowestRange: lowestRange
         highestRange: 120
-        speed: mydashboard.speed / 2
+        val: mydashboard.coolanttemp
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
         interval: 30
-        innerCircleSize: innerCircleSize - 5
-        progressBarPos: progressBarPos + 2
-        gaugeNameTextSize: gaugeNameTextSize - 2
+        innerCircleSize: initialInnerCircleSize - 5
+        progressBarPos: initialProgressBarPos + 2
+        gaugeNameTextSize: initialGaugeNameTextSize - 2
 
         unit: "°C"
 
@@ -143,15 +182,15 @@ Window {
         lowestRange: lowestRange
         highestRange: 255
         interval: 25
-        speed: mydashboard.speed
+        val: mydashboard.intakepressure
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        innerCircleSize: innerCircleSize - 5
-        progressBarPos: progressBarPos + 2
-        gaugeNameTextSize: gaugeNameTextSize - 2
+        innerCircleSize: initialInnerCircleSize - 5
+        progressBarPos: initialProgressBarPos + 2
+        gaugeNameTextSize: initialGaugeNameTextSize - 2
         unit: "kPa"
 
     }
@@ -167,15 +206,15 @@ Window {
         lowestRange: -40
         highestRange: 255
         interval: 25
-        speed: mydashboard.speed
+        val: mydashboard.intaketemp
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        innerCircleSize: innerCircleSize - 5
-        progressBarPos: progressBarPos + 2
-        gaugeNameTextSize: gaugeNameTextSize - 2
+        innerCircleSize: initialInnerCircleSize - 5
+        progressBarPos: initialProgressBarPos + 2
+        gaugeNameTextSize: initialGaugeNameTextSize - 2
         unit: "°C"
 
     }
@@ -191,15 +230,15 @@ Window {
         lowestRange: lowestRange
         highestRange: 255
         interval: 25
-        speed: mydashboard.speed
+        val: mydashboard.maf
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        innerCircleSize: innerCircleSize - 5
-        progressBarPos: progressBarPos + 2
-        gaugeNameTextSize: gaugeNameTextSize - 2
+        innerCircleSize: initialInnerCircleSize - 5
+        progressBarPos: initialProgressBarPos + 2
+        gaugeNameTextSize: initialGaugeNameTextSize - 2
         unit: "g/s"
 
     }
@@ -215,15 +254,15 @@ Window {
         lowestRange: lowestRange
         highestRange: 100
         interval: 10
-        speed: mydashboard.speed
+        val: mydashboard.throttlepos
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        innerCircleSize: innerCircleSize - 5
-        progressBarPos: progressBarPos + 2
-        gaugeNameTextSize: gaugeNameTextSize - 2
+        innerCircleSize: initialInnerCircleSize - 5
+        progressBarPos: initialProgressBarPos + 2
+        gaugeNameTextSize: initialGaugeNameTextSize - 2
         unit: "%"
 
     }
@@ -243,8 +282,8 @@ Window {
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        gaugeNameTextSize: gaugeNameTextSize - 2
-        progressBarPos: progressBarPos + 2
+        gaugeNameTextSize: initialGaugeNameTextSize - 2
+        progressBarPos: initialProgressBarPos + 2
     }
 
 

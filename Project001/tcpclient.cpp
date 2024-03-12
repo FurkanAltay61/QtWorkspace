@@ -26,7 +26,7 @@ void TcpClient::connectToServer() {
     qDebug() << "Connected to the server!";
     // Setup OBD-II communication
     writeData("AT E0\rAT L0\rAT H0\rAT S1\rAT AT 1\rAT ST 32\r");
-    sendTimer->start(100); // Example: Send data every 50 ms
+    sendTimer->start(200); // Example: Send data every 50 ms
     prevtime = std::chrono::high_resolution_clock::now();
 }
 
@@ -54,12 +54,37 @@ void TcpClient::onError(QAbstractSocket::SocketError socketError) {
 
 void TcpClient::onSendData() {
 #ifdef METHOD1
+    // static int count{0};
+    // if (!datas.isEmpty()) {
+    //     writeData(datas[count++]);
+    //     if (count >= datas.size())
+    //         count = 0;
+    // }
+
     static int count{0};
+    static int tickcount{0};
+
     if (!datas.isEmpty()) {
-        writeData(datas[count++]);
+        if(datas[count] == 0x0105 && tickcount == 1200)     //Engine coolant temperature //60sn
+            writeData(datas[count]);
+        else if(datas[count] == 0x010B && tickcount == 50) //Intake manifold absolute pressure //5sn
+            writeData(datas[count]);
+        else if(datas[count] == 0x010F && tickcount == 50) //Intake air temperature //10sn
+            writeData(datas[count]);
+        else if(datas[count] == 0x0111 && tickcount == 50) //Throttle position //10sn
+            writeData(datas[count]);
+        else
+            writeData(datas[count]);
+
+        count++;
         if (count >= datas.size())
             count = 0;
+
+        tickcount++;
+        if (tickcount >= 1200)
+            tickcount = 0;
     }
+
 #endif
 #ifdef METHOD2
     writeData(alldata);
@@ -102,14 +127,15 @@ void TcpClient::processMessage(const QByteArray& message) {
         } else if (pid == "0F") {
             int intaketemp = parsedstr[2].toInt(nullptr, 16) - 40;
             qDebug() << "Intake air temperature :" << intaketemp << "°C";
-            emit IntakeTempSent(intaketemp);
+            emit intakeTempSent(intaketemp);
         } else if (pid == "10") {
             double flowrate = (256 * parsedstr[2].toInt(nullptr, 16) + parsedstr[3].toInt(nullptr, 16)) / 100.0;
             qDebug() << "Mass air flow-rate :" << flowrate << "g/s";
-            emit MassAirFlowSent(flowrate);
+            emit massAirFlowSent(flowrate);
         } else if (pid == "11") {
             double throttlepos = (100.0 * parsedstr[2].toInt(nullptr, 16)) / 255.0;
             qDebug() << "Throttle position :" << throttlepos;
+            emit throttlePosSent(throttlepos);
         }
     } else {
         qDebug() << "Message from server:" << message;
@@ -120,6 +146,6 @@ void TcpClient::processMessage(const QByteArray& message) {
     qDebug() << duration.count() << "ms";
     prevtime = currtime;
 
-    emit dataSent("Data Geldi");
+    //emit dataSent("Data Geldi");
 }
 

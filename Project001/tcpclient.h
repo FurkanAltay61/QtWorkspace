@@ -16,7 +16,7 @@
  * 0120 -> PIDs supported [$21 - $40]
  */
 
-//#define METHOD1
+#define METHOD1
 //#define METHOD2
 
 #include <QTcpSocket>
@@ -46,9 +46,9 @@ signals:
     void intakePressSent(const int inpress);
     void rpmSent(const double rpm);
     void speedSent(const int speed);
-    void IntakeTempSent(const int intemp);
-    void MassAirFlowSent(const double maf);
-    void ThrottlePosSent(const double throtpos);
+    void intakeTempSent(const int intemp);
+    void massAirFlowSent(const double maf);
+    void throttlePosSent(const double throtpos);
 
 
 private:

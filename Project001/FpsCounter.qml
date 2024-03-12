@@ -21,7 +21,7 @@ Rectangle {
         x: 4 * dp
         width: 36 * dp
         height: width
-        source: "images/spinner.png"
+        //source: "images/spinner.png"
         NumberAnimation on rotation {
             from:0
             to: 360
