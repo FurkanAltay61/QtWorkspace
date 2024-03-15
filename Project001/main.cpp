@@ -20,8 +20,6 @@ int main(int argc, char *argv[])
     QThread clientThread;
     client.moveToThread(&clientThread);
     clientThread.start();
-    QObject::connect(&client, &TcpClient::dataSent,&mydashboard,&Dashboard::onDataReceived);
-
     QObject::connect(&client, &TcpClient::engineLoadSent,&mydashboard,&Dashboard::engineLoadReceived);
     QObject::connect(&client, &TcpClient::coolantTempSent,&mydashboard,&Dashboard::coolantTempReceived);
     QObject::connect(&client, &TcpClient::intakePressSent,&mydashboard,&Dashboard::intakePressReceived);

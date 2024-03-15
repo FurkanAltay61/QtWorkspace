@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import Dashboardqml 1.0
+import QtQuick.Timeline 1.0
 
 
 Window {

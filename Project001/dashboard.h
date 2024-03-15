@@ -139,9 +139,7 @@ public:
     void    setVal(qreal val);
 
 public slots:
-    void updateDashboard();
     void speedReceived(const int speed);
-    void onDataReceived(const QString &data);
     void engineLoadReceived(const double EngineLoad);
     void coolantTempReceived(const int CoolantTemp);
     void intakePressReceived(const int IntakePressure);
@@ -192,7 +190,6 @@ signals:
     void    valChanged();
 
 private:
-    QTimer  m_timer;
     qreal   m_val;
     bool    m_direction;
     qreal   m_SpeedometerSize;

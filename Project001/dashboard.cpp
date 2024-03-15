@@ -42,22 +42,7 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_Maf(0),
     m_ThrottlePos(0),
     m_Val(0)
-
 {
-    //connect(&m_timer,&QTimer::timeout, this, &Dashboard::updateDashboard);
-    //m_timer.start(50);
-}
-
-void Dashboard::onDataReceived(const QString &data){
-    qDebug() << "Received data:" << data;
-    if(m_val >= 240)
-        m_direction = false;
-    else if(m_val <= 0.1)
-        m_direction = true;
-
-    m_val += m_direction ? 1 : -1;
-
-    setSpeed(m_val);
 }
 
 void Dashboard::engineLoadReceived(const double load){
@@ -83,19 +68,6 @@ void Dashboard::MassAirFlowReceived(const double maf){
 }
 void Dashboard::ThrottlePosReceived(const double throtpos){
     setThrottlePos(throtpos);
-}
-
-
-
-void Dashboard::updateDashboard() {
-    if(m_val >= 240)
-        m_direction = false;
-    else if(m_val <= 0.1)
-        m_direction = true;
-
-    m_val += m_direction ? 1 : -1;
-
-    setSpeed(m_val);
 }
 
 void Dashboard::paint(QPainter *painter){
