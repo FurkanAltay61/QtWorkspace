@@ -5,6 +5,8 @@
 #include <QQuickPaintedItem>
 #include <QTimer>
 #include <QGradient>
+#include <QPixmap>
+
 
 class Dashboard : public QQuickPaintedItem
 {
@@ -138,6 +140,8 @@ public:
 
     void    setVal(qreal val);
 
+    void    drawBackgroundPixmap();
+
 public slots:
     void speedReceived(const int speed);
     void engineLoadReceived(const double EngineLoad);
@@ -231,6 +235,8 @@ private:
     double  m_Maf;
     double  m_ThrottlePos;
     qreal   m_Val;
+
+    QPixmap m_BackgroundPixmap;
 
 };
 

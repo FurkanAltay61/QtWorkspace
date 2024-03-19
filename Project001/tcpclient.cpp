@@ -24,8 +24,6 @@ TcpClient::TcpClient(const QString& ip, quint16 port, QObject* parent)
     sendTimer = new QTimer(this);
     connect(sendTimer, &QTimer::timeout, this, &TcpClient::onSendData);
 
-    connect(&m_timer,&QTimer::timeout, this, &TcpClient::updateDashboard);
-
     // Start connection
     connectToServer();
 }
@@ -38,10 +36,8 @@ void TcpClient::connectToServer() {
     }
     qDebug() << "Connected to the server!";
     // Setup OBD-II communication
-    writeData("AT E0\rAT L0\rAT H0\rAT S1\rAT AT 1\rAT ST 32\r");
+    writeData("AT E0\rAT L0\rAT H0\rAT S1\rAT AT 1\r");
     sendTimer->start(SENDING_PERIOD);
-    m_timer.start(SAMPLE_PERIOD);
-    //m_RpmStruct->prevTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
 }
 
 void TcpClient::onConnected(){
@@ -67,12 +63,13 @@ void TcpClient::onError(QAbstractSocket::SocketError socketError) {
 }
 
 void TcpClient::onSendData() {
-    static int count{0};
-    if (!datas.isEmpty()) {
-        writeData(datas[count++]);
-        if (count >= datas.size())
-            count = 0;
-    }
+    // static int count{0};
+    // if (!datas.isEmpty()) {
+    //     if(retval != "NO DATA")
+    //         writeData(datas[count++]);
+    //     if (count >= datas.size())
+    //         count = 0;
+    // }
 
     // static int count{0};
     // static int tickcount{0};
@@ -98,7 +95,7 @@ void TcpClient::onSendData() {
     //         tickcount = 0;
     // }
 
-    //writeData("ATI\r");
+    writeData("ATI\r");
 }
 
 void TcpClient::writeData(const QString& data) {
@@ -117,171 +114,71 @@ void TcpClient::processMessage(const QByteArray& message) {
             QString pid = parsedstr[1];
             if (pid == "04") {
                 m_SpeedStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-                m_SpeedStruct->prevValue = m_SpeedStruct->currValue;
                 double load = (100.0 * parsedstr[2].toInt(nullptr, 16)) / 255.0;
-                m_SpeedStruct->currValue = load;
-                m_SpeedStruct->slope = (m_SpeedStruct->currValue - m_SpeedStruct->prevValue) /
-                                     static_cast<double>(m_SpeedStruct->currTime - m_SpeedStruct->prevTime);
+                qDebug() << "Engine load :" << load << "duration :" << m_SpeedStruct->currTime - m_SpeedStruct->prevTime;
                 m_SpeedStruct->prevTime = m_SpeedStruct->currTime;
-
-                // qDebug() << "Engine load :" << load;
-                // emit engineLoadSent(load);
+                emit engineLoadSent(load);
             } else if (pid == "05") {
                 m_CoolantTempStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-                m_CoolantTempStruct->prevValue = m_CoolantTempStruct->currValue;
                 int cooltemp = parsedstr[2].toInt(nullptr, 16) - 40;
-                m_CoolantTempStruct->currValue = cooltemp;
-                m_CoolantTempStruct->slope = (m_CoolantTempStruct->currValue - m_CoolantTempStruct->prevValue) /
-                                       static_cast<double>(m_CoolantTempStruct->currTime - m_CoolantTempStruct->prevTime);
+                qDebug() << "Coolant temperature :" << cooltemp << "°C" << "duration :" << m_CoolantTempStruct->currTime - m_CoolantTempStruct->prevTime;
                 m_CoolantTempStruct->prevTime = m_CoolantTempStruct->currTime;
-
-                // qDebug() << "Coolant temperature :" << cooltemp << "°C";
-                // emit coolantTempSent(cooltemp);
+                emit coolantTempSent(cooltemp);
             } else if (pid == "0B") {
                 m_IntakePressStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-                m_IntakePressStruct->prevValue = m_IntakePressStruct->currValue;
                 int intakepressure = parsedstr[2].toInt(nullptr, 16);
-                m_IntakePressStruct->currValue = intakepressure;
-                m_IntakePressStruct->slope = (m_IntakePressStruct->currValue - m_IntakePressStruct->prevValue) /
-                                             static_cast<double>(m_IntakePressStruct->currTime - m_IntakePressStruct->prevTime);
+                qDebug() << "Intake manifold absolute pressure :" << intakepressure << "kPa" << "duration :" << m_IntakePressStruct->currTime - m_IntakePressStruct->prevTime;
                 m_IntakePressStruct->prevTime = m_IntakePressStruct->currTime;
-
-                // qDebug() << "Intake manifold absolute pressure :" << intakepressure << "kPa";
-                // emit intakePressSent(intakepressure);
+                emit intakePressSent(intakepressure);
             } else if (pid == "0C") {
                 m_RpmStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-                m_RpmStruct->prevValue = m_RpmStruct->currValue;
                 double rpm = (256 * parsedstr[2].toInt(nullptr, 16) + parsedstr[3].toInt(nullptr, 16)) / 4.0;
-                m_RpmStruct->currValue = rpm;
-                m_RpmStruct->slope = (m_RpmStruct->currValue - m_RpmStruct->prevValue) /
-                                             static_cast<double>(m_RpmStruct->currTime - m_RpmStruct->prevTime);
+                qDebug() << "Engine rpm :" << rpm << "rpm" << "duration :" << m_RpmStruct->currTime - m_RpmStruct->prevTime;
                 m_RpmStruct->prevTime = m_RpmStruct->currTime;
-
-                // qDebug() << "Engine rpm :" << rpm << "rpm";
-                // emit rpmSent(rpm);
+                emit rpmSent(rpm);
             } else if (pid == "0D") {
                 m_SpeedStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-                m_SpeedStruct->prevValue = m_SpeedStruct->currValue;
                 int speed = parsedstr[2].toInt(nullptr, 16);
-                m_SpeedStruct->currValue = speed;
-                m_SpeedStruct->slope = (m_SpeedStruct->currValue - m_SpeedStruct->prevValue) /
-                                     static_cast<double>(m_SpeedStruct->currTime - m_SpeedStruct->prevTime);
+                qDebug() << "Vehicle speed :" << speed << "km/h" << "duration :" << m_SpeedStruct->currTime - m_SpeedStruct->prevTime;
                 m_SpeedStruct->prevTime = m_SpeedStruct->currTime;
-
-                // qDebug() << "Vehicle speed :" << speed << "km/h";
-                // emit speedSent(speed);
+                emit speedSent(speed);
             } else if (pid == "0F") {
                 m_IntakeTempStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-                m_IntakeTempStruct->prevValue = m_IntakeTempStruct->currValue;
                 int intaketemp = parsedstr[2].toInt(nullptr, 16) - 40;
-                m_IntakeTempStruct->currValue = intaketemp;
-                m_IntakeTempStruct->slope = (m_IntakeTempStruct->currValue - m_IntakeTempStruct->prevValue) /
-                                       static_cast<double>(m_IntakeTempStruct->currTime - m_IntakeTempStruct->prevTime);
+                qDebug() << "Intake air temperature :" << intaketemp << "°C" << "duration :" << m_IntakeTempStruct->currTime - m_IntakeTempStruct->prevTime;
                 m_IntakeTempStruct->prevTime = m_IntakeTempStruct->currTime;
-
-                // qDebug() << "Intake air temperature :" << intaketemp << "°C";
-                // emit intakeTempSent(intaketemp);
+                emit intakeTempSent(intaketemp);
             } else if (pid == "10") {
                 m_FlowRateStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-                m_FlowRateStruct->prevValue = m_FlowRateStruct->currValue;
                 double flowrate = (256 * parsedstr[2].toInt(nullptr, 16) + parsedstr[3].toInt(nullptr, 16)) / 100.0;
-                m_FlowRateStruct->currValue = flowrate;
-                m_FlowRateStruct->slope = (m_FlowRateStruct->currValue - m_FlowRateStruct->prevValue) /
-                                            static_cast<double>(m_FlowRateStruct->currTime - m_FlowRateStruct->prevTime);
+                qDebug() << "Mass air flow-rate :" << flowrate << "g/s" << "duration :" << m_FlowRateStruct->currTime - m_FlowRateStruct->prevTime;
                 m_FlowRateStruct->prevTime = m_FlowRateStruct->currTime;
-
-                // qDebug() << "Mass air flow-rate :" << flowrate << "g/s";
-                // emit massAirFlowSent(flowrate);
+                emit massAirFlowSent(flowrate);
             } else if (pid == "11") {
                 m_ThrottlePosStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-                m_ThrottlePosStruct->prevValue = m_ThrottlePosStruct->currValue;
                 double throttlepos = (100.0 * parsedstr[2].toInt(nullptr, 16)) / 255.0;
-                m_ThrottlePosStruct->currValue = throttlepos;
-                m_ThrottlePosStruct->slope = (m_ThrottlePosStruct->currValue - m_ThrottlePosStruct->prevValue) /
-                                          static_cast<double>(m_ThrottlePosStruct->currTime - m_ThrottlePosStruct->prevTime);
+                qDebug() << "Throttle position :" << throttlepos << "duration :" << m_ThrottlePosStruct->currTime - m_ThrottlePosStruct->prevTime;
                 m_ThrottlePosStruct->prevTime = m_ThrottlePosStruct->currTime;
-
-                // qDebug() << "Throttle position :" << throttlepos;
-                // emit throttlePosSent(throttlepos);
+                emit throttlePosSent(throttlepos);
             }
+            retval = "YES";
         } else if(parsedstr[0] == "OK") {
             qDebug() << "Message from server:" << parsedstr[0];
         } else {
             qDebug() << "Message from server:" << message;
 
+            retval = message;
 
-            // m_RpmStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+            static bool direction = true;
+            if(m_counter >= 8000)
+                direction = false;
+            else if(m_counter <= 0.1)
+                direction = true;
 
-            // m_RpmStruct->prevValue = m_counter;
-            // static bool direction = true;
-            // if(m_counter >= 8000)
-            //     direction = false;
-            // else if(m_counter <= 0.1)
-            //     direction = true;
+            m_counter += direction ? 250 : -250;
 
-            // m_counter += direction ? 250 : -250;
-            // m_RpmStruct->currValue = m_counter;
-
-            // m_RpmStruct->slope = (m_RpmStruct->currValue - m_RpmStruct->prevValue) / static_cast<double>(m_RpmStruct->currTime - m_RpmStruct->prevTime);
-            // //qDebug() << "slope is :" << m_RpmStruct->slope;
-
-            // m_RpmStruct->prevTime = m_RpmStruct->currTime;
+            emit rpmSent(m_counter);
         }
     }
 }
 
-void TcpClient::updateDashboard() {
-
-    if(m_EngineLoadStruct->slope != 0){
-        m_EngineLoadStruct->sampledValue = m_EngineLoadStruct->prevValue + (m_EngineLoadStruct->slope * SAMPLE_PERIOD);
-        m_EngineLoadStruct->prevValue = m_EngineLoadStruct->sampledValue;
-        qDebug() << "sampled value is :" << m_EngineLoadStruct->sampledValue;
-        emit engineLoadSent(m_EngineLoadStruct->sampledValue);
-    }
-    if(m_CoolantTempStruct->slope != 0){
-        m_CoolantTempStruct->sampledValue = m_CoolantTempStruct->prevValue + (m_CoolantTempStruct->slope * SAMPLE_PERIOD);
-        m_CoolantTempStruct->prevValue = m_CoolantTempStruct->sampledValue;
-        qDebug() << "sampled value is :" << m_CoolantTempStruct->sampledValue;
-        emit coolantTempSent(m_CoolantTempStruct->sampledValue);
-    }
-    if(m_IntakePressStruct->slope != 0){
-        m_IntakePressStruct->sampledValue = m_IntakePressStruct->prevValue + (m_IntakePressStruct->slope * SAMPLE_PERIOD);
-        m_IntakePressStruct->prevValue = m_IntakePressStruct->sampledValue;
-        qDebug() << "sampled value is :" << m_IntakePressStruct->sampledValue;
-        emit intakePressSent(m_IntakePressStruct->sampledValue);
-    }
-    if(m_RpmStruct->slope != 0){
-        m_RpmStruct->sampledValue = m_RpmStruct->prevValue + (m_RpmStruct->slope * SAMPLE_PERIOD);
-        m_RpmStruct->prevValue = m_RpmStruct->sampledValue;
-        qDebug() << "sampled value is :" << m_RpmStruct->sampledValue;
-        emit rpmSent(m_RpmStruct->sampledValue);
-    }
-    if(m_SpeedStruct->slope != 0){
-        m_SpeedStruct->sampledValue = m_SpeedStruct->prevValue + (m_SpeedStruct->slope * SAMPLE_PERIOD);
-        m_SpeedStruct->prevValue = m_SpeedStruct->sampledValue;
-        qDebug() << "sampled value is :" << m_SpeedStruct->sampledValue;
-        emit speedSent(m_SpeedStruct->sampledValue);
-    }
-    if(m_IntakeTempStruct->slope != 0){
-        m_IntakeTempStruct->sampledValue = m_IntakeTempStruct->prevValue + (m_IntakeTempStruct->slope * SAMPLE_PERIOD);
-        m_IntakeTempStruct->prevValue = m_IntakeTempStruct->sampledValue;
-        qDebug() << "sampled value is :" << m_IntakeTempStruct->sampledValue;
-        emit intakeTempSent(m_IntakeTempStruct->sampledValue);
-    }
-    if(m_FlowRateStruct->slope != 0){
-        m_FlowRateStruct->sampledValue = m_FlowRateStruct->prevValue + (m_FlowRateStruct->slope * SAMPLE_PERIOD);
-        m_FlowRateStruct->prevValue = m_FlowRateStruct->sampledValue;
-        qDebug() << "sampled value is :" << m_FlowRateStruct->sampledValue;
-        emit massAirFlowSent(m_FlowRateStruct->sampledValue);
-    }
-    if(m_ThrottlePosStruct->slope != 0){
-        m_ThrottlePosStruct->sampledValue = m_ThrottlePosStruct->prevValue + (m_ThrottlePosStruct->slope * SAMPLE_PERIOD);
-        m_ThrottlePosStruct->prevValue = m_ThrottlePosStruct->sampledValue;
-        qDebug() << "sampled value is :" << m_ThrottlePosStruct->sampledValue;
-        emit throttlePosSent(m_ThrottlePosStruct->sampledValue);
-    }
-
-
-
-
-}

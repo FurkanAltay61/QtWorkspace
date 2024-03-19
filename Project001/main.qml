@@ -51,6 +51,8 @@ Window {
     property double initialThrottlePos : 0
     property real initialVal : 0
 
+    property int animationDuration : 1600
+
     FpsCounter {
         id : fpsItem
         anchors.right: parent.right
@@ -68,6 +70,11 @@ Window {
         lowestRange: lowestRange
         highestRange: highestRange
         val: mydashboard.speed
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -89,6 +96,7 @@ Window {
         gaugeNameTextSize: initialGaugeNameTextSize + 5
     }
 
+
     Dashboard
     {
         x : 512
@@ -101,6 +109,12 @@ Window {
         highestRange: 8000
         interval: 1000
         val: mydashboard.rpm
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -134,6 +148,11 @@ Window {
         highestRange: 100
         interval: 10
         val: mydashboard.engineload
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -184,6 +203,11 @@ Window {
         highestRange: 255
         interval: 25
         val: mydashboard.intakepressure
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -232,6 +256,11 @@ Window {
         highestRange: 255
         interval: 25
         val: mydashboard.maf
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -256,6 +285,11 @@ Window {
         highestRange: 100
         interval: 10
         val: mydashboard.throttlepos
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -278,6 +312,11 @@ Window {
         lowestRange: lowestRange
         highestRange: highestRange
         speed: mydashboard.speed
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor

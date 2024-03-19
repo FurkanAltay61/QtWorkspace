@@ -29,8 +29,7 @@
 
 class TcpClient : public QObject {
     Q_OBJECT
-    const int SAMPLE_PERIOD = 100;
-    const int SENDING_PERIOD = 300;
+    const int SENDING_PERIOD = 1600;
 public:
     explicit TcpClient(const QString& ip, quint16 port, QObject* parent = nullptr);
     void connectToServer();
@@ -51,7 +50,6 @@ private slots:
     void onSendData();
 
 public slots:
-    void updateDashboard();
 
 signals:
     void dataSent(const QString &data);
@@ -71,12 +69,13 @@ private:
     quint16 serverPort;
     QTimer* sendTimer;
     QByteArray buffer;
-    QStringList datas{"0104\r", "0105\r", "010B\r", "010C\r",
-                      "010D\r", "010F\r", "0110\r", "0111\r"};
+    // QStringList datas{"0104\r", "0105\r", "010B\r", "010C\r",
+    //                   "010D\r", "010F\r", "0110\r", "0111\r"};
+    //QStringList datas{"010C\r","0104\r"};
+
     std::chrono::high_resolution_clock::time_point prevtime;
     void writeData(const QString& data);
     void processMessage(const QByteArray& message);
-    QTimer  m_timer;
     volatile qreal m_counter;
 
     std::shared_ptr<Datapoint> m_EngineLoadStruct;
@@ -87,6 +86,8 @@ private:
     std::shared_ptr<Datapoint> m_IntakeTempStruct;
     std::shared_ptr<Datapoint> m_FlowRateStruct;
     std::shared_ptr<Datapoint> m_ThrottlePosStruct;
+
+    QString retval{""};
 };
 
 

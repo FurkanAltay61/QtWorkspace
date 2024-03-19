@@ -43,7 +43,9 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_ThrottlePos(0),
     m_Val(0)
 {
+    drawBackgroundPixmap();
 }
+
 
 void Dashboard::engineLoadReceived(const double load){
     setEngineLoad(load);
@@ -70,11 +72,14 @@ void Dashboard::ThrottlePosReceived(const double throtpos){
     setThrottlePos(throtpos);
 }
 
-void Dashboard::paint(QPainter *painter){
+void Dashboard::drawBackgroundPixmap(){
+    m_BackgroundPixmap = QPixmap(300,300);
+    m_BackgroundPixmap.fill(Qt::transparent);
+    QPainter painter(&m_BackgroundPixmap);
     QRectF rect = this->boundingRect();
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    QPen pen = painter->pen();
+    painter.setRenderHint(QPainter::Antialiasing);
+    QPen pen = painter.pen();
     pen.setCapStyle(Qt::FlatCap);
 
     double startAngle;
@@ -84,58 +89,54 @@ void Dashboard::paint(QPainter *painter){
     spanAngle = 0 - m_AlignAngle;
 
     //all arc
-    painter->save();
+    painter.save();
     pen.setWidth(m_ArcWidth);
     pen.setColor(m_InnerColor);
-    painter->setPen(pen);
-    painter->drawArc(rect.adjusted(m_ArcWidth, m_ArcWidth, -m_ArcWidth, -m_ArcWidth), startAngle * 16, spanAngle * 16);
-    painter->restore();
+    painter.setPen(pen);
+    painter.drawArc(rect.adjusted(m_ArcWidth, m_ArcWidth, -m_ArcWidth, -m_ArcWidth), startAngle * 16, spanAngle * 16);
+    painter.restore();
 
     //inner circle
-    painter->save();
-    painter->setBrush(QBrush(QColor(m_InnerColor)));
-    painter->drawEllipse(rect.center(), m_InnerCircleSize, m_InnerCircleSize);
-    painter->restore();
+    painter.save();
+    painter.setBrush(QBrush(QColor(m_InnerColor)));
+    painter.drawEllipse(rect.center(), m_InnerCircleSize, m_InnerCircleSize);
+    painter.restore();
 
-    //text which shows the value
-    painter->save();
+    painter.save();
     QFont font("Halvetica",m_TextBarSize,QFont::Bold);
-    painter->setFont(font);
+    painter.setFont(font);
     pen.setColor(m_TextColor);
-    painter->setPen(pen);
-    painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
-                                    -m_TextBarSize, -m_TextBarSize),
-                                    Qt::AlignCenter, QString::number((m_Val),'f',1));
+    painter.setPen(pen);
     font.setPointSize(m_UnitTextSize);
-    painter->setFont(font);
-    painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
+    painter.setFont(font);
+    painter.drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
                                     -m_TextBarSize, -m_TextBarSize + m_UnitOffset),
-                                    Qt::AlignCenter, m_Unit);
+                      Qt::AlignCenter, m_Unit);
 
     font.setPointSize(m_GaugeNameTextSize);
-    painter->setFont(font);
-    painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
+    painter.setFont(font);
+    painter.drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
                                     -m_TextBarSize, -m_TextBarSize + m_GaugeNameOffset),
                       Qt::AlignCenter, m_GaugeName);
 
-    painter->restore();
+    painter.restore();
 
-    painter->save();
+    painter.save();
     pen.setWidth(1);
     pen.setColor(Qt::white);
-    painter->setPen(pen);
-    painter->drawArc(rect.adjusted(m_ProgBarArcPos, m_ProgBarArcPos, -m_ProgBarArcPos, -m_ProgBarArcPos), startAngle * 16, spanAngle * 16);
-    painter->restore();
+    painter.setPen(pen);
+    painter.drawArc(rect.adjusted(m_ProgBarArcPos, m_ProgBarArcPos, -m_ProgBarArcPos, -m_ProgBarArcPos), startAngle * 16, spanAngle * 16);
+    painter.restore();
 
-    painter->save();
+    painter.save();
     QColor tickMarkColor = Qt::white;
-    painter->setPen(tickMarkColor);
+    painter.setPen(tickMarkColor);
 
     // Draw tick marks and speed values
     int numTicks = (m_HighestRange - m_LowestRange) / m_Interval;
     font.setPointSize(m_ArcTextSize);
-    painter->setFont(font);
-    QFontMetrics metrics(painter->font());
+    painter.setFont(font);
+    QFontMetrics metrics(painter.font());
 
     for (int i = 0; i <= numTicks; ++i) {
         int speedValue = m_LowestRange + i * m_Interval;
@@ -146,7 +147,7 @@ void Dashboard::paint(QPainter *painter){
         QPointF textPos = calculatePosition(rect, angle, m_TextPosOffset - metrics.height());
 
         // Draw the tick mark
-        painter->drawLine(tickPos, QPointF(tickPos.x() + m_TickMarkLength * cos(qDegreesToRadians(angle)), tickPos.y() - m_TickMarkLength * sin(qDegreesToRadians(angle))));  // 10 is the length of the tick mark
+        painter.drawLine(tickPos, QPointF(tickPos.x() + m_TickMarkLength * cos(qDegreesToRadians(angle)), tickPos.y() - m_TickMarkLength * sin(qDegreesToRadians(angle))));  // 10 is the length of the tick mark
 
         // Prepare to draw the text
         QString text = QString::number(speedValue);
@@ -154,8 +155,38 @@ void Dashboard::paint(QPainter *painter){
         textRect.moveCenter(textPos.toPoint());
 
         // Adjust for alignment and draw the text
-        painter->drawText(textRect, Qt::AlignCenter, text);
+        painter.drawText(textRect, Qt::AlignCenter, text);
     }
+    painter.restore();
+
+
+}
+
+void Dashboard::paint(QPainter *painter){
+
+    painter->drawPixmap(0,0,m_BackgroundPixmap);
+
+    QRectF rect = this->boundingRect();
+
+    // painter->setRenderHint(QPainter::Antialiasing);
+    QPen pen = painter->pen();
+    pen.setCapStyle(Qt::FlatCap);
+
+    double startAngle;
+    double spanAngle;
+
+    startAngle = m_StartAngle;
+    spanAngle = 0 - m_AlignAngle;
+
+    //text which shows the value
+    painter->save();
+    QFont font("Halvetica",m_TextBarSize,QFont::Bold);
+    painter->setFont(font);
+    pen.setColor(m_TextColor);
+    painter->setPen(pen);
+    painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
+                                    -m_TextBarSize, -m_TextBarSize),
+                                    Qt::AlignCenter, QString::number((m_Val),'f',1));
     painter->restore();
 
     //current active progress
@@ -356,7 +387,8 @@ void Dashboard::setSpeedometerSize(qreal size)
     if(m_SpeedometerSize == size)
         return;
     m_SpeedometerSize = size;
-
+    drawBackgroundPixmap();
+    update();
     emit speedometerSizeChanged();
 }
 
@@ -366,7 +398,8 @@ void Dashboard::setStartAngle(qreal startAngle)
         return;
 
     m_StartAngle = startAngle;
-
+    drawBackgroundPixmap();
+    update();
     emit startAngleChanged();
 }
 
@@ -376,7 +409,8 @@ void Dashboard::setAlignAngle(qreal angle)
         return;
 
     m_StartAngle = angle;
-
+    drawBackgroundPixmap();
+    update();
     emit alignAngleChanged();
 }
 
@@ -386,7 +420,8 @@ void Dashboard::setLowestRange(qreal lowestRange)
         return;
 
     m_LowestRange = lowestRange;
-
+    drawBackgroundPixmap();
+    update();
     emit lowestRangeChanged();
 }
 
@@ -396,7 +431,8 @@ void Dashboard::setHighestRange(qreal highestRange)
         return;
 
     m_HighestRange = highestRange;
-
+    drawBackgroundPixmap();
+    update();
     emit highestRangeChanged();
 }
 
@@ -406,7 +442,8 @@ void Dashboard::setArcWidth(int arcWidth)
         return;
 
     m_ArcWidth = arcWidth;
-
+    drawBackgroundPixmap();
+    update();
     emit arcWidthChanged();
 }
 
@@ -416,7 +453,8 @@ void Dashboard::setOuterColor(QColor outerColor)
         return;
 
     m_OuterColor = outerColor;
-
+    drawBackgroundPixmap();
+    update();
     emit outerColorChanged();
 }
 
@@ -426,7 +464,8 @@ void Dashboard::setInnerColor(QColor innerColor)
         return;
 
     m_InnerColor = innerColor;
-
+    drawBackgroundPixmap();
+    update();
     emit innerColorChanged();
 }
 
@@ -436,7 +475,8 @@ void Dashboard::setTextColor(QColor textColor)
         return;
 
     m_TextColor = textColor;
-
+    drawBackgroundPixmap();
+    update();
     emit textColorChanged();
 }
 
@@ -446,7 +486,8 @@ void Dashboard::setBackgroundColor(QColor backgroundColor)
         return;
 
     m_BackgroundColor = backgroundColor;
-
+    drawBackgroundPixmap();
+    update();
     emit backgroundColorChanged();
 }
 
@@ -457,7 +498,8 @@ void Dashboard::setInnerArcWidth(int InnerArcWidth){
         return;
 
     m_InnerArcWidth = InnerArcWidth;
-
+    drawBackgroundPixmap();
+    update();
     emit innerArcWidthChanged();
 }
 
@@ -466,7 +508,8 @@ void Dashboard::setInnerArcPos(int InnerArcPos){
         return;
 
     m_InnerArcPos = InnerArcPos;
-
+    drawBackgroundPixmap();
+    update();
     emit innerArcPosChanged();
 }
 
@@ -475,7 +518,8 @@ void Dashboard::setProgressBarPos(qreal ProgressBarPos){
         return;
 
     m_ProgressBarPos = ProgressBarPos;
-
+    drawBackgroundPixmap();
+    update();
     emit progressBarPosChanged();
 }
 
@@ -484,7 +528,8 @@ void Dashboard::setProgressBarThickness(qreal ProgressBarThickness){
         return;
 
     m_ProgressBarThickness = ProgressBarThickness;
-
+    drawBackgroundPixmap();
+    update();
     emit progressBarThicknessChanged();
 }
 
@@ -493,7 +538,8 @@ void Dashboard::setInnerCircleSize(qreal InnerCircleSize){
         return;
 
     m_InnerCircleSize = InnerCircleSize;
-
+    drawBackgroundPixmap();
+    update();
     emit innerCircleSizeChanged();
 }
 
@@ -502,7 +548,8 @@ void Dashboard::setInterval(int Interval){
         return;
 
     m_Interval = Interval;
-
+    drawBackgroundPixmap();
+    update();
     emit intervalChanged();
 }
 
@@ -511,7 +558,8 @@ void Dashboard::setTextBarSize(qreal TextBarSize){
         return;
 
     m_TextBarSize = TextBarSize;
-
+    drawBackgroundPixmap();
+    update();
     emit textBarSizeChanged();
 }
 
@@ -520,7 +568,8 @@ void Dashboard::setTickPosOffset(qreal TickPosOffset){
         return;
 
     m_TickPosOffset = TickPosOffset;
-
+    drawBackgroundPixmap();
+    update();
     emit tickPosOffsetChanged();
 }
 
@@ -529,7 +578,8 @@ void Dashboard::setTextPosOffset(qreal TextPosOffset){
         return;
 
     m_TextPosOffset = TextPosOffset;
-
+    drawBackgroundPixmap();
+    update();
     emit textPosOffsetChanged();
 }
 
@@ -538,7 +588,8 @@ void Dashboard::setTickMarkLength(qreal TickMarkLength){
         return;
 
     m_TickMarkLength = TickMarkLength;
-
+    drawBackgroundPixmap();
+    update();
     emit tickMarkLengthChanged();
 }
 
@@ -547,7 +598,8 @@ void Dashboard::setArcTextSize(qreal ArcTextSize){
     if(m_ArcTextSize == ArcTextSize)
         return;
     m_ArcTextSize = ArcTextSize;
-
+    drawBackgroundPixmap();
+    update();
     emit arcTextSizeChanged();
 }
 
@@ -555,7 +607,8 @@ void Dashboard::setProgBarArcPos(qreal ProgBarArcPos){
     if(m_ProgBarArcPos == ProgBarArcPos)
         return;
     m_ProgBarArcPos = ProgBarArcPos;
-
+    drawBackgroundPixmap();
+    update();
     emit progBarArcPosChanged();
 }
 
@@ -563,7 +616,8 @@ void Dashboard::setUnit(QString Unit){
     if(m_Unit == Unit)
         return;
     m_Unit = Unit;
-
+    drawBackgroundPixmap();
+    update();
     emit unitChanged();
 }
 
@@ -571,7 +625,8 @@ void Dashboard::setGaugeName(QString GaugeName){
     if(m_GaugeName == GaugeName)
         return;
     m_GaugeName = GaugeName;
-
+    drawBackgroundPixmap();
+    update();
     emit gaugeNameChanged();
 }
 
@@ -579,7 +634,8 @@ void Dashboard::setUnitOffset(qreal UnitOffset){
     if(m_UnitOffset == UnitOffset)
         return;
     m_UnitOffset = UnitOffset;
-
+    drawBackgroundPixmap();
+    update();
     emit unitOffsetChanged();
 }
 
@@ -587,7 +643,8 @@ void Dashboard::setGaugeNameOffset(qreal GaugeNameOffset){
     if(m_GaugeNameOffset == GaugeNameOffset)
         return;
     m_GaugeNameOffset = GaugeNameOffset;
-
+    drawBackgroundPixmap();
+    update();
     emit gaugeNameOffsetChanged();
 }
 
@@ -595,14 +652,16 @@ void Dashboard::setUnitTextSize(qreal UnitTextSize){
     if(m_UnitTextSize == UnitTextSize)
         return;
     m_UnitTextSize = UnitTextSize;
-
+    drawBackgroundPixmap();
+    update();
     emit unitTextSizeChanged();
 }
 void Dashboard::setGaugeNameTextSize(qreal GaugeNameTextSize){
     if(m_GaugeNameTextSize == GaugeNameTextSize)
         return;
     m_GaugeNameTextSize = GaugeNameTextSize;
-
+    drawBackgroundPixmap();
+    update();
     emit gaugeNameTextSizeChanged();
 }
 
