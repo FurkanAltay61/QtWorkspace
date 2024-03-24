@@ -64,8 +64,8 @@ Window {
         width: 50
         height : 20
         Text {
-            id: name
-            text: qsTr("text")
+            id: close
+            text: qsTr("close")
         }
         MouseArea {
             anchors.fill: parent

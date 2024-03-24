@@ -24,7 +24,15 @@ TcpClient::TcpClient(const QString& ip, quint16 port, QObject* parent)
     connect(sendTimer, &QTimer::timeout, this, &TcpClient::onSendData);
 
     // Start connection
-    connectToServer();
+    //connectToServer();
+}
+
+TcpClient::~TcpClient(){
+    qDebug() << "constructor called ";
+    tcpSocket->close();
+    sendTimer->stop();
+    delete tcpSocket;
+    delete sendTimer;
 }
 
 void TcpClient::connectToServer() {

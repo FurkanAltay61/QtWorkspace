@@ -32,6 +32,7 @@ class TcpClient : public QObject {
     const int SENDING_PERIOD = 200;
 public:
     explicit TcpClient(const QString& ip, quint16 port, QObject* parent = nullptr);
+    ~TcpClient();
     void connectToServer();
     struct Datapoint
     {
