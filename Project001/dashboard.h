@@ -42,13 +42,13 @@ class Dashboard : public QQuickPaintedItem
     Q_PROPERTY(qreal gaugeNameTextSize READ getGaugeNameTextSize WRITE setGaugeNameTextSize NOTIFY gaugeNameTextSizeChanged)
 
     Q_PROPERTY(qreal speed READ getSpeed WRITE setSpeed NOTIFY speedChanged)
-    Q_PROPERTY(double engineload READ getEngineLoad WRITE setEngineLoad NOTIFY engineLoadChanged)
-    Q_PROPERTY(int coolanttemp READ getCoolantTemp WRITE setCoolantTemp NOTIFY coolantTempChanged)
-    Q_PROPERTY(int intakepressure READ getIntakePressure WRITE setIntakePressure NOTIFY intakePressureChanged)
-    Q_PROPERTY(double rpm READ getRpm WRITE setRpm NOTIFY rpmChanged)
-    Q_PROPERTY(int intaketemp READ getIntakeTemp WRITE setIntakeTemp NOTIFY intakeTempChanged)
-    Q_PROPERTY(double maf READ getMaf WRITE setMaf NOTIFY mafChanged)
-    Q_PROPERTY(double throttlepos READ getThrottlePos WRITE setThrottlePos NOTIFY throttlePosChanged)
+    Q_PROPERTY(qreal engineload READ getEngineLoad WRITE setEngineLoad NOTIFY engineLoadChanged)
+    Q_PROPERTY(qreal coolanttemp READ getCoolantTemp WRITE setCoolantTemp NOTIFY coolantTempChanged)
+    Q_PROPERTY(qreal intakepressure READ getIntakePressure WRITE setIntakePressure NOTIFY intakePressureChanged)
+    Q_PROPERTY(qreal rpm READ getRpm WRITE setRpm NOTIFY rpmChanged)
+    Q_PROPERTY(qreal intaketemp READ getIntakeTemp WRITE setIntakeTemp NOTIFY intakeTempChanged)
+    Q_PROPERTY(qreal maf READ getMaf WRITE setMaf NOTIFY mafChanged)
+    Q_PROPERTY(qreal throttlepos READ getThrottlePos WRITE setThrottlePos NOTIFY throttlePosChanged)
     Q_PROPERTY(qreal val READ getVal WRITE setVal NOTIFY valChanged)
 
 
@@ -56,101 +56,101 @@ public:
     Dashboard(QQuickItem *parent = 0);
     virtual void paint(QPainter *painter);
 
-    qreal   getSpeedometerSize();
-    qreal   getStartAngle();
-    qreal   getAlignAngle();
-    qreal   getLowestRange();
-    qreal   getHighestRange();
-    int     getArcWidth();
-    QColor  getOuterColor();
-    QColor  getInnerColor();
-    QColor  getTextColor();
-    QColor  getBackgroundColor();
+    qreal   getSpeedometerSize() const;
+    qreal   getStartAngle() const;
+    qreal   getAlignAngle() const;
+    qreal   getLowestRange() const;
+    qreal   getHighestRange() const;
+    int     getArcWidth() const;
+    QColor  getOuterColor() const;
+    QColor  getInnerColor() const;
+    QColor  getTextColor() const;
+    QColor  getBackgroundColor() const;
 
-    int     getInnerArcWidth();
-    int     getInnerArcPos();
-    qreal   getProgressBarPos();
-    qreal   getProgressBarThickness();
-    qreal   getInnerCircleSize();
-    int     getInterval();
-    qreal   getTextBarSize();
-    qreal   getTickPosOffset();
-    qreal   getTextPosOffset();
-    qreal   getTickMarkLength();
-    qreal   getArcTextSize();
-    qreal   getProgBarArcPos();
-    QString getUnit();
-    QString getGaugeName();
-    qreal   getUnitOffset();
-    qreal   getGaugeNameOffset();
-    qreal   getUnitTextSize();
-    qreal   getGaugeNameTextSize();
+    int     getInnerArcWidth() const;
+    int     getInnerArcPos() const;
+    qreal   getProgressBarPos() const;
+    qreal   getProgressBarThickness() const;
+    qreal   getInnerCircleSize() const;
+    int     getInterval() const;
+    qreal   getTextBarSize() const;
+    qreal   getTickPosOffset() const;
+    qreal   getTextPosOffset() const;
+    qreal   getTickMarkLength() const;
+    qreal   getArcTextSize() const;
+    qreal   getProgBarArcPos() const;
+    QString getUnit() const;
+    QString getGaugeName() const;
+    qreal   getUnitOffset() const;
+    qreal   getGaugeNameOffset() const;
+    qreal   getUnitTextSize() const;
+    qreal   getGaugeNameTextSize() const;
 
-    qreal   getSpeed();
-    double  getEngineLoad();
-    int     getCoolantTemp();
-    int     getIntakePressure();
-    double  getRpm();
-    int     getIntakeTemp();
-    double  getMaf();
-    double  getThrottlePos();
+    qreal   getSpeed() const;
+    double  getEngineLoad() const;
+    int     getCoolantTemp() const;
+    int     getIntakePressure() const;
+    double  getRpm() const;
+    int     getIntakeTemp() const;
+    double  getMaf() const;
+    double  getThrottlePos() const;
 
-    qreal   getVal();
+    qreal   getVal() const;
 
     QPointF calculatePosition(const QRectF &rect, qreal angle, qreal offset);
 
-    void    setSpeedometerSize(qreal size);
-    void    setStartAngle(qreal startAngle);
-    void    setAlignAngle(qreal angle);
-    void    setLowestRange(qreal losbwestRange);
-    void    setHighestRange(qreal highestRange);
-    void    setArcWidth(int arcWidth);
-    void    setOuterColor(QColor outerColor);
-    void    setInnerColor(QColor innerColor);
-    void    setTextColor(QColor textColor);
-    void    setBackgroundColor(QColor backgroundColor);
+    void    setSpeedometerSize(const qreal &size);
+    void    setStartAngle(const qreal &startAngle);
+    void    setAlignAngle(const qreal &angle);
+    void    setLowestRange(const qreal &lowestRange);
+    void    setHighestRange(const qreal &highestRange);
+    void    setArcWidth(const int &arcWidth);
+    void    setOuterColor(const QColor &outerColor);
+    void    setInnerColor(const QColor &innerColor);
+    void    setTextColor(const QColor &textColor);
+    void    setBackgroundColor(const QColor &backgroundColor);
 
-    void    setInnerArcWidth(int InnerArcWidth);
-    void    setInnerArcPos(int InnerArcPos);
-    void    setProgressBarPos(qreal ProgressBarPos);
-    void    setProgressBarThickness(qreal ProgressBarThickness);
-    void    setInnerCircleSize(qreal InnerCircleSize);
-    void    setInterval(int Interval);
-    void    setTextBarSize(qreal TextBarSize);
-    void    setTickPosOffset(qreal TickPosOffset);
-    void    setTextPosOffset(qreal TextPosOffset);
-    void    setTickMarkLength(qreal TickMarkLength);
-    void    setArcTextSize(qreal ArcTextSize);
-    void    setProgBarArcPos(qreal ProgBarArcPos);
-    void    setUnit(QString unit);
-    void    setGaugeName(QString GaugeName);
-    void    setUnitOffset(qreal UnitOffset);
-    void    setGaugeNameOffset(qreal GaugeNameOffset);
-    void    setUnitTextSize(qreal UnitTextSize);
-    void    setGaugeNameTextSize(qreal GaugeNameTextSize);
+    void    setInnerArcWidth(const int &InnerArcWidth);
+    void    setInnerArcPos(const int &InnerArcPos);
+    void    setProgressBarPos(const qreal &ProgressBarPos);
+    void    setProgressBarThickness(const qreal &ProgressBarThickness);
+    void    setInnerCircleSize(const qreal &InnerCircleSize);
+    void    setInterval(const int &Interval);
+    void    setTextBarSize(const qreal &TextBarSize);
+    void    setTickPosOffset(const qreal &TickPosOffset);
+    void    setTextPosOffset(const qreal &TextPosOffset);
+    void    setTickMarkLength(const qreal &TickMarkLength);
+    void    setArcTextSize(const qreal &ArcTextSize);
+    void    setProgBarArcPos(const qreal &ProgBarArcPos);
+    void    setUnit(const QString &unit);
+    void    setGaugeName(const QString &GaugeName);
+    void    setUnitOffset(const qreal &UnitOffset);
+    void    setGaugeNameOffset(const qreal &GaugeNameOffset);
+    void    setUnitTextSize(const qreal &UnitTextSize);
+    void    setGaugeNameTextSize(const qreal &GaugeNameTextSize);
 
-    void    setSpeed(qreal Speed);
-    void    setEngineLoad(double EngineLoad);
-    void    setCoolantTemp(int CoolantTemp);
-    void    setIntakePressure(int IntakePressure);
-    void    setRpm(double Rpm);
-    void    setIntakeTemp(int IntakeTemp);
-    void    setMaf(double Maf);
-    void    setThrottlePos(double ThrottlePos);
+    void    setSpeed(const qreal &Speed);
+    void    setEngineLoad(const qreal &EngineLoad);
+    void    setCoolantTemp(const qreal &CoolantTemp);
+    void    setIntakePressure(const qreal &IntakePressure);
+    void    setRpm(const qreal &Rpm);
+    void    setIntakeTemp(const qreal &IntakeTemp);
+    void    setMaf(const qreal &Maf);
+    void    setThrottlePos(const qreal &ThrottlePos);
 
-    void    setVal(qreal val);
+    void    setVal(const qreal &val);
 
     void    drawBackgroundPixmap();
 
 public slots:
-    void speedReceived(const int speed);
-    void engineLoadReceived(const double EngineLoad);
-    void coolantTempReceived(const int CoolantTemp);
-    void intakePressReceived(const int IntakePressure);
-    void rpmReceived(const double Rpm);
-    void IntakeTempReceived(const int IntakeTemp);
-    void MassAirFlowReceived(const double Maf);
-    void ThrottlePosReceived(const double ThrottlePos);
+    void speedReceived(const qreal &speed);
+    void engineLoadReceived(const qreal &EngineLoad);
+    void coolantTempReceived(const qreal &CoolantTemp);
+    void intakePressReceived(const qreal &IntakePressure);
+    void rpmReceived(const qreal &Rpm);
+    void IntakeTempReceived(const qreal &IntakeTemp);
+    void MassAirFlowReceived(const qreal &Maf);
+    void ThrottlePosReceived(const qreal &ThrottlePos);
 
 signals:
     void    speedometerSizeChanged();

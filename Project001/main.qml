@@ -58,6 +58,23 @@ Window {
         anchors.right: parent.right
     }
 
+    Rectangle {
+        x : 974
+        y : 580
+        width: 50
+        height : 20
+        Text {
+            id: name
+            text: qsTr("text")
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                Qt.quit()
+            }
+        }
+    }
+
 
     Dashboard
     {

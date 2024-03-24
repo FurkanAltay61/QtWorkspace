@@ -37,10 +37,7 @@ public:
     {
         uint64_t prevTime;
         uint64_t currTime;
-        double prevValue;
-        double currValue;
-        double   slope;
-        double   sampledValue;
+        qreal    data;
     };
 
 private slots:
@@ -53,14 +50,14 @@ public slots:
 
 signals:
     void dataSent(const QString &data);
-    void engineLoadSent(const double load);
-    void coolantTempSent(const int cooltemp);
-    void intakePressSent(const int inpress);
-    void rpmSent(const double rpm);
-    void speedSent(const int speed);
-    void intakeTempSent(const int intemp);
-    void massAirFlowSent(const double maf);
-    void throttlePosSent(const double throtpos);
+    void engineLoadSent(const qreal &load);
+    void coolantTempSent(const qreal &cooltemp);
+    void intakePressSent(const qreal &inpress);
+    void rpmSent(const qreal &rpm);
+    void speedSent(const qreal &speed);
+    void intakeTempSent(const qreal &intemp);
+    void massAirFlowSent(const qreal &maf);
+    void throttlePosSent(const qreal &throtpos);
 
 
 private:
@@ -76,7 +73,7 @@ private:
     std::chrono::high_resolution_clock::time_point prevtime;
     void writeData(const QString& data);
     void processMessage(const QByteArray& message);
-    volatile qreal m_counter;
+    qreal m_counter;
 
     std::shared_ptr<Datapoint> m_EngineLoadStruct;
     std::shared_ptr<Datapoint> m_CoolantTempStruct;

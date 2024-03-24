@@ -47,28 +47,28 @@ Dashboard::Dashboard(QQuickItem *parent)
 }
 
 
-void Dashboard::engineLoadReceived(const double load){
+void Dashboard::engineLoadReceived(const qreal &load){
     setEngineLoad(load);
 }
-void Dashboard::coolantTempReceived(const int cooltemp){
+void Dashboard::coolantTempReceived(const qreal &cooltemp){
     setCoolantTemp(cooltemp);
 }
-void Dashboard::intakePressReceived(const int inpress){
+void Dashboard::intakePressReceived(const qreal &inpress){
     setIntakePressure(inpress);
 }
-void Dashboard::rpmReceived(const double rpm){
+void Dashboard::rpmReceived(const qreal &rpm){
     setRpm(rpm);
 }
-void Dashboard::speedReceived(const int speed){
+void Dashboard::speedReceived(const qreal &speed){
     setSpeed(speed);
 }
-void Dashboard::IntakeTempReceived(const int intemp){
+void Dashboard::IntakeTempReceived(const qreal &intemp){
     setIntakeTemp(intemp);
 }
-void Dashboard::MassAirFlowReceived(const double maf){
+void Dashboard::MassAirFlowReceived(const qreal &maf){
     setMaf(maf);
 }
-void Dashboard::ThrottlePosReceived(const double throtpos){
+void Dashboard::ThrottlePosReceived(const qreal &throtpos){
     setThrottlePos(throtpos);
 }
 
@@ -219,170 +219,194 @@ QPointF Dashboard::calculatePosition(const QRectF &rect, qreal angle, qreal offs
 }
 
 
-qreal Dashboard::getSpeedometerSize()
+qreal Dashboard::getSpeedometerSize() const
 {
     return m_SpeedometerSize;
 }
 
-qreal Dashboard::getStartAngle()
+qreal Dashboard::getStartAngle() const
 {
     return m_StartAngle;
 }
 
-
-qreal Dashboard::getAlignAngle()
+qreal Dashboard::getAlignAngle() const
 {
     return m_AlignAngle;
 }
 
-
-qreal Dashboard::getLowestRange()
+qreal Dashboard::getLowestRange() const
 {
     return m_LowestRange;
 }
 
-qreal Dashboard::getHighestRange()
+qreal Dashboard::getHighestRange() const
 {
     return m_HighestRange;
 }
 
-int Dashboard::getArcWidth()
+int Dashboard::getArcWidth() const
 {
     return m_ArcWidth;
 }
 
-QColor Dashboard::getOuterColor()
+QColor Dashboard::getOuterColor() const
 {
     return m_OuterColor;
 }
 
-QColor Dashboard::getInnerColor()
+QColor Dashboard::getInnerColor() const
 {
     return m_InnerColor;
 }
 
-QColor Dashboard::getTextColor()
+QColor Dashboard::getTextColor() const
 {
     return m_TextColor;
 }
 
-QColor Dashboard::getBackgroundColor()
+QColor Dashboard::getBackgroundColor() const
 {
     return m_BackgroundColor;
 }
 
-int Dashboard::getInnerArcWidth(){
+int Dashboard::getInnerArcWidth() const
+{
     return m_InnerArcWidth;
 }
 
-int Dashboard::getInnerArcPos(){
+int Dashboard::getInnerArcPos() const
+{
     return m_InnerArcPos;
 }
 
-qreal Dashboard::getProgressBarPos(){
+qreal Dashboard::getProgressBarPos() const
+{
     return m_ProgressBarPos;
 }
 
-qreal Dashboard::getProgressBarThickness(){
+qreal Dashboard::getProgressBarThickness() const
+{
     return m_ProgressBarThickness;
 }
 
-qreal Dashboard::getInnerCircleSize(){
+qreal Dashboard::getInnerCircleSize() const
+{
     return m_InnerCircleSize;
 }
 
-int Dashboard::getInterval(){
+int Dashboard::getInterval() const
+{
     return m_Interval;
 }
 
-qreal Dashboard::getTextBarSize(){
+qreal Dashboard::getTextBarSize() const
+{
     return m_TextBarSize;
 }
 
-qreal Dashboard::getTickPosOffset(){
+qreal Dashboard::getTickPosOffset() const
+{
     return m_TickPosOffset;
 }
 
-qreal Dashboard::getTextPosOffset(){
+qreal Dashboard::getTextPosOffset() const
+{
     return m_TextPosOffset;
 }
 
-qreal Dashboard::getTickMarkLength(){
+qreal Dashboard::getTickMarkLength() const
+{
     return m_TickMarkLength;
 }
 
-qreal Dashboard::getArcTextSize(){
+qreal Dashboard::getArcTextSize() const
+{
     return m_ArcTextSize;
 }
 
-qreal Dashboard::getProgBarArcPos(){
+qreal Dashboard::getProgBarArcPos() const
+{
     return m_ProgBarArcPos;
 }
 
-QString Dashboard::getUnit(){
+QString Dashboard::getUnit() const
+{
     return m_Unit;
 }
 
-QString Dashboard::getGaugeName(){
+QString Dashboard::getGaugeName() const
+{
     return m_GaugeName;
 }
 
-qreal Dashboard::getUnitOffset(){
+qreal Dashboard::getUnitOffset() const
+{
     return m_UnitOffset;
 }
 
-qreal Dashboard::getGaugeNameOffset(){
+qreal Dashboard::getGaugeNameOffset() const
+{
     return m_GaugeNameOffset;
 }
 
-qreal Dashboard::getUnitTextSize(){
+qreal Dashboard::getUnitTextSize() const
+{
     return m_UnitTextSize;
 }
 
-qreal Dashboard::getGaugeNameTextSize(){
+qreal Dashboard::getGaugeNameTextSize() const
+{
     return m_GaugeNameTextSize;
 }
 
-qreal Dashboard::getSpeed()
+qreal Dashboard::getSpeed() const
 {
     return m_Speed;
 }
 
-double Dashboard::getEngineLoad(){
+double Dashboard::getEngineLoad() const
+{
     return m_EngineLoad;
 }
 
-int Dashboard::getCoolantTemp(){
+int Dashboard::getCoolantTemp() const
+{
     return m_CoolantTemp;
 }
 
-int Dashboard::getIntakePressure(){
+int Dashboard::getIntakePressure() const
+{
     return m_IntakePressure;
 }
 
-double Dashboard::getRpm(){
+double Dashboard::getRpm() const
+{
     return m_Rpm;
 }
 
-int Dashboard::getIntakeTemp(){
+int Dashboard::getIntakeTemp() const
+{
     return m_IntakeTemp;
 }
 
-double Dashboard::getMaf(){
+double Dashboard::getMaf() const
+{
     return m_Maf;
 }
 
-double Dashboard::getThrottlePos(){
+double Dashboard::getThrottlePos() const
+{
     return m_ThrottlePos;
 }
 
-qreal  Dashboard::getVal(){
+qreal  Dashboard::getVal() const
+{
     return m_Val;
 }
 
 
 
-void Dashboard::setSpeedometerSize(qreal size)
+void Dashboard::setSpeedometerSize(const qreal &size)
 {
     if(m_SpeedometerSize == size)
         return;
@@ -392,7 +416,7 @@ void Dashboard::setSpeedometerSize(qreal size)
     emit speedometerSizeChanged();
 }
 
-void Dashboard::setStartAngle(qreal startAngle)
+void Dashboard::setStartAngle(const qreal &startAngle)
 {
     if(m_StartAngle == startAngle)
         return;
@@ -403,7 +427,7 @@ void Dashboard::setStartAngle(qreal startAngle)
     emit startAngleChanged();
 }
 
-void Dashboard::setAlignAngle(qreal angle)
+void Dashboard::setAlignAngle(const qreal &angle)
 {
     if(m_StartAngle == angle)
         return;
@@ -414,7 +438,7 @@ void Dashboard::setAlignAngle(qreal angle)
     emit alignAngleChanged();
 }
 
-void Dashboard::setLowestRange(qreal lowestRange)
+void Dashboard::setLowestRange(const qreal &lowestRange)
 {
     if(m_LowestRange == lowestRange)
         return;
@@ -425,7 +449,7 @@ void Dashboard::setLowestRange(qreal lowestRange)
     emit lowestRangeChanged();
 }
 
-void Dashboard::setHighestRange(qreal highestRange)
+void Dashboard::setHighestRange(const qreal &highestRange)
 {
     if(m_HighestRange == highestRange)
         return;
@@ -436,7 +460,7 @@ void Dashboard::setHighestRange(qreal highestRange)
     emit highestRangeChanged();
 }
 
-void Dashboard::setArcWidth(int arcWidth)
+void Dashboard::setArcWidth(const int &arcWidth)
 {
     if(m_ArcWidth == arcWidth)
         return;
@@ -447,7 +471,7 @@ void Dashboard::setArcWidth(int arcWidth)
     emit arcWidthChanged();
 }
 
-void Dashboard::setOuterColor(QColor outerColor)
+void Dashboard::setOuterColor(const QColor &outerColor)
 {
     if(m_OuterColor == outerColor)
         return;
@@ -458,7 +482,7 @@ void Dashboard::setOuterColor(QColor outerColor)
     emit outerColorChanged();
 }
 
-void Dashboard::setInnerColor(QColor innerColor)
+void Dashboard::setInnerColor(const QColor &innerColor)
 {
     if(m_InnerColor == innerColor)
         return;
@@ -469,7 +493,7 @@ void Dashboard::setInnerColor(QColor innerColor)
     emit innerColorChanged();
 }
 
-void Dashboard::setTextColor(QColor textColor)
+void Dashboard::setTextColor(const QColor &textColor)
 {
     if(m_TextColor == textColor)
         return;
@@ -480,7 +504,7 @@ void Dashboard::setTextColor(QColor textColor)
     emit textColorChanged();
 }
 
-void Dashboard::setBackgroundColor(QColor backgroundColor)
+void Dashboard::setBackgroundColor(const QColor &backgroundColor)
 {
     if(m_BackgroundColor == backgroundColor)
         return;
@@ -493,7 +517,7 @@ void Dashboard::setBackgroundColor(QColor backgroundColor)
 
 
 
-void Dashboard::setInnerArcWidth(int InnerArcWidth){
+void Dashboard::setInnerArcWidth(const int &InnerArcWidth){
     if(m_InnerArcWidth == InnerArcWidth)
         return;
 
@@ -503,7 +527,7 @@ void Dashboard::setInnerArcWidth(int InnerArcWidth){
     emit innerArcWidthChanged();
 }
 
-void Dashboard::setInnerArcPos(int InnerArcPos){
+void Dashboard::setInnerArcPos(const int &InnerArcPos){
     if(m_InnerArcPos == InnerArcPos)
         return;
 
@@ -513,7 +537,7 @@ void Dashboard::setInnerArcPos(int InnerArcPos){
     emit innerArcPosChanged();
 }
 
-void Dashboard::setProgressBarPos(qreal ProgressBarPos){
+void Dashboard::setProgressBarPos(const qreal &ProgressBarPos){
     if(m_ProgressBarPos == ProgressBarPos)
         return;
 
@@ -523,7 +547,7 @@ void Dashboard::setProgressBarPos(qreal ProgressBarPos){
     emit progressBarPosChanged();
 }
 
-void Dashboard::setProgressBarThickness(qreal ProgressBarThickness){
+void Dashboard::setProgressBarThickness(const qreal &ProgressBarThickness){
     if(m_ProgressBarThickness == ProgressBarThickness)
         return;
 
@@ -533,7 +557,7 @@ void Dashboard::setProgressBarThickness(qreal ProgressBarThickness){
     emit progressBarThicknessChanged();
 }
 
-void Dashboard::setInnerCircleSize(qreal InnerCircleSize){
+void Dashboard::setInnerCircleSize(const qreal &InnerCircleSize){
     if(m_InnerCircleSize == InnerCircleSize)
         return;
 
@@ -543,7 +567,7 @@ void Dashboard::setInnerCircleSize(qreal InnerCircleSize){
     emit innerCircleSizeChanged();
 }
 
-void Dashboard::setInterval(int Interval){
+void Dashboard::setInterval(const int &Interval){
     if(m_Interval == Interval)
         return;
 
@@ -553,7 +577,7 @@ void Dashboard::setInterval(int Interval){
     emit intervalChanged();
 }
 
-void Dashboard::setTextBarSize(qreal TextBarSize){
+void Dashboard::setTextBarSize(const qreal &TextBarSize){
     if(m_TextBarSize == TextBarSize)
         return;
 
@@ -563,7 +587,7 @@ void Dashboard::setTextBarSize(qreal TextBarSize){
     emit textBarSizeChanged();
 }
 
-void Dashboard::setTickPosOffset(qreal TickPosOffset){
+void Dashboard::setTickPosOffset(const qreal &TickPosOffset){
     if(m_TickPosOffset == TickPosOffset)
         return;
 
@@ -573,7 +597,7 @@ void Dashboard::setTickPosOffset(qreal TickPosOffset){
     emit tickPosOffsetChanged();
 }
 
-void Dashboard::setTextPosOffset(qreal TextPosOffset){
+void Dashboard::setTextPosOffset(const qreal &TextPosOffset){
     if(m_TextPosOffset == TextPosOffset)
         return;
 
@@ -583,7 +607,7 @@ void Dashboard::setTextPosOffset(qreal TextPosOffset){
     emit textPosOffsetChanged();
 }
 
-void Dashboard::setTickMarkLength(qreal TickMarkLength){
+void Dashboard::setTickMarkLength(const qreal &TickMarkLength){
     if(m_TickMarkLength == TickMarkLength)
         return;
 
@@ -594,7 +618,7 @@ void Dashboard::setTickMarkLength(qreal TickMarkLength){
 }
 
 
-void Dashboard::setArcTextSize(qreal ArcTextSize){
+void Dashboard::setArcTextSize(const qreal &ArcTextSize){
     if(m_ArcTextSize == ArcTextSize)
         return;
     m_ArcTextSize = ArcTextSize;
@@ -603,7 +627,7 @@ void Dashboard::setArcTextSize(qreal ArcTextSize){
     emit arcTextSizeChanged();
 }
 
-void Dashboard::setProgBarArcPos(qreal ProgBarArcPos){
+void Dashboard::setProgBarArcPos(const qreal &ProgBarArcPos){
     if(m_ProgBarArcPos == ProgBarArcPos)
         return;
     m_ProgBarArcPos = ProgBarArcPos;
@@ -612,7 +636,7 @@ void Dashboard::setProgBarArcPos(qreal ProgBarArcPos){
     emit progBarArcPosChanged();
 }
 
-void Dashboard::setUnit(QString Unit){
+void Dashboard::setUnit(const QString &Unit){
     if(m_Unit == Unit)
         return;
     m_Unit = Unit;
@@ -621,7 +645,7 @@ void Dashboard::setUnit(QString Unit){
     emit unitChanged();
 }
 
-void Dashboard::setGaugeName(QString GaugeName){
+void Dashboard::setGaugeName(const QString &GaugeName){
     if(m_GaugeName == GaugeName)
         return;
     m_GaugeName = GaugeName;
@@ -630,7 +654,7 @@ void Dashboard::setGaugeName(QString GaugeName){
     emit gaugeNameChanged();
 }
 
-void Dashboard::setUnitOffset(qreal UnitOffset){
+void Dashboard::setUnitOffset(const qreal &UnitOffset){
     if(m_UnitOffset == UnitOffset)
         return;
     m_UnitOffset = UnitOffset;
@@ -639,7 +663,7 @@ void Dashboard::setUnitOffset(qreal UnitOffset){
     emit unitOffsetChanged();
 }
 
-void Dashboard::setGaugeNameOffset(qreal GaugeNameOffset){
+void Dashboard::setGaugeNameOffset(const qreal &GaugeNameOffset){
     if(m_GaugeNameOffset == GaugeNameOffset)
         return;
     m_GaugeNameOffset = GaugeNameOffset;
@@ -648,7 +672,7 @@ void Dashboard::setGaugeNameOffset(qreal GaugeNameOffset){
     emit gaugeNameOffsetChanged();
 }
 
-void Dashboard::setUnitTextSize(qreal UnitTextSize){
+void Dashboard::setUnitTextSize(const qreal &UnitTextSize){
     if(m_UnitTextSize == UnitTextSize)
         return;
     m_UnitTextSize = UnitTextSize;
@@ -656,7 +680,7 @@ void Dashboard::setUnitTextSize(qreal UnitTextSize){
     update();
     emit unitTextSizeChanged();
 }
-void Dashboard::setGaugeNameTextSize(qreal GaugeNameTextSize){
+void Dashboard::setGaugeNameTextSize(const qreal &GaugeNameTextSize){
     if(m_GaugeNameTextSize == GaugeNameTextSize)
         return;
     m_GaugeNameTextSize = GaugeNameTextSize;
@@ -667,7 +691,7 @@ void Dashboard::setGaugeNameTextSize(qreal GaugeNameTextSize){
 
 
 
-void Dashboard::setSpeed(qreal speed)
+void Dashboard::setSpeed(const qreal &speed)
 {
     if(m_Speed == speed)
         return;
@@ -677,7 +701,7 @@ void Dashboard::setSpeed(qreal speed)
     emit speedChanged();
 }
 
-void Dashboard::setEngineLoad(double EngineLoad)
+void Dashboard::setEngineLoad(const qreal &EngineLoad)
 {
     if(m_EngineLoad == EngineLoad)
         return;
@@ -687,7 +711,7 @@ void Dashboard::setEngineLoad(double EngineLoad)
     emit engineLoadChanged();
 }
 
-void Dashboard::setCoolantTemp(int CoolantTemp)
+void Dashboard::setCoolantTemp(const qreal &CoolantTemp)
 {
     if(m_CoolantTemp == CoolantTemp)
         return;
@@ -697,7 +721,7 @@ void Dashboard::setCoolantTemp(int CoolantTemp)
     emit coolantTempChanged();
 }
 
-void Dashboard::setIntakePressure(int IntakePressure)
+void Dashboard::setIntakePressure(const qreal &IntakePressure)
 {
     if(m_IntakePressure == IntakePressure)
         return;
@@ -707,7 +731,7 @@ void Dashboard::setIntakePressure(int IntakePressure)
     emit intakePressureChanged();
 }
 
-void Dashboard::setRpm(double Rpm)
+void Dashboard::setRpm(const qreal &Rpm)
 {
     if(m_Rpm == Rpm)
         return;
@@ -717,7 +741,7 @@ void Dashboard::setRpm(double Rpm)
     emit rpmChanged();
 }
 
-void Dashboard::setIntakeTemp(int IntakeTemp)
+void Dashboard::setIntakeTemp(const qreal &IntakeTemp)
 {
     if(m_IntakeTemp == IntakeTemp)
         return;
@@ -727,7 +751,7 @@ void Dashboard::setIntakeTemp(int IntakeTemp)
     emit intakeTempChanged();
 }
 
-void Dashboard::setMaf(double Maf)
+void Dashboard::setMaf(const qreal &Maf)
 {
     if(m_Maf == Maf)
         return;
@@ -737,7 +761,7 @@ void Dashboard::setMaf(double Maf)
     emit mafChanged();
 }
 
-void Dashboard::setThrottlePos(double ThrottlePos)
+void Dashboard::setThrottlePos(const qreal &ThrottlePos)
 {
     if(m_ThrottlePos == ThrottlePos)
         return;
@@ -747,7 +771,7 @@ void Dashboard::setThrottlePos(double ThrottlePos)
     emit throttlePosChanged();
 }
 
-void Dashboard::setVal(double mval){
+void Dashboard::setVal(const qreal &mval){
     if(m_Val == mval)
         return;
 
