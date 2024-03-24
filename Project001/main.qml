@@ -73,6 +73,7 @@ Window {
         Behavior on val {
             PropertyAnimation {
                 duration : animationDuration
+                easing.type: Easing.Linear
             }
         }
         arcWidth: arcWidth
@@ -112,7 +113,7 @@ Window {
         Behavior on val {
             PropertyAnimation {
                 duration : animationDuration
-                easing.type: Easing.InOutQuad
+                easing.type: Easing.Linear
             }
         }
         arcWidth: arcWidth
@@ -151,6 +152,7 @@ Window {
         Behavior on val {
             PropertyAnimation {
                 duration : animationDuration
+                easing.type: Easing.Linear
             }
         }
         arcWidth: arcWidth
@@ -206,6 +208,7 @@ Window {
         Behavior on val {
             PropertyAnimation {
                 duration : animationDuration
+                easing.type: Easing.Linear
             }
         }
         arcWidth: arcWidth
@@ -259,6 +262,7 @@ Window {
         Behavior on val {
             PropertyAnimation {
                 duration : animationDuration
+                easing.type: Easing.Linear
             }
         }
         arcWidth: arcWidth
@@ -288,6 +292,7 @@ Window {
         Behavior on val {
             PropertyAnimation {
                 duration : animationDuration
+                easing.type: Easing.Linear
             }
         }
         arcWidth: arcWidth
@@ -302,29 +307,29 @@ Window {
 
     }
 
-    Dashboard
-    {
-        x : 412
-        y : 0
-        width: speedometerSize
-        height: speedometerSize
-        startAngle: startAngle
-        lowestRange: lowestRange
-        highestRange: highestRange
-        speed: mydashboard.speed
-        Behavior on val {
-            PropertyAnimation {
-                duration : animationDuration
-            }
-        }
-        arcWidth: arcWidth
-        outerColor: outerColor
-        innerColor: innerColor
-        textColor: textColor
-        backgroundColor: backgroundColor
-        gaugeNameTextSize: initialGaugeNameTextSize - 2
-        progressBarPos: initialProgressBarPos + 2
-    }
+    // Dashboard
+    // {
+    //     x : 412
+    //     y : 0
+    //     width: speedometerSize
+    //     height: speedometerSize
+    //     startAngle: startAngle
+    //     lowestRange: lowestRange
+    //     highestRange: highestRange
+    //     speed: mydashboard.speed
+    //     Behavior on val {
+    //         PropertyAnimation {
+    //             duration : animationDuration
+    //         }
+    //     }
+    //     arcWidth: arcWidth
+    //     outerColor: outerColor
+    //     innerColor: innerColor
+    //     textColor: textColor
+    //     backgroundColor: backgroundColor
+    //     gaugeNameTextSize: initialGaugeNameTextSize - 2
+    //     progressBarPos: initialProgressBarPos + 2
+    // }
 
 
 

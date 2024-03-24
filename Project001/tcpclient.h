@@ -29,7 +29,7 @@
 
 class TcpClient : public QObject {
     Q_OBJECT
-    const int SENDING_PERIOD = 1600;
+    const int SENDING_PERIOD = 200;
 public:
     explicit TcpClient(const QString& ip, quint16 port, QObject* parent = nullptr);
     void connectToServer();
@@ -69,9 +69,9 @@ private:
     quint16 serverPort;
     QTimer* sendTimer;
     QByteArray buffer;
-    // QStringList datas{"0104\r", "0105\r", "010B\r", "010C\r",
-    //                   "010D\r", "010F\r", "0110\r", "0111\r"};
-    //QStringList datas{"010C\r","0104\r"};
+    QStringList datas{"0104\r", "0105\r", "010B\r", "010C\r",
+                      "010D\r", "010F\r", "0110\r", "0111\r"};
+    //QStringList datas{"0104\r","010C\r","010D\r","0110\r"};
 
     std::chrono::high_resolution_clock::time_point prevtime;
     void writeData(const QString& data);

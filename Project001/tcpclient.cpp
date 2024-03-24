@@ -36,7 +36,7 @@ void TcpClient::connectToServer() {
     }
     qDebug() << "Connected to the server!";
     // Setup OBD-II communication
-    writeData("AT E0\rAT L0\rAT H0\rAT S1\rAT AT 1\r");
+    writeData("AT E0\rAT L0\rAT H0\rAT S1\rAT AT1\r");
     sendTimer->start(SENDING_PERIOD);
 }
 
@@ -71,27 +71,30 @@ void TcpClient::onSendData() {
     //         count = 0;
     // }
 
+
     // static int count{0};
     // static int tickcount{0};
 
     // if (!datas.isEmpty()) {
-    //     if(datas[count] == 0x0105 && tickcount == 1200)     //Engine coolant temperature //60sn
+    //     if(datas[count] == "0105\r" && tickcount == 250)     //Engine coolant temperature //60sn
     //         writeData(datas[count]);
-    //     else if(datas[count] == 0x010B && tickcount == 50) //Intake manifold absolute pressure //5sn
+    //     else if(datas[count] == "010B\r" && tickcount == 25) //Intake manifold absolute pressure //5sn
     //         writeData(datas[count]);
-    //     else if(datas[count] == 0x010F && tickcount == 50) //Intake air temperature //10sn
+    //     else if(datas[count] == "010F\r" && tickcount == 50) //Intake air temperature //10sn
     //         writeData(datas[count]);
-    //     else if(datas[count] == 0x0111 && tickcount == 50) //Throttle position //10sn
+    //     else if(datas[count] == "0111\r" && tickcount == 5) //Throttle position //10sn
     //         writeData(datas[count]);
     //     else
     //         writeData(datas[count]);
 
-    //     count++;
+    //     if(retval == "YES")
+    //         count++;
+
     //     if (count >= datas.size())
     //         count = 0;
 
     //     tickcount++;
-    //     if (tickcount >= 1200)
+    //     if (tickcount > 250)
     //         tickcount = 0;
     // }
 
