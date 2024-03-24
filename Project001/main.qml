@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import Dashboardqml 1.0
+import QtQuick.Timeline 1.0
 
 
 Window {
@@ -50,9 +51,28 @@ Window {
     property double initialThrottlePos : 0
     property real initialVal : 0
 
+    property int animationDuration : 1600
+
     FpsCounter {
         id : fpsItem
         anchors.right: parent.right
+    }
+
+    Rectangle {
+        x : 974
+        y : 580
+        width: 50
+        height : 20
+        Text {
+            id: close
+            text: qsTr("close")
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                Qt.quit()
+            }
+        }
     }
 
 
@@ -67,6 +87,12 @@ Window {
         lowestRange: lowestRange
         highestRange: highestRange
         val: mydashboard.speed
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+                easing.type: Easing.Linear
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -88,6 +114,7 @@ Window {
         gaugeNameTextSize: initialGaugeNameTextSize + 5
     }
 
+
     Dashboard
     {
         x : 512
@@ -100,6 +127,12 @@ Window {
         highestRange: 8000
         interval: 1000
         val: mydashboard.rpm
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+                easing.type: Easing.Linear
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -133,6 +166,12 @@ Window {
         highestRange: 100
         interval: 10
         val: mydashboard.engineload
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+                easing.type: Easing.Linear
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -183,6 +222,12 @@ Window {
         highestRange: 255
         interval: 25
         val: mydashboard.intakepressure
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+                easing.type: Easing.Linear
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -231,6 +276,12 @@ Window {
         highestRange: 255
         interval: 25
         val: mydashboard.maf
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+                easing.type: Easing.Linear
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -255,6 +306,12 @@ Window {
         highestRange: 100
         interval: 10
         val: mydashboard.throttlepos
+        Behavior on val {
+            PropertyAnimation {
+                duration : animationDuration
+                easing.type: Easing.Linear
+            }
+        }
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -267,24 +324,29 @@ Window {
 
     }
 
-    Dashboard
-    {
-        x : 412
-        y : 0
-        width: speedometerSize
-        height: speedometerSize
-        startAngle: startAngle
-        lowestRange: lowestRange
-        highestRange: highestRange
-        speed: mydashboard.speed
-        arcWidth: arcWidth
-        outerColor: outerColor
-        innerColor: innerColor
-        textColor: textColor
-        backgroundColor: backgroundColor
-        gaugeNameTextSize: initialGaugeNameTextSize - 2
-        progressBarPos: initialProgressBarPos + 2
-    }
+    // Dashboard
+    // {
+    //     x : 412
+    //     y : 0
+    //     width: speedometerSize
+    //     height: speedometerSize
+    //     startAngle: startAngle
+    //     lowestRange: lowestRange
+    //     highestRange: highestRange
+    //     speed: mydashboard.speed
+    //     Behavior on val {
+    //         PropertyAnimation {
+    //             duration : animationDuration
+    //         }
+    //     }
+    //     arcWidth: arcWidth
+    //     outerColor: outerColor
+    //     innerColor: innerColor
+    //     textColor: textColor
+    //     backgroundColor: backgroundColor
+    //     gaugeNameTextSize: initialGaugeNameTextSize - 2
+    //     progressBarPos: initialProgressBarPos + 2
+    // }
 
 
 

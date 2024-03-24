@@ -16,9 +16,6 @@
  * 0120 -> PIDs supported [$21 - $40]
  */
 
-#define METHOD1
-//#define METHOD2
-
 #include <QTcpSocket>
 #include <QTimer>
 #include <QObject>
@@ -26,12 +23,23 @@
 #include <QStringList>
 #include <QByteArray>
 #include <QCoreApplication>
+#include <QDateTime>
+#include <memory>
+#include <cmath>
 
 class TcpClient : public QObject {
     Q_OBJECT
+    const int SENDING_PERIOD = 200;
 public:
     explicit TcpClient(const QString& ip, quint16 port, QObject* parent = nullptr);
+    ~TcpClient();
     void connectToServer();
+    struct Datapoint
+    {
+        uint64_t prevTime;
+        uint64_t currTime;
+        qreal    data;
+    };
 
 private slots:
     void onConnected();
@@ -39,16 +47,18 @@ private slots:
     void onError(QAbstractSocket::SocketError socketError);
     void onSendData();
 
+public slots:
+
 signals:
     void dataSent(const QString &data);
-    void engineLoadSent(const double load);
-    void coolantTempSent(const int cooltemp);
-    void intakePressSent(const int inpress);
-    void rpmSent(const double rpm);
-    void speedSent(const int speed);
-    void intakeTempSent(const int intemp);
-    void massAirFlowSent(const double maf);
-    void throttlePosSent(const double throtpos);
+    void engineLoadSent(const qreal &load);
+    void coolantTempSent(const qreal &cooltemp);
+    void intakePressSent(const qreal &inpress);
+    void rpmSent(const qreal &rpm);
+    void speedSent(const qreal &speed);
+    void intakeTempSent(const qreal &intemp);
+    void massAirFlowSent(const qreal &maf);
+    void throttlePosSent(const qreal &throtpos);
 
 
 private:
@@ -57,16 +67,25 @@ private:
     quint16 serverPort;
     QTimer* sendTimer;
     QByteArray buffer;
-#ifdef METHOD1
     QStringList datas{"0104\r", "0105\r", "010B\r", "010C\r",
                       "010D\r", "010F\r", "0110\r", "0111\r"};
-#endif
-#ifdef METHOD2
-    QString alldata{"0104\r0105\r010B\r010C\r010D\r010F\r0110\r0111\r"};
-#endif
+    //QStringList datas{"0104\r","010C\r","010D\r","0110\r"};
+
     std::chrono::high_resolution_clock::time_point prevtime;
     void writeData(const QString& data);
     void processMessage(const QByteArray& message);
+    qreal m_counter;
+
+    std::shared_ptr<Datapoint> m_EngineLoadStruct;
+    std::shared_ptr<Datapoint> m_CoolantTempStruct;
+    std::shared_ptr<Datapoint> m_IntakePressStruct;
+    std::shared_ptr<Datapoint> m_RpmStruct;
+    std::shared_ptr<Datapoint> m_SpeedStruct;
+    std::shared_ptr<Datapoint> m_IntakeTempStruct;
+    std::shared_ptr<Datapoint> m_FlowRateStruct;
+    std::shared_ptr<Datapoint> m_ThrottlePosStruct;
+
+    QString retval{""};
 };
 
 

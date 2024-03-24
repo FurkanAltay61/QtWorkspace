@@ -16,20 +16,23 @@ int main(int argc, char *argv[])
     Dashboard mydashboard;
     qmlRegisterType<Dashboard>("Dashboardqml", 1, 0, "Dashboard");
     QQmlApplicationEngine engine;
-    TcpClient client("192.168.0.10", (quint16)35000);
-    QThread clientThread;
-    client.moveToThread(&clientThread);
-    clientThread.start();
-    QObject::connect(&client, &TcpClient::dataSent,&mydashboard,&Dashboard::onDataReceived);
 
-    QObject::connect(&client, &TcpClient::engineLoadSent,&mydashboard,&Dashboard::engineLoadReceived);
-    QObject::connect(&client, &TcpClient::coolantTempSent,&mydashboard,&Dashboard::coolantTempReceived);
-    QObject::connect(&client, &TcpClient::intakePressSent,&mydashboard,&Dashboard::intakePressReceived);
-    QObject::connect(&client, &TcpClient::rpmSent,&mydashboard,&Dashboard::rpmReceived);
-    QObject::connect(&client, &TcpClient::speedSent,&mydashboard,&Dashboard::speedReceived);
-    QObject::connect(&client, &TcpClient::intakeTempSent,&mydashboard,&Dashboard::IntakeTempReceived);
-    QObject::connect(&client, &TcpClient::massAirFlowSent,&mydashboard,&Dashboard::MassAirFlowReceived);
-    QObject::connect(&client, &TcpClient::throttlePosSent,&mydashboard,&Dashboard::ThrottlePosReceived);
+    TcpClient *client = new TcpClient("192.168.0.10", (quint16)35000);
+    QThread clientThread;
+    client->moveToThread(&clientThread);
+    QObject::connect(&clientThread, &QThread::started, client, &TcpClient::connectToServer);
+    QObject::connect(&clientThread, &QThread::finished, client, &QObject::deleteLater);
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, &clientThread, &QThread::quit);
+    clientThread.start();
+
+    QObject::connect(client, &TcpClient::engineLoadSent, &mydashboard, &Dashboard::engineLoadReceived);
+    QObject::connect(client, &TcpClient::coolantTempSent, &mydashboard, &Dashboard::coolantTempReceived);
+    QObject::connect(client, &TcpClient::intakePressSent, &mydashboard, &Dashboard::intakePressReceived);
+    QObject::connect(client, &TcpClient::rpmSent, &mydashboard, &Dashboard::rpmReceived);
+    QObject::connect(client, &TcpClient::speedSent, &mydashboard, &Dashboard::speedReceived);
+    QObject::connect(client, &TcpClient::intakeTempSent, &mydashboard, &Dashboard::IntakeTempReceived);
+    QObject::connect(client, &TcpClient::massAirFlowSent, &mydashboard, &Dashboard::MassAirFlowReceived);
+    QObject::connect(client, &TcpClient::throttlePosSent, &mydashboard, &Dashboard::ThrottlePosReceived);
 
     engine.rootContext()->setContextProperty("mydashboard",&mydashboard);
     const QUrl url(QStringLiteral("qrc:/main.qml"));
@@ -46,7 +49,12 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    return app.exec();
+    int ret = app.exec();
+
+    clientThread.quit();
+    clientThread.wait();
+    qDebug() << "thread quitted";
+    return ret;
 }
 
 
