@@ -33,43 +33,9 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_GaugeNameOffset(100),
     m_UnitTextSize(7),
     m_GaugeNameTextSize(10),
-    m_Speed(0),
-    m_EngineLoad(0),
-    m_CoolantTemp(0),
-    m_IntakePressure(0),
-    m_Rpm(0),
-    m_IntakeTemp(0),
-    m_Maf(0),
-    m_ThrottlePos(0),
     m_Val(0)
 {
     drawBackgroundPixmap();
-}
-
-
-void Dashboard::engineLoadReceived(const qreal &load){
-    setEngineLoad(load);
-}
-void Dashboard::coolantTempReceived(const qreal &cooltemp){
-    setCoolantTemp(cooltemp);
-}
-void Dashboard::intakePressReceived(const qreal &inpress){
-    setIntakePressure(inpress);
-}
-void Dashboard::rpmReceived(const qreal &rpm){
-    setRpm(rpm);
-}
-void Dashboard::speedReceived(const qreal &speed){
-    setSpeed(speed);
-}
-void Dashboard::IntakeTempReceived(const qreal &intemp){
-    setIntakeTemp(intemp);
-}
-void Dashboard::MassAirFlowReceived(const qreal &maf){
-    setMaf(maf);
-}
-void Dashboard::ThrottlePosReceived(const qreal &throtpos){
-    setThrottlePos(throtpos);
 }
 
 void Dashboard::drawBackgroundPixmap(){
@@ -357,46 +323,6 @@ qreal Dashboard::getUnitTextSize() const
 qreal Dashboard::getGaugeNameTextSize() const
 {
     return m_GaugeNameTextSize;
-}
-
-qreal Dashboard::getSpeed() const
-{
-    return m_Speed;
-}
-
-double Dashboard::getEngineLoad() const
-{
-    return m_EngineLoad;
-}
-
-int Dashboard::getCoolantTemp() const
-{
-    return m_CoolantTemp;
-}
-
-int Dashboard::getIntakePressure() const
-{
-    return m_IntakePressure;
-}
-
-double Dashboard::getRpm() const
-{
-    return m_Rpm;
-}
-
-int Dashboard::getIntakeTemp() const
-{
-    return m_IntakeTemp;
-}
-
-double Dashboard::getMaf() const
-{
-    return m_Maf;
-}
-
-double Dashboard::getThrottlePos() const
-{
-    return m_ThrottlePos;
 }
 
 qreal  Dashboard::getVal() const
@@ -687,88 +613,6 @@ void Dashboard::setGaugeNameTextSize(const qreal &GaugeNameTextSize){
     drawBackgroundPixmap();
     update();
     emit gaugeNameTextSizeChanged();
-}
-
-
-
-void Dashboard::setSpeed(const qreal &speed)
-{
-    if(m_Speed == speed)
-        return;
-
-    m_Speed = speed;
-    //update();
-    emit speedChanged();
-}
-
-void Dashboard::setEngineLoad(const qreal &EngineLoad)
-{
-    if(m_EngineLoad == EngineLoad)
-        return;
-
-    m_EngineLoad = EngineLoad;
-    //update();
-    emit engineLoadChanged();
-}
-
-void Dashboard::setCoolantTemp(const qreal &CoolantTemp)
-{
-    if(m_CoolantTemp == CoolantTemp)
-        return;
-
-    m_CoolantTemp = CoolantTemp;
-    //update();
-    emit coolantTempChanged();
-}
-
-void Dashboard::setIntakePressure(const qreal &IntakePressure)
-{
-    if(m_IntakePressure == IntakePressure)
-        return;
-
-    m_IntakePressure = IntakePressure;
-    //update();
-    emit intakePressureChanged();
-}
-
-void Dashboard::setRpm(const qreal &Rpm)
-{
-    if(m_Rpm == Rpm)
-        return;
-
-    m_Rpm = Rpm;
-    //update();
-    emit rpmChanged();
-}
-
-void Dashboard::setIntakeTemp(const qreal &IntakeTemp)
-{
-    if(m_IntakeTemp == IntakeTemp)
-        return;
-
-    m_IntakeTemp = IntakeTemp;
-    //update();
-    emit intakeTempChanged();
-}
-
-void Dashboard::setMaf(const qreal &Maf)
-{
-    if(m_Maf == Maf)
-        return;
-
-    m_Maf = Maf;
-    //update();
-    emit mafChanged();
-}
-
-void Dashboard::setThrottlePos(const qreal &ThrottlePos)
-{
-    if(m_ThrottlePos == ThrottlePos)
-        return;
-
-    m_ThrottlePos = ThrottlePos;
-    //update();
-    emit throttlePosChanged();
 }
 
 void Dashboard::setVal(const qreal &mval){

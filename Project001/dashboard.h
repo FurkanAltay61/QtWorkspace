@@ -40,15 +40,6 @@ class Dashboard : public QQuickPaintedItem
     Q_PROPERTY(qreal gaugeNameOffset READ getGaugeNameOffset WRITE setGaugeNameOffset NOTIFY gaugeNameOffsetChanged)
     Q_PROPERTY(qreal unitTextSize READ getUnitTextSize WRITE setUnitTextSize NOTIFY unitTextSizeChanged)
     Q_PROPERTY(qreal gaugeNameTextSize READ getGaugeNameTextSize WRITE setGaugeNameTextSize NOTIFY gaugeNameTextSizeChanged)
-
-    Q_PROPERTY(qreal speed READ getSpeed WRITE setSpeed NOTIFY speedChanged)
-    Q_PROPERTY(qreal engineload READ getEngineLoad WRITE setEngineLoad NOTIFY engineLoadChanged)
-    Q_PROPERTY(qreal coolanttemp READ getCoolantTemp WRITE setCoolantTemp NOTIFY coolantTempChanged)
-    Q_PROPERTY(qreal intakepressure READ getIntakePressure WRITE setIntakePressure NOTIFY intakePressureChanged)
-    Q_PROPERTY(qreal rpm READ getRpm WRITE setRpm NOTIFY rpmChanged)
-    Q_PROPERTY(qreal intaketemp READ getIntakeTemp WRITE setIntakeTemp NOTIFY intakeTempChanged)
-    Q_PROPERTY(qreal maf READ getMaf WRITE setMaf NOTIFY mafChanged)
-    Q_PROPERTY(qreal throttlepos READ getThrottlePos WRITE setThrottlePos NOTIFY throttlePosChanged)
     Q_PROPERTY(qreal val READ getVal WRITE setVal NOTIFY valChanged)
 
 
@@ -86,15 +77,6 @@ public:
     qreal   getUnitTextSize() const;
     qreal   getGaugeNameTextSize() const;
 
-    qreal   getSpeed() const;
-    double  getEngineLoad() const;
-    int     getCoolantTemp() const;
-    int     getIntakePressure() const;
-    double  getRpm() const;
-    int     getIntakeTemp() const;
-    double  getMaf() const;
-    double  getThrottlePos() const;
-
     qreal   getVal() const;
 
     QPointF calculatePosition(const QRectF &rect, qreal angle, qreal offset);
@@ -129,28 +111,11 @@ public:
     void    setUnitTextSize(const qreal &UnitTextSize);
     void    setGaugeNameTextSize(const qreal &GaugeNameTextSize);
 
-    void    setSpeed(const qreal &Speed);
-    void    setEngineLoad(const qreal &EngineLoad);
-    void    setCoolantTemp(const qreal &CoolantTemp);
-    void    setIntakePressure(const qreal &IntakePressure);
-    void    setRpm(const qreal &Rpm);
-    void    setIntakeTemp(const qreal &IntakeTemp);
-    void    setMaf(const qreal &Maf);
-    void    setThrottlePos(const qreal &ThrottlePos);
-
     void    setVal(const qreal &val);
 
     void    drawBackgroundPixmap();
 
 public slots:
-    void speedReceived(const qreal &speed);
-    void engineLoadReceived(const qreal &EngineLoad);
-    void coolantTempReceived(const qreal &CoolantTemp);
-    void intakePressReceived(const qreal &IntakePressure);
-    void rpmReceived(const qreal &Rpm);
-    void IntakeTempReceived(const qreal &IntakeTemp);
-    void MassAirFlowReceived(const qreal &Maf);
-    void ThrottlePosReceived(const qreal &ThrottlePos);
 
 signals:
     void    speedometerSizeChanged();
@@ -183,14 +148,6 @@ signals:
     void    unitTextSizeChanged();
     void    gaugeNameTextSizeChanged();
 
-    void    speedChanged();
-    void    engineLoadChanged();
-    void    coolantTempChanged();
-    void    intakePressureChanged();
-    void    rpmChanged();
-    void    intakeTempChanged();
-    void    mafChanged();
-    void    throttlePosChanged();
     void    valChanged();
 
 private:
@@ -226,14 +183,7 @@ private:
     qreal   m_UnitTextSize;
     qreal   m_GaugeNameTextSize;
 
-    qreal   m_Speed;
-    double  m_EngineLoad;
-    int     m_CoolantTemp;
-    int     m_IntakePressure;
-    double  m_Rpm;
-    int     m_IntakeTemp;
-    double  m_Maf;
-    double  m_ThrottlePos;
+
     qreal   m_Val;
 
     QPixmap m_BackgroundPixmap;
