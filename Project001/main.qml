@@ -42,13 +42,13 @@ Window {
     property real initialGaugeNameTextSize : 10
 
     property real initialSpeed : 0
-    property double initialEngineLoad : 0
-    property int initialCoolantTemp : 0
-    property int initialIntakePressure : 0
-    property double initialRpm : 0
-    property int initialIntakeTemp : 0
-    property double initialMaf : 0
-    property double initialThrottlePos : 0
+    property real initialEngineLoad : 0
+    property real initialCoolantTemp : 0
+    property real initialIntakePressure : 0
+    property real initialRpm : 0
+    property real initialIntakeTemp : 0
+    property real initialMaf : 0
+    property real initialThrottlePos : 0
     property real initialVal : 0
 
     property int animationDuration : 1600
@@ -86,7 +86,7 @@ Window {
         startAngle: startAngle
         lowestRange: lowestRange
         highestRange: highestRange
-        val: mydashboard.speed
+        val: tcpClient.speed
         Behavior on val {
             PropertyAnimation {
                 duration : animationDuration
@@ -126,7 +126,7 @@ Window {
         lowestRange: lowestRange
         highestRange: 8000
         interval: 1000
-        val: mydashboard.rpm
+        val: tcpClient.rpm
         Behavior on val {
             PropertyAnimation {
                 duration : animationDuration
@@ -165,7 +165,7 @@ Window {
         lowestRange: lowestRange
         highestRange: 100
         interval: 10
-        val: mydashboard.engineload
+        val: tcpClient.engineload
         Behavior on val {
             PropertyAnimation {
                 duration : animationDuration
@@ -195,7 +195,7 @@ Window {
         startAngle: startAngle
         lowestRange: lowestRange
         highestRange: 120
-        val: mydashboard.coolanttemp
+        val: tcpClient.coolanttemp
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -221,7 +221,7 @@ Window {
         lowestRange: lowestRange
         highestRange: 255
         interval: 25
-        val: mydashboard.intakepressure
+        val: tcpClient.intakepressure
         Behavior on val {
             PropertyAnimation {
                 duration : animationDuration
@@ -251,7 +251,7 @@ Window {
         lowestRange: -40
         highestRange: 255
         interval: 25
-        val: mydashboard.intaketemp
+        val: tcpClient.intaketemp
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -275,7 +275,7 @@ Window {
         lowestRange: lowestRange
         highestRange: 255
         interval: 25
-        val: mydashboard.maf
+        val: tcpClient.maf
         Behavior on val {
             PropertyAnimation {
                 duration : animationDuration
@@ -305,7 +305,7 @@ Window {
         lowestRange: lowestRange
         highestRange: 100
         interval: 10
-        val: mydashboard.throttlepos
+        val: tcpClient.throttlepos
         Behavior on val {
             PropertyAnimation {
                 duration : animationDuration
@@ -333,7 +333,7 @@ Window {
     //     startAngle: startAngle
     //     lowestRange: lowestRange
     //     highestRange: highestRange
-    //     speed: mydashboard.speed
+    //     speed: tcpClient.speed
     //     Behavior on val {
     //         PropertyAnimation {
     //             duration : animationDuration

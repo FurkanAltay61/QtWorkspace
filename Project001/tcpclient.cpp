@@ -22,13 +22,10 @@ TcpClient::TcpClient(const QString& ip, quint16 port, QObject* parent)
 
     sendTimer = new QTimer(this);
     connect(sendTimer, &QTimer::timeout, this, &TcpClient::onSendData);
-
-    // Start connection
-    //connectToServer();
 }
 
 TcpClient::~TcpClient(){
-    qDebug() << "constructor called ";
+    qDebug() << "destructor called ";
     tcpSocket->close();
     sendTimer->stop();
     delete tcpSocket;
@@ -123,11 +120,11 @@ void TcpClient::processMessage(const QByteArray& message) {
         if (parsedstr[0] == "41") {
             QString pid = parsedstr[1];
             if (pid == "04") {
-                m_SpeedStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-                m_SpeedStruct->data = (100.0 * parsedstr[2].toInt(nullptr, 16)) / 255.0;
-                qDebug() << "Engine load :" << m_SpeedStruct->data << "duration :" << m_SpeedStruct->currTime - m_SpeedStruct->prevTime;
-                m_SpeedStruct->prevTime = m_SpeedStruct->currTime;
-                emit engineLoadSent(m_SpeedStruct->data);
+                m_EngineLoadStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+                m_EngineLoadStruct->data = (100.0 * parsedstr[2].toInt(nullptr, 16)) / 255.0;
+                qDebug() << "Engine load :" << m_EngineLoadStruct->data << "duration :" << m_EngineLoadStruct->currTime - m_EngineLoadStruct->prevTime;
+                m_EngineLoadStruct->prevTime = m_EngineLoadStruct->currTime;
+                emit engineLoadSent(m_EngineLoadStruct->data);
             } else if (pid == "05") {
                 m_CoolantTempStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
                 m_CoolantTempStruct->data = parsedstr[2].toInt(nullptr, 16) - 40;
@@ -139,7 +136,7 @@ void TcpClient::processMessage(const QByteArray& message) {
                 m_IntakePressStruct->data = parsedstr[2].toInt(nullptr, 16);
                 qDebug() << "Intake manifold absolute pressure :" << m_IntakePressStruct->data << "kPa" << "duration :" << m_IntakePressStruct->currTime - m_IntakePressStruct->prevTime;
                 m_IntakePressStruct->prevTime = m_IntakePressStruct->currTime;
-                emit intakePressSent(m_IntakePressStruct->data);
+                emit intakePressureSent(m_IntakePressStruct->data);
             } else if (pid == "0C") {
                 m_RpmStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
                 m_RpmStruct->data = (256 * parsedstr[2].toInt(nullptr, 16) + parsedstr[3].toInt(nullptr, 16)) / 4.0;
@@ -163,7 +160,7 @@ void TcpClient::processMessage(const QByteArray& message) {
                 m_FlowRateStruct->data = (256 * parsedstr[2].toInt(nullptr, 16) + parsedstr[3].toInt(nullptr, 16)) / 100.0;
                 qDebug() << "Mass air flow-rate :" << m_FlowRateStruct->data << "g/s" << "duration :" << m_FlowRateStruct->currTime - m_FlowRateStruct->prevTime;
                 m_FlowRateStruct->prevTime = m_FlowRateStruct->currTime;
-                emit massAirFlowSent(m_FlowRateStruct->data);
+                emit mafSent(m_FlowRateStruct->data);
             } else if (pid == "11") {
                 m_ThrottlePosStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
                 m_ThrottlePosStruct->data = (100.0 * parsedstr[2].toInt(nullptr, 16)) / 255.0;
@@ -191,6 +188,3 @@ void TcpClient::processMessage(const QByteArray& message) {
         }
     }
 }
-
-
-

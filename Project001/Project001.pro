@@ -7,7 +7,8 @@ QT += quick
 SOURCES += \
         dashboard.cpp \
         main.cpp \
-        tcpclient.cpp
+        tcpclient.cpp \
+        tcpclientwrapper.cpp
 
 RESOURCES += qml.qrc
 
@@ -24,4 +25,5 @@ else: unix:!android: target.path = /home/pi/$${TARGET}
 
 HEADERS += \
     dashboard.h \
-    tcpclient.h
+    tcpclient.h \
+    tcpclientwrapper.h

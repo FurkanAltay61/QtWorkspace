@@ -28,8 +28,10 @@
 #include <cmath>
 
 class TcpClient : public QObject {
+     const int SENDING_PERIOD = 200;
+
     Q_OBJECT
-    const int SENDING_PERIOD = 200;
+
 public:
     explicit TcpClient(const QString& ip, quint16 port, QObject* parent = nullptr);
     ~TcpClient();
@@ -50,15 +52,14 @@ private slots:
 public slots:
 
 signals:
-    void dataSent(const QString &data);
-    void engineLoadSent(const qreal &load);
-    void coolantTempSent(const qreal &cooltemp);
-    void intakePressSent(const qreal &inpress);
-    void rpmSent(const qreal &rpm);
-    void speedSent(const qreal &speed);
-    void intakeTempSent(const qreal &intemp);
-    void massAirFlowSent(const qreal &maf);
-    void throttlePosSent(const qreal &throtpos);
+    void    engineLoadSent(const qreal &_engineload);
+    void    coolantTempSent(const qreal &_coolantemp);
+    void    intakePressureSent(const qreal &_intakepressure);
+    void    rpmSent(const qreal &_rpm);
+    void    speedSent(const qreal &_speed);
+    void    intakeTempSent(const qreal &_intaketemp);
+    void    mafSent(const qreal &_maf);
+    void    throttlePosSent(const qreal &_throttlepos);
 
 
 private:
