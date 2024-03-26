@@ -44,6 +44,7 @@ signals:
     void    intakeTempChanged();
     void    mafChanged();
     void    throttlePosChanged();
+    void    resetSignal();
 
 public slots:
     void    engineLoadReceived(const qreal &_engineload);

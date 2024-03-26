@@ -161,3 +161,4 @@ void TcpClientWrapper::mafReceived(const qreal &_maf){
 void TcpClientWrapper::throttlePosReceived(const qreal &_throttlepos){
     setThrottlePos(_throttlepos);
 }
+

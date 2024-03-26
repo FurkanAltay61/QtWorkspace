@@ -14,18 +14,19 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
     QGuiApplication app(argc, argv);
-    Dashboard mydashboard;
-    qmlRegisterType<Dashboard>("Dashboardqml", 1, 0, "Dashboard");
     QQmlApplicationEngine engine;
-
+    Dashboard mydashboard;
     TcpClient *client = new TcpClient("192.168.0.10", (quint16)35000);
     QThread clientThread;
+    TcpClientWrapper *clientWrapper = new TcpClientWrapper(client);
+
+    qmlRegisterType<Dashboard>("Dashboardqml", 1, 0, "Dashboard");
+
     client->moveToThread(&clientThread);
     QObject::connect(&clientThread, &QThread::started, client, &TcpClient::connectToServer);
     QObject::connect(&clientThread, &QThread::finished, client, &QObject::deleteLater);
     QObject::connect(&app, &QCoreApplication::aboutToQuit, &clientThread, &QThread::quit);
-
-    TcpClientWrapper *clientWrapper = new TcpClientWrapper(client);
+    QObject::connect(clientWrapper, &TcpClientWrapper::resetSignal,client, &TcpClient::handleResetSignal);
 
     clientThread.start();
 
