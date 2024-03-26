@@ -3,7 +3,6 @@ import QtQuick.Window 2.15
 import Dashboardqml 1.0
 import QtQuick.Timeline 1.0
 
-
 Window {
     visible: true
     width: 1024
@@ -71,6 +70,25 @@ Window {
             anchors.fill: parent
             onClicked: {
                 Qt.quit()
+            }
+        }
+    }
+
+    Rectangle {
+        x : 919
+        y : 580
+        width: 50
+        height : 20
+        Text {
+            id: reset
+            text: qsTr("reset")
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                //Reset command should send here
+                console.log("Clicked")
+                tcpClient.resetSignal()
             }
         }
     }

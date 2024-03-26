@@ -12,6 +12,7 @@ TcpClient::TcpClient(const QString& ip, quint16 port, QObject* parent)
     m_ThrottlePosStruct(std::make_shared<Datapoint>())
 {
 
+
     m_counter = 0;
     tcpSocket = new QTcpSocket(this);
 
@@ -40,8 +41,12 @@ void TcpClient::connectToServer() {
     }
     qDebug() << "Connected to the server!";
     // Setup OBD-II communication
-    writeData("AT E0\rAT L0\rAT H0\rAT S1\rAT AT1\r");
+    configureOBDII();
     sendTimer->start(SENDING_PERIOD);
+}
+
+void TcpClient::configureOBDII(){
+    writeData("AT E0\rAT L0\rAT H0\rAT S1\rAT AT1\r");
 }
 
 void TcpClient::onConnected(){
@@ -187,4 +192,13 @@ void TcpClient::processMessage(const QByteArray& message) {
             emit rpmSent(m_counter);
         }
     }
+}
+
+void TcpClient::handleResetSignal(){
+    qDebug() << "Reset signal is triggered";
+    writeData("ATZ\r");
+    sendTimer->stop();
+    QThread::sleep(5);
+    configureOBDII();
+    sendTimer->start();
 }

@@ -26,11 +26,13 @@
 #include <QDateTime>
 #include <memory>
 #include <cmath>
+#include <QThread>
 
 class TcpClient : public QObject {
      const int SENDING_PERIOD = 200;
 
     Q_OBJECT
+
 
 public:
     explicit TcpClient(const QString& ip, quint16 port, QObject* parent = nullptr);
@@ -50,6 +52,7 @@ private slots:
     void onSendData();
 
 public slots:
+    void handleResetSignal();
 
 signals:
     void    engineLoadSent(const qreal &_engineload);
@@ -73,8 +76,10 @@ private:
     //QStringList datas{"0104\r","010C\r","010D\r","0110\r"};
 
     std::chrono::high_resolution_clock::time_point prevtime;
-    void writeData(const QString& data);
+
     void processMessage(const QByteArray& message);
+    void writeData(const QString& data);
+    void configureOBDII();
     qreal m_counter;
 
     std::shared_ptr<Datapoint> m_EngineLoadStruct;
