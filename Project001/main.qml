@@ -1,7 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import Dashboardqml 1.0
-import QtQuick.Timeline 1.0
 
 Window {
     visible: true
@@ -9,7 +8,7 @@ Window {
     height: 600
     title: qsTr("Speedometer")
     color: "black"
-    //visibility:  "FullScreen"
+    visibility:  "FullScreen"
 
     property real initialSpeedometerSize : 200
     property real initialStartAngle : -140
@@ -107,7 +106,7 @@ Window {
         val: tcpClient.speed
         Behavior on val {
             PropertyAnimation {
-                duration : animationDuration
+                duration : tcpClient.speed_duration
                 easing.type: Easing.Linear
             }
         }
@@ -147,10 +146,14 @@ Window {
         val: tcpClient.rpm
         Behavior on val {
             PropertyAnimation {
-                duration : animationDuration
+                duration : tcpClient.rpm_duration
                 easing.type: Easing.Linear
+                onDurationChanged: {
+                    console.log("Duration changed to:", tcpClient.rpm_duration);
+                }
             }
         }
+
         arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -186,7 +189,7 @@ Window {
         val: tcpClient.engineload
         Behavior on val {
             PropertyAnimation {
-                duration : animationDuration
+                duration : tcpClient.engineload_duration
                 easing.type: Easing.Linear
             }
         }
@@ -242,7 +245,7 @@ Window {
         val: tcpClient.intakepressure
         Behavior on val {
             PropertyAnimation {
-                duration : animationDuration
+                duration : tcpClient.intakepressure_duration
                 easing.type: Easing.Linear
             }
         }
@@ -296,7 +299,7 @@ Window {
         val: tcpClient.maf
         Behavior on val {
             PropertyAnimation {
-                duration : animationDuration
+                duration : tcpClient.maf_duration
                 easing.type: Easing.Linear
             }
         }
@@ -326,7 +329,7 @@ Window {
         val: tcpClient.throttlepos
         Behavior on val {
             PropertyAnimation {
-                duration : animationDuration
+                duration : tcpClient.throttlepos_duration
                 easing.type: Easing.Linear
             }
         }
