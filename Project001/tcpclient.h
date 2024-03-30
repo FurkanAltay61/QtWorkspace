@@ -42,6 +42,7 @@ public:
     {
         uint64_t prevTime;
         uint64_t currTime;
+        qreal duration;
         qreal    data;
     };
 
@@ -63,6 +64,15 @@ signals:
     void    intakeTempSent(const qreal &_intaketemp);
     void    mafSent(const qreal &_maf);
     void    throttlePosSent(const qreal &_throttlepos);
+
+    void    engineLoadDurationSent(const qreal &_engineloadduration);
+    void    coolantTempDurationSent(const qreal &_coolantempduration);
+    void    intakePressureDurationSent(const qreal &_intakepressureduration);
+    void    rpmDurationSent(const qreal &_rpmduration);
+    void    speedDurationSent(const qreal &_speedduration);
+    void    intakeTempDurationSent(const qreal &_intaketempduration);
+    void    mafDurationSent(const qreal &_mafduration);
+    void    throttlePosDurationSent(const qreal &_throttleposduration);
 
 
 private:

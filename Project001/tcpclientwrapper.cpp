@@ -21,6 +21,15 @@ TcpClientWrapper::TcpClientWrapper(TcpClient *_client, QObject *parent)
     connect(m_client, &TcpClient::mafSent, this, &TcpClientWrapper::mafReceived);
     connect(m_client, &TcpClient::throttlePosSent, this, &TcpClientWrapper::throttlePosReceived);
 
+    connect(m_client, &TcpClient::engineLoadDurationSent, this, &TcpClientWrapper::engineLoadDurationReceived);
+    connect(m_client, &TcpClient::coolantTempDurationSent, this, &TcpClientWrapper::coolantTempDurationReceived);
+    connect(m_client, &TcpClient::intakePressureDurationSent, this, &TcpClientWrapper::intakePressureDurationReceived);
+    connect(m_client, &TcpClient::rpmDurationSent, this, &TcpClientWrapper::rpmDurationReceived);
+    connect(m_client, &TcpClient::speedDurationSent, this, &TcpClientWrapper::speedDurationReceived);
+    connect(m_client, &TcpClient::intakeTempDurationSent, this, &TcpClientWrapper::intakeTempDurationReceived);
+    connect(m_client, &TcpClient::mafDurationSent, this, &TcpClientWrapper::mafDurationReceived);
+    connect(m_client, &TcpClient::throttlePosDurationSent, this, &TcpClientWrapper::throttlePosDurationReceived);
+
 }
 
 qreal TcpClientWrapper::getSpeed() const
@@ -137,6 +146,127 @@ void TcpClientWrapper::setThrottlePos(const qreal &ThrottlePos)
     emit throttlePosChanged();
 }
 
+
+
+
+qreal TcpClientWrapper::getSpeedDuration() const
+{
+    return m_SpeedDuration;
+}
+
+qreal TcpClientWrapper::getEngineLoadDuration() const
+{
+    return m_EngineLoadDuration;
+}
+
+qreal TcpClientWrapper::getCoolantTempDuration() const
+{
+    return m_CoolantTempDuration;
+}
+
+qreal TcpClientWrapper::getIntakePressureDuration() const
+{
+    return m_IntakePressureDuration;
+}
+
+qreal TcpClientWrapper::getRpmDuration() const
+{
+    return m_RpmDuration;
+}
+
+qreal TcpClientWrapper::getIntakeTempDuration() const
+{
+    return m_IntakeTempDuration;
+}
+
+qreal TcpClientWrapper::getMafDuration() const
+{
+    return m_MafDuration;
+}
+
+qreal TcpClientWrapper::getThrottlePosDuration() const
+{
+    return m_ThrottlePosDuration;
+}
+
+
+
+void TcpClientWrapper::setSpeedDuration(const qreal &_SpeedDuration)
+{
+    if(m_SpeedDuration == _SpeedDuration)
+        return;
+
+    m_SpeedDuration = _SpeedDuration;
+    emit speedDurationChanged();
+}
+
+void TcpClientWrapper::setEngineLoadDuration(const qreal &_EngineLoadDuration)
+{
+    if(m_EngineLoadDuration == _EngineLoadDuration)
+        return;
+
+    m_EngineLoadDuration = _EngineLoadDuration;
+    emit engineLoadDurationChanged();
+}
+
+void TcpClientWrapper::setCoolantTempDuration(const qreal &_CoolantTempDuration)
+{
+    if(m_CoolantTempDuration == _CoolantTempDuration)
+        return;
+
+    m_CoolantTempDuration = _CoolantTempDuration;
+    emit coolantTempDurationChanged();
+}
+
+void TcpClientWrapper::setIntakePressureDuration(const qreal &_IntakePressureDuration)
+{
+    if(m_IntakePressureDuration == _IntakePressureDuration)
+        return;
+
+    m_IntakePressureDuration = _IntakePressureDuration;
+    emit intakePressureDurationChanged();
+}
+
+void TcpClientWrapper::setRpmDuration(const qreal &_RpmDuration)
+{
+    if(m_RpmDuration == _RpmDuration)
+        return;
+
+    m_RpmDuration = _RpmDuration;
+    qDebug()<< "m_RpmDuration :" << m_RpmDuration;
+    emit rpmDurationChanged();
+}
+
+void TcpClientWrapper::setIntakeTempDuration(const qreal &_IntakeTempDuration)
+{
+    if(m_IntakeTempDuration == _IntakeTempDuration)
+        return;
+
+    m_IntakeTempDuration = _IntakeTempDuration;
+    emit intakeTempDurationChanged();
+}
+
+void TcpClientWrapper::setMafDuration(const qreal &_MafDuration)
+{
+    if(m_MafDuration == _MafDuration)
+        return;
+
+    m_MafDuration = _MafDuration;
+    emit mafDurationChanged();
+}
+
+void TcpClientWrapper::setThrottlePosDuration(const qreal &_ThrottlePosDuration)
+{
+    if(m_ThrottlePosDuration == _ThrottlePosDuration)
+        return;
+
+    m_ThrottlePosDuration = _ThrottlePosDuration;
+    emit throttlePosDurationChanged();
+}
+
+
+
+
 void TcpClientWrapper::engineLoadReceived(const qreal &_engineload){
     setEngineLoad(_engineload);
 }
@@ -162,3 +292,29 @@ void TcpClientWrapper::throttlePosReceived(const qreal &_throttlepos){
     setThrottlePos(_throttlepos);
 }
 
+
+void TcpClientWrapper::engineLoadDurationReceived(const qreal &_engineloadduration){
+    setEngineLoadDuration(_engineloadduration);
+}
+void TcpClientWrapper::coolantTempDurationReceived(const qreal &_coolantempduration){
+    setCoolantTempDuration(_coolantempduration);
+}
+void TcpClientWrapper::intakePressureDurationReceived(const qreal &_intakepressureduration){
+    setIntakePressureDuration(_intakepressureduration);
+}
+void TcpClientWrapper::rpmDurationReceived(const qreal &_rpmduration){
+    qDebug() << "Geldi :" << _rpmduration;
+    setRpmDuration(_rpmduration);
+}
+void TcpClientWrapper::speedDurationReceived(const qreal &_speedduration){
+    setSpeedDuration(_speedduration);
+}
+void TcpClientWrapper::intakeTempDurationReceived(const qreal &_intaketempduration){
+    setIntakeTempDuration(_intaketempduration);
+}
+void TcpClientWrapper::mafDurationReceived(const qreal &_mafduration){
+    setMafDuration(_mafduration);
+}
+void TcpClientWrapper::throttlePosDurationReceived(const qreal &_throttleposduration){
+    setThrottlePosDuration(_throttleposduration);
+}
