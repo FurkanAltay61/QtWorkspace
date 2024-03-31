@@ -90,34 +90,35 @@ void TcpClient::onSendData() {
     //         count = 0;
     // }
 
-
-    // static int count{0};
-    // static int tickcount{0};
-
-    // if (!datas.isEmpty()) {
-    //     if(datas[count] == "0105\r" && tickcount == 250)     //Engine coolant temperature //60sn
-    //         writeData(datas[count]);
-    //     else if(datas[count] == "010B\r" && tickcount == 25) //Intake manifold absolute pressure //5sn
-    //         writeData(datas[count]);
-    //     else if(datas[count] == "010F\r" && tickcount == 50) //Intake air temperature //10sn
-    //         writeData(datas[count]);
-    //     else if(datas[count] == "0111\r" && tickcount == 5) //Throttle position //10sn
-    //         writeData(datas[count]);
-    //     else
-    //         writeData(datas[count]);
-
-    //     if(retval == "YES")
-    //         count++;
-
-    //     if (count >= datas.size())
-    //         count = 0;
-
-    //     tickcount++;
-    //     if (tickcount > 250)
-    //         tickcount = 0;
-    // }
-
+#ifdef  TEST_MODE
     writeData("ATI\r");
+#elif
+    static int count{0};
+    static int tickcount{0};
+
+if (!datas.isEmpty()) {
+    if(datas[count] == "0105\r" && tickcount == 250)     //Engine coolant temperature //60sn
+        writeData(datas[count]);
+    else if(datas[count] == "010B\r" && tickcount == 25) //Intake manifold absolute pressure //5sn
+        writeData(datas[count]);
+    else if(datas[count] == "010F\r" && tickcount == 50) //Intake air temperature //10sn
+        writeData(datas[count]);
+    else if(datas[count] == "0111\r" && tickcount == 5) //Throttle position //10sn
+        writeData(datas[count]);
+    else
+        writeData(datas[count]);
+
+    if(retval == "YES")
+        count++;
+
+    if (count >= datas.size())
+        count = 0;
+
+    tickcount++;
+    if (tickcount > 250)
+        tickcount = 0;
+}
+#endif
 }
 
 void TcpClient::writeData(const QString& data) {
