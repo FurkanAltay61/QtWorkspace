@@ -92,9 +92,10 @@ void TcpClient::onSendData() {
 
 #ifdef  TEST_MODE
     writeData("ATI\r");
-#elif
+#else
     static int count{0};
     static int tickcount{0};
+
 
 if (!datas.isEmpty()) {
     if(datas[count] == "0105\r" && tickcount == 250)     //Engine coolant temperature //60sn
