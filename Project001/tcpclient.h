@@ -29,7 +29,7 @@
 #include <QThread>
 #include <QProcess>
 
-#define TEST_MODE
+//#define TEST_MODE
 const qreal SENDING_PERIOD = 200;
 
 class TcpClient : public QObject {
