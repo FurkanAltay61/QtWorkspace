@@ -92,7 +92,7 @@ void TcpClient::onSendData() {
 
 #ifdef  TEST_MODE
     writeData("ATI\r");
-#elif
+#else
     static int count{0};
     static int tickcount{0};
 
