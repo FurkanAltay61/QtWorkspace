@@ -23,8 +23,10 @@ class TcpClientWrapper : public QObject
     Q_PROPERTY(qreal intaketemp_duration READ getIntakeTempDuration WRITE setIntakeTempDuration NOTIFY intakeTempDurationChanged)
     Q_PROPERTY(qreal maf_duration READ getMafDuration WRITE setMafDuration NOTIFY mafDurationChanged)
     Q_PROPERTY(qreal throttlepos_duration READ getThrottlePosDuration WRITE setThrottlePosDuration NOTIFY throttlePosDurationChanged)
-
     Q_PROPERTY(QString statmsg READ getStatMsg WRITE setStatMsg NOTIFY statMsgChanged)
+
+    Q_PROPERTY(bool testMode READ getTestMode CONSTANT)
+    Q_PROPERTY(qreal sendingPeriod READ getSendingPeriod CONSTANT)
 
 public:
     TcpClientWrapper(TcpClient *_client = nullptr, QObject *parent = nullptr);
@@ -67,6 +69,9 @@ public:
 
     void    setStatMsg(QString _statMsg);
     QString getStatMsg();
+
+    bool    getTestMode();
+    qreal   getSendingPeriod();
 
 signals:
     void    speedChanged();

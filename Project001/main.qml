@@ -217,7 +217,7 @@ Window {
         val: tcpClient.rpm
         Behavior on val {
             PropertyAnimation {
-                duration : tcpClient.rpm_duration
+                duration : tcpClient.testMode ? tcpClient.sendingPeriod : tcpClient.rpm_duration
                 easing.type: Easing.Linear
                 onDurationChanged: {
                     console.log("Duration changed to:", tcpClient.rpm_duration);

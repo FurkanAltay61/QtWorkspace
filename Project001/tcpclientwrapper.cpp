@@ -337,3 +337,15 @@ void TcpClientWrapper::throttlePosDurationReceived(const qreal &_throttleposdura
 void TcpClientWrapper::statMsgReceived(const QString &_statMsg){
     setStatMsg(_statMsg);
 }
+
+bool TcpClientWrapper::getTestMode(){
+#ifdef TEST_MODE
+    return true;
+#else
+    return false;
+#endif
+}
+
+qreal TcpClientWrapper::getSendingPeriod(){
+    return SENDING_PERIOD;
+}
