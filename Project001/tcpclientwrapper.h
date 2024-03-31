@@ -24,6 +24,8 @@ class TcpClientWrapper : public QObject
     Q_PROPERTY(qreal maf_duration READ getMafDuration WRITE setMafDuration NOTIFY mafDurationChanged)
     Q_PROPERTY(qreal throttlepos_duration READ getThrottlePosDuration WRITE setThrottlePosDuration NOTIFY throttlePosDurationChanged)
 
+    Q_PROPERTY(QString statmsg READ getStatMsg WRITE setStatMsg NOTIFY statMsgChanged)
+
 public:
     TcpClientWrapper(TcpClient *_client = nullptr, QObject *parent = nullptr);
 
@@ -63,6 +65,9 @@ public:
     qreal   getMafDuration() const;
     qreal   getThrottlePosDuration() const;
 
+    void    setStatMsg(QString _statMsg);
+    QString getStatMsg();
+
 signals:
     void    speedChanged();
     void    engineLoadChanged();
@@ -74,6 +79,8 @@ signals:
     void    throttlePosChanged();
 
     void    resetSignal();
+    void    connectSignal();
+    void    rebootSignal();
 
     void    speedDurationChanged();
     void    engineLoadDurationChanged();
@@ -83,6 +90,8 @@ signals:
     void    intakeTempDurationChanged();
     void    mafDurationChanged();
     void    throttlePosDurationChanged();
+
+    void    statMsgChanged();
 
 public slots:
     void    engineLoadReceived(const qreal &_engineload);
@@ -103,6 +112,8 @@ public slots:
     void    mafDurationReceived(const qreal &_maf);
     void    throttlePosDurationReceived(const qreal &_throttlepos);
 
+    void    statMsgReceived(const QString &_statMsg);
+
 private:
     TcpClient *m_client;
     qreal   m_Speed;
@@ -122,6 +133,8 @@ private:
     qreal   m_IntakeTempDuration;
     qreal   m_MafDuration;
     qreal   m_ThrottlePosDuration;
+
+    QString m_StatMsg;
 };
 
 #endif // TCPCLIENTWRAPPER_H

@@ -27,6 +27,7 @@
 #include <memory>
 #include <cmath>
 #include <QThread>
+#include <QProcess>
 
 class TcpClient : public QObject {
      const int SENDING_PERIOD = 200;
@@ -54,6 +55,8 @@ private slots:
 
 public slots:
     void handleResetSignal();
+    void handleConnectSignal();
+    void handleRebootSignal();
 
 signals:
     void    engineLoadSent(const qreal &_engineload);
@@ -73,6 +76,8 @@ signals:
     void    intakeTempDurationSent(const qreal &_intaketempduration);
     void    mafDurationSent(const qreal &_mafduration);
     void    throttlePosDurationSent(const qreal &_throttleposduration);
+
+    void    statMsgSent(const QString &_statMsg);
 
 
 private:

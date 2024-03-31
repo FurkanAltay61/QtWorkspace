@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import Dashboardqml 1.0
 
+
 Window {
     visible: true
     width: 1024
@@ -88,6 +89,76 @@ Window {
                 //Reset command should send here
                 console.log("Clicked")
                 tcpClient.resetSignal()
+            }
+        }
+    }
+
+
+    Rectangle {
+        x : 845
+        y : 580
+        width: 70
+        height : 20
+        Text {
+            id: obd2connect
+            text: qsTr("connect")
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                //Reset command should send here
+                console.log("Clicked")
+                tcpClient.connectSignal()
+            }
+        }
+    }
+
+
+    Rectangle {
+        x : 310
+        y : 20
+        width: 400
+        height : 125
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            id: dashboardstatus
+            text: qsTr(tcpClient.statmsg)
+            wrapMode: Text.WordWrap  // Enable word wrapping
+            elide: Text.ElideRight   // Truncate text with an ellipsis on the right if it doesn't fit
+            width: parent.width      // Ensure the text width is the same as the parent Rectangle
+
+        }
+    }
+
+    Rectangle {
+        x : 310
+        y : 425
+        width: 400
+        height : 125
+        Text {
+            anchors.centerIn: parent
+            id: dashboardstatus2
+            text: qsTr("Status2")
+        }
+    }
+
+
+    Rectangle {
+        x : 770
+        y : 580
+        width: 70
+        height : 20
+        Text {
+            id: reboot
+            text: qsTr("reboot")
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                //Reset command should send here
+                console.log("Clicked")
+                tcpClient.rebootSignal()
             }
         }
     }
