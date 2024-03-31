@@ -34,23 +34,32 @@ TcpClient::~TcpClient(){
 }
 
 void TcpClient::connectToServer() {
-    tcpSocket->connectToHost(serverIP, serverPort);
-    if (!tcpSocket->waitForConnected()) {
-        qDebug() << "Failed to connect to the server:" << tcpSocket->errorString();
-        QCoreApplication::exit(EXIT_FAILURE);
+    if(tcpSocket->state() == tcpSocket->UnconnectedState){
+        tcpSocket->connectToHost(serverIP, serverPort);
+        if (!tcpSocket->waitForConnected()) {
+            qDebug() << "Failed to connect to the server:" << tcpSocket->errorString();
+            emit statMsgSent("[TcpClient::connectToServer] : " + tcpSocket->errorString());
+            //QCoreApplication::exit(EXIT_FAILURE);
+            return;
+        }
+        qDebug() << "Connected to the server!";
+        emit statMsgSent("[TcpClient::connectToServer] : Connect signal is handled");
+        // Setup OBD-II communication
+        configureOBDII();
+        sendTimer->start(SENDING_PERIOD);
     }
-    qDebug() << "Connected to the server!";
-    // Setup OBD-II communication
-    configureOBDII();
-    sendTimer->start(SENDING_PERIOD);
+
+
 }
 
 void TcpClient::configureOBDII(){
     writeData("AT E0\rAT L0\rAT H0\rAT S1\rAT AT1\r");
+    emit statMsgSent("[TcpClient::configureOBDII] : Obd2 device is configured");
 }
 
 void TcpClient::onConnected(){
     qDebug() << "Connected to the server!";
+    emit statMsgSent("[TcpClient::onConnected] : Connected to the server!");
 }
 
 void TcpClient::onReadyRead() {
@@ -68,7 +77,8 @@ void TcpClient::onReadyRead() {
 void TcpClient::onError(QAbstractSocket::SocketError socketError) {
     Q_UNUSED(socketError);
     qDebug() << "Socket error:" << tcpSocket->errorString();
-    QCoreApplication::exit(EXIT_FAILURE);
+    emit statMsgSent("[TcpClient::onError] : " + tcpSocket->errorString());
+    //QCoreApplication::exit(EXIT_FAILURE);
 }
 
 void TcpClient::onSendData() {
@@ -220,10 +230,25 @@ void TcpClient::processMessage(const QByteArray& message) {
 }
 
 void TcpClient::handleResetSignal(){
-    qDebug() << "Reset signal is triggered";
+    qDebug() << "Reset signal is handled";
     writeData("ATZ\r");
     sendTimer->stop();
-    QThread::sleep(5);
-    configureOBDII();
-    sendTimer->start();
+    if(tcpSocket->state() == QAbstractSocket::ConnectedState){
+        tcpSocket->disconnectFromHost();
+        if(tcpSocket->state() != QAbstractSocket::UnconnectedState)
+            tcpSocket->waitForDisconnected();
+    }
+
+    emit statMsgSent("[TcpClient::handleResetSignal] : Reset signal is handled");
+}
+
+void TcpClient::handleConnectSignal(){
+    qDebug() << "connect signal is handled";
+    connectToServer();
+}
+
+void TcpClient::handleRebootSignal(){
+    QProcess process;
+    process.start("reboot",QStringList());
+    process.waitForFinished();
 }

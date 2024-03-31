@@ -30,6 +30,8 @@ TcpClientWrapper::TcpClientWrapper(TcpClient *_client, QObject *parent)
     connect(m_client, &TcpClient::mafDurationSent, this, &TcpClientWrapper::mafDurationReceived);
     connect(m_client, &TcpClient::throttlePosDurationSent, this, &TcpClientWrapper::throttlePosDurationReceived);
 
+    connect(m_client, &TcpClient::statMsgSent, this, &TcpClientWrapper::statMsgReceived);
+
 }
 
 qreal TcpClientWrapper::getSpeed() const
@@ -265,6 +267,19 @@ void TcpClientWrapper::setThrottlePosDuration(const qreal &_ThrottlePosDuration)
 }
 
 
+void TcpClientWrapper::setStatMsg(QString _statMsg){
+    if(m_StatMsg == _statMsg)
+        return;
+
+    m_StatMsg = _statMsg;
+    emit statMsgChanged();
+}
+
+QString TcpClientWrapper::getStatMsg(){
+    return m_StatMsg;
+}
+
+
 
 
 void TcpClientWrapper::engineLoadReceived(const qreal &_engineload){
@@ -317,4 +332,8 @@ void TcpClientWrapper::mafDurationReceived(const qreal &_mafduration){
 }
 void TcpClientWrapper::throttlePosDurationReceived(const qreal &_throttleposduration){
     setThrottlePosDuration(_throttleposduration);
+}
+
+void TcpClientWrapper::statMsgReceived(const QString &_statMsg){
+    setStatMsg(_statMsg);
 }

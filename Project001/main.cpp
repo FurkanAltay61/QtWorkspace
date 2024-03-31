@@ -23,10 +23,12 @@ int main(int argc, char *argv[])
     qmlRegisterType<Dashboard>("Dashboardqml", 1, 0, "Dashboard");
 
     client->moveToThread(&clientThread);
-    QObject::connect(&clientThread, &QThread::started, client, &TcpClient::connectToServer);
+    //QObject::connect(&clientThread, &QThread::started, client, &TcpClient::connectToServer);
     QObject::connect(&clientThread, &QThread::finished, client, &QObject::deleteLater);
     QObject::connect(&app, &QCoreApplication::aboutToQuit, &clientThread, &QThread::quit);
     QObject::connect(clientWrapper, &TcpClientWrapper::resetSignal,client, &TcpClient::handleResetSignal);
+    QObject::connect(clientWrapper, &TcpClientWrapper::connectSignal,client, &TcpClient::handleConnectSignal);
+    QObject::connect(clientWrapper, &TcpClientWrapper::rebootSignal,client, &TcpClient::handleRebootSignal);
 
     clientThread.start();
 
