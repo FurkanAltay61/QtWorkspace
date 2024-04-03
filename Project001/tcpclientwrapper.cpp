@@ -347,5 +347,5 @@ bool TcpClientWrapper::getTestMode(){
 }
 
 qreal TcpClientWrapper::getSendingPeriod(){
-    return SENDING_PERIOD;
+    return 200;
 }

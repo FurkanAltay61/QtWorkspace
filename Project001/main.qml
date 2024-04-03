@@ -9,7 +9,7 @@ Window {
     height: 600
     title: qsTr("Speedometer")
     color: "black"
-    visibility:  "FullScreen"
+    //visibility:  "FullScreen"
 
     property real initialSpeedometerSize : 200
     property real initialStartAngle : -140

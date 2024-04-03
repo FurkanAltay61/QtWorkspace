@@ -11,8 +11,6 @@ TcpClient::TcpClient(const QString& ip, quint16 port, QObject* parent)
     m_FlowRateStruct(std::make_shared<Datapoint>()),
     m_ThrottlePosStruct(std::make_shared<Datapoint>())
 {
-
-
     m_counter = 0;
     tcpSocket = new QTcpSocket(this);
 
@@ -21,16 +19,15 @@ TcpClient::TcpClient(const QString& ip, quint16 port, QObject* parent)
     connect(tcpSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::errorOccurred),
             this, &TcpClient::onError);
 
-    sendTimer = new QTimer(this);
-    connect(sendTimer, &QTimer::timeout, this, &TcpClient::onSendData);
+    setupTimers();
+
 }
 
 TcpClient::~TcpClient(){
     qDebug() << "destructor called ";
     tcpSocket->close();
-    sendTimer->stop();
+    deleteTimers();
     delete tcpSocket;
-    delete sendTimer;
 }
 
 void TcpClient::connectToServer() {
@@ -46,14 +43,15 @@ void TcpClient::connectToServer() {
         emit statMsgSent("[TcpClient::connectToServer] : Connect signal is handled");
         // Setup OBD-II communication
         configureOBDII();
-        sendTimer->start(SENDING_PERIOD);
+        //QThread::sleep(5);
+        startTimers();
     }
 
 
 }
 
 void TcpClient::configureOBDII(){
-    writeData("AT E0\rAT L0\rAT H0\rAT S1\rAT AT1\r");
+    writeData("AT E0\rAT L0\rAT H0\rAT S1\rAT AT2\r");
     emit statMsgSent("[TcpClient::configureOBDII] : Obd2 device is configured");
 }
 
@@ -81,46 +79,6 @@ void TcpClient::onError(QAbstractSocket::SocketError socketError) {
     //QCoreApplication::exit(EXIT_FAILURE);
 }
 
-void TcpClient::onSendData() {
-    // static int count{0};
-    // if (!datas.isEmpty()) {
-    //     if(retval != "NO DATA")
-    //         writeData(datas[count++]);
-    //     if (count >= datas.size())
-    //         count = 0;
-    // }
-
-#ifdef  TEST_MODE
-    writeData("ATI\r");
-#else
-    static int count{0};
-    static int tickcount{0};
-
-
-if (!datas.isEmpty()) {
-    if(datas[count] == "0105\r" && tickcount == 250)     //Engine coolant temperature //60sn
-        writeData(datas[count]);
-    else if(datas[count] == "010B\r" && tickcount == 25) //Intake manifold absolute pressure //5sn
-        writeData(datas[count]);
-    else if(datas[count] == "010F\r" && tickcount == 50) //Intake air temperature //10sn
-        writeData(datas[count]);
-    else if(datas[count] == "0111\r" && tickcount == 5) //Throttle position //10sn
-        writeData(datas[count]);
-    else
-        writeData(datas[count]);
-
-    if(retval == "YES")
-        count++;
-
-    if (count >= datas.size())
-        count = 0;
-
-    tickcount++;
-    if (tickcount > 250)
-        tickcount = 0;
-}
-#endif
-}
 
 void TcpClient::writeData(const QString& data) {
     if (tcpSocket->state() == QAbstractSocket::ConnectedState) {
@@ -209,14 +167,13 @@ void TcpClient::processMessage(const QByteArray& message) {
                 emit throttlePosDurationSent(m_ThrottlePosStruct->duration);
                 emit throttlePosSent(m_ThrottlePosStruct->data);
             }
-            retval = "YES";
+            //retval = "YES";
         } else if(parsedstr[0] == "OK") {
             qDebug() << "Message from server:" << parsedstr[0];
         } else {
             qDebug() << "Message from server:" << message;
 
-            retval = message;
-
+#ifdef TEST_MODE
             static bool direction = true;
             if(m_counter >= 8000)
                 direction = false;
@@ -226,7 +183,7 @@ void TcpClient::processMessage(const QByteArray& message) {
             m_counter += direction ? 250 : -250;
 
             emit rpmSent(m_counter);
-
+#endif
         }
     }
 }
@@ -234,13 +191,12 @@ void TcpClient::processMessage(const QByteArray& message) {
 void TcpClient::handleResetSignal(){
     qDebug() << "Reset signal is handled";
     writeData("ATZ\r");
-    sendTimer->stop();
     if(tcpSocket->state() == QAbstractSocket::ConnectedState){
         tcpSocket->disconnectFromHost();
         if(tcpSocket->state() != QAbstractSocket::UnconnectedState)
             tcpSocket->waitForDisconnected();
     }
-
+    stopTimers();
     emit statMsgSent("[TcpClient::handleResetSignal] : Reset signal is handled");
 }
 
@@ -254,3 +210,122 @@ void TcpClient::handleRebootSignal(){
     process.start("reboot",QStringList());
     process.waitForFinished();
 }
+
+void TcpClient::setupTimers() {
+    engineLoadTimer = new QTimer(this);
+    engineLoadTimer->setInterval(500);
+    connect(engineLoadTimer, &QTimer::timeout, this, &TcpClient::requestEngineLoad);
+
+    coolTempTimer = new QTimer(this);
+    coolTempTimer->setInterval(60000);
+    connect(coolTempTimer, &QTimer::timeout, this, &TcpClient::requestCoolTemp);
+
+    mapTimer = new QTimer(this);
+    mapTimer->setInterval(600);
+    connect(mapTimer, &QTimer::timeout, this, &TcpClient::requestMap);
+
+    rpmTimer = new QTimer(this);
+    rpmTimer->setInterval(200);
+    connect(rpmTimer, &QTimer::timeout, this, &TcpClient::requestRpm);
+
+    speedTimer = new QTimer(this);
+    speedTimer->setInterval(400);
+    connect(speedTimer, &QTimer::timeout, this, &TcpClient::requestSpeed);
+
+    iatTimer = new QTimer(this);
+    iatTimer->setInterval(5000);
+    connect(iatTimer, &QTimer::timeout, this, &TcpClient::requestIat);
+
+    mafTimer = new QTimer(this);
+    mafTimer->setInterval(500);
+    connect(mafTimer, &QTimer::timeout, this, &TcpClient::requestMaf);
+
+    throtPosTimer = new QTimer(this);
+    throtPosTimer->setInterval(1000);
+    connect(throtPosTimer, &QTimer::timeout, this, &TcpClient::requestThrotPos);
+}
+
+void TcpClient::startTimers() {
+    engineLoadTimer->start();
+    coolTempTimer->start();
+    mapTimer->start();
+    rpmTimer->start();
+    speedTimer->start();
+    iatTimer->start();
+    mafTimer->start();
+    //throtPosTimer->start();
+}
+
+void TcpClient::stopTimers() {
+    engineLoadTimer->stop();
+    coolTempTimer->stop();
+    mapTimer->stop();
+    rpmTimer->stop();
+    speedTimer->stop();
+    iatTimer->stop();
+    mafTimer->stop();
+    //throtPosTimer->stop();
+}
+
+void TcpClient::deleteTimers(){
+    delete engineLoadTimer;
+    delete coolTempTimer;
+    delete mapTimer;
+    delete rpmTimer;
+    delete speedTimer;
+    delete iatTimer;
+    delete mafTimer;
+    delete throtPosTimer;
+}
+
+void TcpClient::requestEngineLoad(){
+    QString message = "0104\r";
+    //qDebug() << "requestEngineLoad";
+    writeData(message);
+}
+
+void TcpClient::requestCoolTemp(){
+    QString message = "0105\r";
+    //qDebug() << "requestCoolTemp";
+    writeData(message);
+}
+
+void TcpClient::requestMap(){
+    QString message = "010B\r";
+    //qDebug() << "requestMap";
+    writeData(message);
+}
+
+void TcpClient::requestRpm(){
+    QString message = "010C\r";
+    //qDebug() << "requestRpm";
+    writeData(message);
+}
+
+void TcpClient::requestSpeed(){
+    QString message = "010D\r";
+    //qDebug() << "requestSpeed";
+    writeData(message);
+}
+
+void TcpClient::requestIat(){
+    QString message = "010F\r";
+    //qDebug() << "requestIat";
+    writeData(message);
+}
+
+void TcpClient::requestMaf(){
+    QString message = "0110\r";
+    //qDebug() << "requestMaf";
+    writeData(message);
+}
+
+void TcpClient::requestThrotPos(){
+    QString message = "0111\r";
+    //qDebug() << "requestThrotPos";
+    writeData(message);
+}
+
+/*********************************************WorkerClass*****************************************/
+
+
