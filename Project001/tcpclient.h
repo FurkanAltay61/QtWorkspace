@@ -28,13 +28,15 @@
 #include <cmath>
 #include <QThread>
 #include <QProcess>
+#include <QMutex>
+#include <QWaitCondition>
+
+
+class Worker;
 
 //#define TEST_MODE
-const qreal SENDING_PERIOD = 200;
 
 class TcpClient : public QObject {
-
-
     Q_OBJECT
 
 
@@ -50,11 +52,19 @@ public:
         qreal    data;
     };
 
+
 private slots:
     void onConnected();
     void onReadyRead();
     void onError(QAbstractSocket::SocketError socketError);
-    void onSendData();
+    void requestEngineLoad();
+    void requestCoolTemp();
+    void requestMap();
+    void requestRpm();
+    void requestSpeed();
+    void requestIat();
+    void requestMaf();
+    void requestThrotPos();
 
 public slots:
     void handleResetSignal();
@@ -82,16 +92,13 @@ signals:
 
     void    statMsgSent(const QString &_statMsg);
 
-
 private:
     QTcpSocket* tcpSocket;
     QString serverIP;
     quint16 serverPort;
-    QTimer* sendTimer;
     QByteArray buffer;
     QStringList datas{"0104\r", "0105\r", "010B\r", "010C\r",
-                      "010D\r", "010F\r", "0110\r", "0111\r"};
-    //QStringList datas{"0104\r","010C\r","010D\r","0110\r"};
+                     "010D\r", "010F\r", "0110\r", "0111\r"};
 
     std::chrono::high_resolution_clock::time_point prevtime;
 
@@ -109,8 +116,20 @@ private:
     std::shared_ptr<Datapoint> m_FlowRateStruct;
     std::shared_ptr<Datapoint> m_ThrottlePosStruct;
 
-    QString retval{""};
-};
+    QTimer *engineLoadTimer;
+    QTimer *coolTempTimer;
+    QTimer *mapTimer;
+    QTimer *rpmTimer;
+    QTimer *speedTimer;
+    QTimer *iatTimer;
+    QTimer *mafTimer;
+    QTimer *throtPosTimer;
 
+    void setupTimers();
+    void startTimers();
+    void stopTimers();
+    void deleteTimers();
+
+};
 
 #endif // TCPCLIENT_H

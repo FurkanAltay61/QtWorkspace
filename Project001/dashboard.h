@@ -183,7 +183,6 @@ private:
     qreal   m_UnitTextSize;
     qreal   m_GaugeNameTextSize;
 
-
     qreal   m_Val;
 
     QPixmap m_BackgroundPixmap;
