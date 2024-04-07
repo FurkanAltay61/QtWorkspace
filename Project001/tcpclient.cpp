@@ -175,7 +175,7 @@ void TcpClient::processMessage(const QByteArray& message) {
 
 #ifdef TEST_MODE
             static bool direction = true;
-            if(m_counter >= 8000)
+            if(m_counter >= 5000)
                 direction = false;
             else if(m_counter <= 0.1)
                 direction = true;
@@ -246,17 +246,24 @@ void TcpClient::setupTimers() {
 }
 
 void TcpClient::startTimers() {
+#ifdef TEST_MODE
+    rpmTimer->start();
+#else
+    rpmTimer->start();
     engineLoadTimer->start();
     coolTempTimer->start();
     mapTimer->start();
-    rpmTimer->start();
     speedTimer->start();
     iatTimer->start();
     mafTimer->start();
     //throtPosTimer->start();
+#endif
 }
 
 void TcpClient::stopTimers() {
+#ifdef TEST_MODE
+    rpmTimer->stop();
+#else
     engineLoadTimer->stop();
     coolTempTimer->stop();
     mapTimer->stop();
@@ -265,6 +272,7 @@ void TcpClient::stopTimers() {
     iatTimer->stop();
     mafTimer->stop();
     //throtPosTimer->stop();
+#endif
 }
 
 void TcpClient::deleteTimers(){
@@ -297,7 +305,11 @@ void TcpClient::requestMap(){
 }
 
 void TcpClient::requestRpm(){
+#ifdef TEST_MODE
+    QString message = "ATI\r";
+#else
     QString message = "010C\r";
+#endif
     //qDebug() << "requestRpm";
     writeData(message);
 }

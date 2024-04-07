@@ -41,6 +41,8 @@ class Dashboard : public QQuickPaintedItem
     Q_PROPERTY(qreal unitTextSize READ getUnitTextSize WRITE setUnitTextSize NOTIFY unitTextSizeChanged)
     Q_PROPERTY(qreal gaugeNameTextSize READ getGaugeNameTextSize WRITE setGaugeNameTextSize NOTIFY gaugeNameTextSizeChanged)
     Q_PROPERTY(qreal val READ getVal WRITE setVal NOTIFY valChanged)
+    Q_PROPERTY(qreal valtext READ getValText WRITE setValText NOTIFY valTextChanged)
+    Q_PROPERTY(qreal minorticks READ getMinorTicks WRITE setMinorTicks NOTIFY minorTicksChanged)
 
 
 public:
@@ -78,6 +80,8 @@ public:
     qreal   getGaugeNameTextSize() const;
 
     qreal   getVal() const;
+    qreal   getValText() const;
+    qreal   getMinorTicks() const;
 
     QPointF calculatePosition(const QRectF &rect, qreal angle, qreal offset);
 
@@ -110,10 +114,12 @@ public:
     void    setGaugeNameOffset(const qreal &GaugeNameOffset);
     void    setUnitTextSize(const qreal &UnitTextSize);
     void    setGaugeNameTextSize(const qreal &GaugeNameTextSize);
-
     void    setVal(const qreal &val);
+    void    setValText(const qreal &_valtext);
+    void    setMinorTicks(const qreal &_minorticks);
 
     void    drawBackgroundPixmap();
+    void    drawNeedlePixmap();
 
 public slots:
 
@@ -147,8 +153,9 @@ signals:
     void    gaugeNameOffsetChanged();
     void    unitTextSizeChanged();
     void    gaugeNameTextSizeChanged();
-
     void    valChanged();
+    void    valTextChanged();
+    void    minorTicksChanged();
 
 private:
     qreal   m_val;
@@ -182,10 +189,14 @@ private:
     qreal   m_GaugeNameOffset;
     qreal   m_UnitTextSize;
     qreal   m_GaugeNameTextSize;
-
     qreal   m_Val;
+    qreal   m_ValText;
+    qreal   m_MinorTicks;
 
     QPixmap m_BackgroundPixmap;
+    QPixmap m_NeedlePixmap;
+
+    qreal   m_NeedleAngle;
 
 };
 
