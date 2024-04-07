@@ -34,7 +34,7 @@
 
 class Worker;
 
-//#define TEST_MODE
+#define TEST_MODE
 
 class TcpClient : public QObject {
     Q_OBJECT

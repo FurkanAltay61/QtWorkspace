@@ -5,9 +5,9 @@
 
 Dashboard::Dashboard(QQuickItem *parent)
     :QQuickPaintedItem(parent),
-    m_SpeedometerSize(200), // touch screen is 800 x 480
-    m_StartAngle(-140),
-    m_AlignAngle(260), // it should be 360 - m_StartAngle*3 for good looking
+    m_SpeedometerSize(400), // touch screen is 800 x 480
+    m_StartAngle(m_SpeedometerSize / 1.95),
+    m_AlignAngle(-m_SpeedometerSize / 1.75), // it should be 360 - m_StartAngle*3 for good looking
     m_LowestRange(0),
     m_HighestRange(240),
     m_ArcWidth(5),
@@ -15,31 +15,33 @@ Dashboard::Dashboard(QQuickItem *parent)
     m_InnerColor(QColor(51,88,255,80)),
     m_TextColor(QColor(255,255,255)),
     m_BackgroundColor(Qt::transparent),
-    m_InnerArcWidth(50),
-    m_InnerArcPos(45),
-    m_ProgressBarPos(42.5),
-    m_ProgressBarThickness(13),
-    m_InnerCircleSize(50),
-    m_Interval(20),
-    m_TextBarSize(10),
-    m_TickPosOffset(28.5),
-    m_TextPosOffset(20),
-    m_TickMarkLength(10),
-    m_ArcTextSize(8),
-    m_ProgBarArcPos(38),
+    m_InnerArcWidth(m_SpeedometerSize / 6),
+    m_InnerArcPos(m_SpeedometerSize / 6.67),
+    m_ProgressBarPos(m_SpeedometerSize / 7.05),
+    m_ProgressBarThickness(m_SpeedometerSize / 13),
+    m_InnerCircleSize(m_SpeedometerSize / 2),
+    m_Interval(m_SpeedometerSize / 15),
+    m_TextBarSize(m_SpeedometerSize / 30),
+    m_TickPosOffset(m_SpeedometerSize / 10.52),
+    m_TextPosOffset(m_SpeedometerSize / 15),
+    m_TickMarkLength(m_SpeedometerSize / 30),
+    m_ArcTextSize(m_SpeedometerSize / 37.5),
+    m_ProgBarArcPos(m_SpeedometerSize / 8),
     m_Unit("NULL"),
     m_GaugeName("NULL"),
-    m_UnitOffset(50),
-    m_GaugeNameOffset(100),
-    m_UnitTextSize(7),
-    m_GaugeNameTextSize(10),
-    m_Val(0)
+    m_UnitOffset(m_SpeedometerSize / 6),
+    m_GaugeNameOffset(m_SpeedometerSize / 3),
+    m_UnitTextSize(m_SpeedometerSize / 43),
+    m_GaugeNameTextSize(m_SpeedometerSize / 30),
+    m_Val(0),
+    m_ValText(0),
+    m_MinorTicks(5)
 {
     drawBackgroundPixmap();
 }
 
 void Dashboard::drawBackgroundPixmap(){
-    m_BackgroundPixmap = QPixmap(300,300);
+    m_BackgroundPixmap = QPixmap(m_SpeedometerSize,m_SpeedometerSize);
     m_BackgroundPixmap.fill(Qt::transparent);
     QPainter painter(&m_BackgroundPixmap);
     QRectF rect = this->boundingRect();
@@ -48,28 +50,56 @@ void Dashboard::drawBackgroundPixmap(){
     QPen pen = painter.pen();
     pen.setCapStyle(Qt::FlatCap);
 
-    double startAngle;
-    double spanAngle;
-
-    startAngle = m_StartAngle;
-    spanAngle = 0 - m_AlignAngle;
-
     //all arc
     painter.save();
     pen.setWidth(m_ArcWidth);
-    pen.setColor(m_InnerColor);
+    pen.setColor(Qt::white);
     painter.setPen(pen);
-    painter.drawArc(rect.adjusted(m_ArcWidth, m_ArcWidth, -m_ArcWidth, -m_ArcWidth), startAngle * 16, spanAngle * 16);
+    painter.drawArc(rect.adjusted(m_ArcWidth, m_ArcWidth, -m_ArcWidth, -m_ArcWidth), m_StartAngle * 17, m_AlignAngle * 18);
+    painter.restore();
+
+
+    //red zone
+    painter.save();
+    QPointF center = rect.center();
+    QConicalGradient conicalGradient(center, 45); // 0 is the angle where the gradient starts
+
+    // Set gradient stops to create the light effect
+    conicalGradient.setColorAt(0.0, QColor(83, 83, 83, 100)); // Fully transparent color stop
+    conicalGradient.setColorAt(0.5, QColor(83, 83, 83, 255)); // Half-way point with light color
+    conicalGradient.setColorAt(0.8, QColor(255, 0, 0, 255)); // Half-way point with light color
+    conicalGradient.setColorAt(1.0, QColor(255, 0, 0, 100)); // Back to transparent
+
+    //QBrush brush(conicalGradient);
+    QPen pen2;
+    pen2.setBrush(conicalGradient);
+    pen2.setWidth(m_ArcWidth * 12.5);
+    pen2.setCapStyle(Qt::FlatCap);
+    painter.setPen(pen2);
+    painter.drawArc(rect.adjusted(m_ArcWidth * 7.5, m_ArcWidth * 7.5, -m_ArcWidth * 7.5, -m_ArcWidth * 7.5), m_StartAngle * 17, m_AlignAngle * 18);
     painter.restore();
 
     //inner circle
     painter.save();
-    painter.setBrush(QBrush(QColor(m_InnerColor)));
+    QPen InnerCirclePen(Qt::white, 2); // Black color, 2 pixels width
+    painter.setPen(InnerCirclePen);
+    painter.setBrush(Qt::NoBrush);
+    painter.drawEllipse(rect.center(), m_InnerCircleSize, m_InnerCircleSize);
+    QRadialGradient radianGradient(center,m_InnerCircleSize * 1.25,center); // 0 is the angle where the gradient starts
+
+    // Set gradient stops to create the light effect
+    radianGradient.setColorAt(0.0, QColor(83, 83, 83, 255)); // Fully transparent color stop
+    radianGradient.setColorAt(0.3, QColor(83, 83, 83, 200)); // Fully transparent color stop
+    radianGradient.setColorAt(0.5, QColor(83, 83, 83, 150)); // Fully transparent color stop
+    radianGradient.setColorAt(0.8, QColor(83, 83, 83, 100)); // Fully transparent color stop
+    radianGradient.setColorAt(1.0, QColor(83, 83, 83, 0)); // Half-way point with light color
+    painter.setBrush(radianGradient);
     painter.drawEllipse(rect.center(), m_InnerCircleSize, m_InnerCircleSize);
     painter.restore();
 
     painter.save();
     QFont font("Halvetica",m_TextBarSize,QFont::Bold);
+    font.setItalic(true);
     painter.setFont(font);
     pen.setColor(m_TextColor);
     painter.setPen(pen);
@@ -88,10 +118,10 @@ void Dashboard::drawBackgroundPixmap(){
     painter.restore();
 
     painter.save();
-    pen.setWidth(1);
+    pen.setWidth(3);
     pen.setColor(Qt::white);
     painter.setPen(pen);
-    painter.drawArc(rect.adjusted(m_ProgBarArcPos, m_ProgBarArcPos, -m_ProgBarArcPos, -m_ProgBarArcPos), startAngle * 16, spanAngle * 16);
+    painter.drawArc(rect.adjusted(m_ProgBarArcPos * 1.2, m_ProgBarArcPos * 1.2, -m_ProgBarArcPos * 1.2, -m_ProgBarArcPos * 1.2), m_StartAngle * 17, m_AlignAngle * 18);
     painter.restore();
 
     painter.save();
@@ -100,29 +130,34 @@ void Dashboard::drawBackgroundPixmap(){
 
     // Draw tick marks and speed values
     int numTicks = (m_HighestRange - m_LowestRange) / m_Interval;
-    font.setPointSize(m_ArcTextSize);
+    font.setPointSize(m_ArcTextSize * 1.2);
     painter.setFont(font);
     QFontMetrics metrics(painter.font());
 
     for (int i = 0; i <= numTicks; ++i) {
         int speedValue = m_LowestRange + i * m_Interval;
-        qreal angle = startAngle + ((speedValue - m_LowestRange) / (m_HighestRange - m_LowestRange)) * spanAngle;
+        qreal majorAngle = m_StartAngle + ((speedValue - m_LowestRange) / (m_HighestRange - m_LowestRange)) * m_AlignAngle;
 
-        // Calculate position for the tick mark
-        QPointF tickPos = calculatePosition(rect, angle, m_TickPosOffset);
-        QPointF textPos = calculatePosition(rect, angle, m_TextPosOffset - metrics.height());
-
-        // Draw the tick mark
-        painter.drawLine(tickPos, QPointF(tickPos.x() + m_TickMarkLength * cos(qDegreesToRadians(angle)), tickPos.y() - m_TickMarkLength * sin(qDegreesToRadians(angle))));  // 10 is the length of the tick mark
-
-        // Prepare to draw the text
-        QString text = QString::number(speedValue);
+        // Draw major tick mark and text
+        QPointF majorTickPos = calculatePosition(rect, majorAngle, m_TickPosOffset);
+        painter.drawLine(majorTickPos, QPointF(majorTickPos.x() + m_TickMarkLength * cos(qDegreesToRadians(majorAngle)), majorTickPos.y() - m_TickMarkLength * sin(qDegreesToRadians(majorAngle))));
+        QPointF textPos = calculatePosition(rect, majorAngle, m_TextPosOffset * 1.35 - metrics.height());
+        QString text = QString::number(m_GaugeName == "Rpm" ? speedValue / 1000 : speedValue);
         QRect textRect = metrics.boundingRect(text);
         textRect.moveCenter(textPos.toPoint());
-
-        // Adjust for alignment and draw the text
         painter.drawText(textRect, Qt::AlignCenter, text);
+
+        // Draw minor tick marks
+        if (i < numTicks) {  // Avoid drawing minor ticks beyond the last major tick
+            for (int j = 1; j < m_MinorTicks; ++j) {
+                qreal minorAngle = majorAngle + (j * (m_Interval / static_cast<qreal>(m_MinorTicks)) / (m_HighestRange - m_LowestRange)) * m_AlignAngle;
+                QPointF minorTickPos = calculatePosition(rect, minorAngle, m_TickPosOffset * 2.5);
+                QPointF minorTickEndPos = QPointF(minorTickPos.x() + (m_TickMarkLength / 2) * cos(qDegreesToRadians(minorAngle)), minorTickPos.y() - (m_TickMarkLength / 2) * sin(qDegreesToRadians(minorAngle)));  // Half the length for minor ticks
+                painter.drawLine(minorTickPos, minorTickEndPos);
+            }
+        }
     }
+
     painter.restore();
 
 
@@ -134,15 +169,9 @@ void Dashboard::paint(QPainter *painter){
 
     QRectF rect = this->boundingRect();
 
-    // painter->setRenderHint(QPainter::Antialiasing);
+    painter->setRenderHint(QPainter::Antialiasing);
     QPen pen = painter->pen();
     pen.setCapStyle(Qt::FlatCap);
-
-    double startAngle;
-    double spanAngle;
-
-    startAngle = m_StartAngle;
-    spanAngle = 0 - m_AlignAngle;
 
     //text which shows the value
     painter->save();
@@ -152,29 +181,43 @@ void Dashboard::paint(QPainter *painter){
     painter->setPen(pen);
     painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
                                     -m_TextBarSize, -m_TextBarSize),
-                                    Qt::AlignCenter, QString::number((m_Val),'f',1));
+                                    Qt::AlignCenter, QString::number((m_ValText),'f',1));
     painter->restore();
-
-    //current active progress
 
     painter->save();
-     // Set up the gradient
-    QLinearGradient gradient(rect.topLeft(),rect.topRight());
-    gradient.setColorAt(0.0, QColor(0,255,0, 200)); // Start with fully transparent
-    gradient.setColorAt(0.5, QColor(0,0,255, 200)); // Half-way point with semi-transparency
-    gradient.setColorAt(1.0, QColor(255,0,0, 200)); // End with fully opaque
 
-    // Set up the pen with the gradient
-    QPen gradientPen;
-    gradientPen.setWidth(m_ProgressBarThickness);
-    gradientPen.setBrush(gradient);
-    gradientPen.setCapStyle(Qt::FlatCap);
+    // Calculate the angle for the needle based on the current speed
+    qreal needleAngle = m_StartAngle + ((m_Val - m_LowestRange) / (m_HighestRange - m_LowestRange)) * m_AlignAngle;
 
-    // Draw the arc with the gradient pen
-    painter->setPen(gradientPen);
-    qreal valueToAngle = ((m_Val - m_LowestRange)/(m_HighestRange - m_LowestRange)) * spanAngle;
-    painter->drawArc(rect.adjusted(m_ProgressBarPos, m_ProgressBarPos, -m_ProgressBarPos, -m_ProgressBarPos), startAngle * 16, valueToAngle * 16);
+    // Calculate the position of the needle's tip
+    qreal needleLength = rect.width() / 2 * 0.8;  // 80% of the radius
+    QPointF needleTip(
+        rect.center().x() + (needleLength * 1.1) * cos(qDegreesToRadians(-needleAngle)),
+        rect.center().y() + (needleLength * 1.1) * sin(qDegreesToRadians(-needleAngle))
+        );
+
+    // Calculate the position of the needle's base at the inner circle's edge
+    QPointF needleBase(
+        rect.center().x() + (m_InnerCircleSize * 1.3) * cos(qDegreesToRadians(-needleAngle)),
+        rect.center().y() + (m_InnerCircleSize * 1.3) * sin(qDegreesToRadians(-needleAngle))
+        );
+
+    // Draw the needle
+    QPen needlePen(Qt::red, rect.width()/100);  // White color, 4 pixels width
+    painter->setPen(needlePen);
+    painter->drawLine(needleBase, needleTip);
+
+    // Create a light effect using a radial gradient
+    QRadialGradient lightGradient(needleTip, needleLength / 4);
+    lightGradient.setColorAt(0, QColor(255, 255, 255, 150));  // Light color at the center
+    lightGradient.setColorAt(1, QColor(255, 255, 255, 0));    // Transparent towards the edges
+
+    // Draw the light effect
+    painter->setBrush(lightGradient);
+    painter->setPen(Qt::NoPen);
+    painter->drawEllipse(QPointF(needleTip.x(), needleTip.y()), needleLength / 4, needleLength / 4);
     painter->restore();
+
 }
 
 QPointF Dashboard::calculatePosition(const QRectF &rect, qreal angle, qreal offset) {
@@ -330,6 +373,14 @@ qreal  Dashboard::getVal() const
     return m_Val;
 }
 
+qreal Dashboard::getValText() const
+{
+    return m_ValText;
+}
+
+qreal  Dashboard::getMinorTicks() const {
+    return m_MinorTicks;
+}
 
 
 void Dashboard::setSpeedometerSize(const qreal &size)
@@ -615,6 +666,15 @@ void Dashboard::setGaugeNameTextSize(const qreal &GaugeNameTextSize){
     emit gaugeNameTextSizeChanged();
 }
 
+void Dashboard::setMinorTicks(const qreal &_minorticks){
+    if(m_MinorTicks == _minorticks)
+        return;
+    m_MinorTicks = _minorticks;
+    drawBackgroundPixmap();
+    update();
+    emit minorTicksChanged();
+}
+
 void Dashboard::setVal(const qreal &mval){
     if(m_Val == mval)
         return;
@@ -622,5 +682,14 @@ void Dashboard::setVal(const qreal &mval){
     m_Val = mval;
     update();
     emit valChanged();
+}
+
+void Dashboard::setValText(const qreal &_mvaltext){
+    if(m_ValText == _mvaltext)
+        return;
+
+    m_ValText = _mvaltext;
+    update();
+    emit valTextChanged();
 }
 
