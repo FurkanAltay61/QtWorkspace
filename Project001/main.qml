@@ -1,7 +1,9 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import Dashboardqml 1.0
-
+import QtQuick.Shapes 1.12
+import QtQuick.Controls 2.15
+//import QtGraphicalEffects 1.15
 
 Window {
     visible: true
@@ -11,166 +13,140 @@ Window {
     color: "black"
     //visibility:  "FullScreen"
 
-    // property real initialSpeedometerSize : 300
-    // property real initialStartAngle : - initialSpeedometerSize / 2.14
-    // property real initialAlignAngle : initialSpeedometerSize / 1.15
-    // property real initialLowestRange : 0
-    // property real initialHighestRange : 240
-    // property int initialArcWidth : initialSpeedometerSize / 60
-    // property color initialOuterColor : "blue"
-    // property color initialInnerColor : Qt.rgba(51,88,255,80)
-    // property color initialTextColor : Qt.rgba(255,255,255)
-    // property color initialBackgroundColor : Qt.transparent
-    // property int   initialInnerArcWidth : initialSpeedometerSize / 60
-    // property int   initialInnerArcPos : initialSpeedometerSize / 6.67
-    // property real initialProgressBarPos : initialSpeedometerSize / 7.0
-    // property real initialProgressBarThickness : initialSpeedometerSize / 23.07
-    // property real initialInnerCircleSize : initialSpeedometerSize / 4
-    // property int   initialInterval : initialSpeedometerSize / 15
-    // property real initialTextBarSize : initialSpeedometerSize / 30
-    // property real initialTickPosOffset : initialSpeedometerSize / 50
-    // property real initialTextPosOffset : initialSpeedometerSize / 15
-    // property real initialTickMarkLength : initialSpeedometerSize / 15
-    // property real initialArcTextSize : initialSpeedometerSize / 37.5
-    // property real initialProgBarArcPos : initialSpeedometerSize / 5.75
-    // property string initialUnit : "NULL"
-    // property string initialGaugeName : "NULL"
-    // property real initialUnitOffset : initialSpeedometerSize / 5
-    // property real initialGaugeNameOffset : initialSpeedometerSize / 3
-    // property real initialUnitTextSize : initialSpeedometerSize / 43
-    // property real initialGaugeNameTextSize : initialSpeedometerSize / 30
-
-    property real initialSpeed : 0
-    property real initialEngineLoad : 0
-    property real initialCoolantTemp : 0
-    property real initialIntakePressure : 0
-    property real initialRpm : 0
-    property real initialIntakeTemp : 0
-    property real initialMaf : 0
-    property real initialThrottlePos : 0
-    property real initialVal : 0
-
     property int animationDuration : 1600
 
+    Shape {
+        width: 1024
+        height: 600
+        anchors.centerIn: parent
+        ShapePath {
+            strokeWidth: 3
+            strokeColor: "gray"
+            fillColor: "transparent"
+            // Starting point
+            startX: 175
+            startY: 5
+            // Hexagon points
+            // Draw an arc to the next side
+            PathLine { x: 175; y: 5 }
+            PathLine { x: 850; y: 5 }
+            PathLine { x: 1000;  y: 300 }
+            PathLine { x: 850;   y: 575 }
+            PathLine { x: 175;   y: 575 }
+            PathLine { x: 25;  y: 300 }
+            PathLine { x: 175;  y: 5 } // Closes the path
+        }
+    }
+
     FpsCounter {
+        x : 934
+        y : 0
+        width: 50
+        height : 20
         id : fpsItem
-        anchors.right: parent.right
-    }
-
-    Rectangle {
-        x : 974
-        y : 580
-        width: 50
-        height : 20
-        Text {
-            id: close
-            text: qsTr("close")
-        }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                Qt.quit()
-            }
-        }
-    }
-
-    Rectangle {
-        x : 919
-        y : 580
-        width: 50
-        height : 20
-        Text {
-            id: reset
-            text: qsTr("reset")
-        }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                //Reset command should send here
-                console.log("Clicked")
-                tcpClient.resetSignal()
-            }
-        }
     }
 
 
-    Rectangle {
-        x : 845
+    Button {
+        x : 949
         y : 580
         width: 70
         height : 20
-        Text {
-            id: obd2connect
-            text: qsTr("connect")
-        }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                //Reset command should send here
-                console.log("Clicked")
-                tcpClient.connectSignal()
+        id: closebutton
+        text: "Close"
+        font.pointSize: 10
+        font.bold : true
+        background: Rectangle {
+            id: closebackground
+            color: closebutton.pressed ? "gray" : "darkgray"
+            radius: 5
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: closebutton.pressed ? "gray" : "darkgray" }
+                GradientStop { position: 1.0; color: closebutton.pressed ? "red" : "darkred" }
             }
+        }
+        onPressed: {
+            Qt.quit()
         }
     }
 
-
-    // Rectangle {
-    //     x : 310
-    //     y : 20
-    //     width: 400
-    //     height : 125
-    //     Text {
-    //         anchors.horizontalCenter: parent.horizontalCenter
-    //         anchors.verticalCenter: parent.verticalCenter
-    //         id: dashboardstatus
-    //         text: qsTr(tcpClient.statmsg)
-    //         wrapMode: Text.WordWrap  // Enable word wrapping
-    //         elide: Text.ElideRight   // Truncate text with an ellipsis on the right if it doesn't fit
-    //         width: parent.width      // Ensure the text width is the same as the parent Rectangle
-
-    //     }
-    // }
-
-    // Rectangle {
-    //     x : 310
-    //     y : 425
-    //     width: 400
-    //     height : 125
-    //     Text {
-    //         anchors.centerIn: parent
-    //         id: dashboardstatus2
-    //         text: qsTr("Status2")
-    //     }
-    // }
-
-
-    Rectangle {
-        x : 770
+    Button {
+        x : 874
         y : 580
         width: 70
         height : 20
-        Text {
-            id: reboot
-            text: qsTr("reboot")
-        }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                //Reset command should send here
-                console.log("Clicked")
-                tcpClient.rebootSignal()
+        id: resetbutton
+        text: "Reset"
+        font.pointSize: 10
+        font.bold : true
+        background: Rectangle {
+            id: resetbackground
+            color: resetbutton.pressed ? "gray" : "darkgray"
+            radius: 5
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: resetbutton.pressed ? "gray" : "darkgray" }
+                GradientStop { position: 1.0; color: resetbutton.pressed ? "red" : "darkred" }
             }
         }
+        onPressed: {
+            tcpClient.resetSignal()
+        }
     }
+
+    Button {
+        x : 799
+        y : 580
+        width: 70
+        height : 20
+        id: connectbutton
+        text: "Connect"
+        font.pointSize: 10
+        font.bold : true
+        background: Rectangle {
+            id: connectbackground
+            radius: 5
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: connectbutton.pressed ? "gray" : "darkgray" }
+                GradientStop { position: 1.0; color: connectbutton.pressed ? "red" : "darkred" }
+            }
+        }
+        onPressed: {
+            tcpClient.connectSignal()
+        }
+    }
+
+    Button {
+        x : 724
+        y : 580
+        width: 70
+        height : 20
+        id: rebootbutton
+        text: "Reboot"
+        //anchors.centerIn: parent
+        font.pointSize: 10
+        font.bold : true
+        background: Rectangle {
+            id: background
+            color: rebootbutton.pressed ? "gray" : "darkgray"
+            radius: 5
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: rebootbutton.pressed ? "gray" : "darkgray" }
+                GradientStop { position: 1.0; color: rebootbutton.pressed ? "red" : "darkred" }
+            }
+        }
+        onPressed: {
+            tcpClient.rebootSignal()
+        }
+    }
+
 
     Dashboard
     {
-        property real initialSpeedometerSize: 400
         x : 312
         y : 100
-        gaugeName: "Rpm"
-        width: initialSpeedometerSize
-        height: initialSpeedometerSize
+        width: 400
+        height: 400
+        gaugeName: "RPM"
         //startAngle: startAngle - 90
         //alignAngle: alignAngle + 90
         lowestRange: lowestRange
@@ -196,40 +172,51 @@ Window {
                 // }
             }
         }
-        arcWidth: initialSpeedometerSize / 60
+        //arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        innerArcWidth : initialSpeedometerSize / 60
-        innerArcPos : initialSpeedometerSize / 6.67
-        progressBarPos: initialSpeedometerSize / 4.5
-        progressBarThickness: initialSpeedometerSize / 10
-        innerCircleSize: initialSpeedometerSize / 4.5
-        textBarSize: initialSpeedometerSize / 30
-        tickPosOffset: -initialSpeedometerSize / 50
-        textPosOffset: initialSpeedometerSize / 12
-        tickMarkLength: initialSpeedometerSize / 15
-        arcTextSize: initialSpeedometerSize / 25
-        progBarArcPos: initialSpeedometerSize / 5.75
+        // innerArcWidth : innerArcWidth
+        // innerArcPos : innerArcPos
+        progressBarPos: 45
+        progressBarThickness: 75
+        // innerCircleSize: innerCircleSize
+        textBarSize: 30
+        // tickPosOffset: tickPosOffset
+        textPosOffset: 50
+        // tickMarkLength: tickMarkLength
+        arcTextSize: 20
+        progBarArcPos: 85
         unit: "km/h"
-        unitOffset: initialSpeedometerSize / 5
-        gaugeNameOffset: initialSpeedometerSize / 2
-        unitTextSize: initialSpeedometerSize / 43
-        gaugeNameTextSize: initialSpeedometerSize / 30
+        unitTextSize: 12
+        unitOffset: 80
+        gaugeNameOffset: 240
+        gaugeNameTextSize: 25
         minorticks: 20
 
+        Text {
+            x : 295
+            y : 275
+            id: text
+            font.family: "Helvetica"
+            font.italic: true
+            font.bold: true
+            font.pixelSize: 20
+            color: "white"
+            rotation: 38
+            text: qsTr("x1000")
+        }
     }
 
     Dashboard
     {
-        property real initialSpeedometerSize: 200
         x : 150
         y : 12
-        gaugeName: "Engine Load"
-        width: initialSpeedometerSize
-        height: initialSpeedometerSize
-        startAngle: startAngle
+        width: 200
+        height: 200
+        gaugeName: "ENGINE"
+        //startAngle: startAngle
         lowestRange: lowestRange
         highestRange: 100
         interval: 10
@@ -240,27 +227,27 @@ Window {
                 easing.type: Easing.Linear
             }
         }
-        arcWidth: initialSpeedometerSize / 60
+//        arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        innerArcWidth : initialSpeedometerSize / 60
-        innerArcPos : initialSpeedometerSize / 6.67
-        progressBarPos: initialSpeedometerSize / 4.5
-        progressBarThickness: initialSpeedometerSize / 10
-        innerCircleSize: initialSpeedometerSize / 4.5
-        textBarSize: initialSpeedometerSize / 30
-        tickPosOffset: -initialSpeedometerSize / 50
-        textPosOffset: initialSpeedometerSize / 15
-        tickMarkLength: initialSpeedometerSize / 15
-        arcTextSize: initialSpeedometerSize / 37.5
-        progBarArcPos: initialSpeedometerSize / 5.75
-        unit: "km/h"
-        unitOffset: initialSpeedometerSize / 5
-        gaugeNameOffset: initialSpeedometerSize / 2
-        unitTextSize: initialSpeedometerSize / 43
-        gaugeNameTextSize: initialSpeedometerSize / 30
+        // innerArcWidth : innerArcWidth
+        // innerArcPos : innerArcPos
+        progressBarPos: 22.5
+        progressBarThickness: 38
+        // innerCircleSize: innerCircleSize
+        textBarSize: 10
+        // tickPosOffset: tickPosOffset
+        textPosOffset: 20
+        // tickMarkLength: tickMarkLength
+        arcTextSize: 6
+        progBarArcPos: 42.5
+        unit: "%"
+        unitTextSize: 8
+        unitOffset: 40
+        gaugeNameOffset: 120
+        gaugeNameTextSize: 7.5
     }
 
 
@@ -269,7 +256,7 @@ Window {
         property real initialSpeedometerSize: 200
         x : 62
         y : 200
-        gaugeName: "Coolant Temp"
+        gaugeName: "COOLANT"
         width: initialSpeedometerSize
         height: initialSpeedometerSize
         startAngle: startAngle
@@ -277,27 +264,27 @@ Window {
         highestRange: 120
         val: tcpClient.coolanttemp
         interval: 30
-        arcWidth: initialSpeedometerSize / 60
+//        arcWidth: initialSpeedometerSize / 60
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        innerArcWidth : initialSpeedometerSize / 60
-        innerArcPos : initialSpeedometerSize / 6.67
-        progressBarPos: initialSpeedometerSize / 4.5
-        progressBarThickness: initialSpeedometerSize / 10
-        innerCircleSize: initialSpeedometerSize / 4.5
-        textBarSize: initialSpeedometerSize / 30
-        tickPosOffset: -initialSpeedometerSize / 50
-        textPosOffset: initialSpeedometerSize / 15
-        tickMarkLength: initialSpeedometerSize / 15
-        arcTextSize: initialSpeedometerSize / 37.5
-        progBarArcPos: initialSpeedometerSize / 5.75
-        unit: "km/h"
-        unitOffset: initialSpeedometerSize / 5
-        gaugeNameOffset: initialSpeedometerSize / 2
-        unitTextSize: initialSpeedometerSize / 43
-        gaugeNameTextSize: initialSpeedometerSize / 30
+        // innerArcWidth : initialSpeedometerSize / 60
+        // innerArcPos : initialSpeedometerSize / 6.67
+        progressBarPos: 22.5
+        progressBarThickness: 38
+        // innerCircleSize: initialSpeedometerSize / 4.5
+        textBarSize: 10
+        // tickPosOffset: -initialSpeedometerSize / 50
+        textPosOffset: 20
+        // tickMarkLength: initialSpeedometerSize / 15
+        arcTextSize: 6
+        progBarArcPos: 42.5
+        unit: "°C"
+        unitTextSize: 8
+        unitOffset: 40
+        gaugeNameOffset: 120
+        gaugeNameTextSize: 7.5
     }
 
     Dashboard
@@ -305,7 +292,7 @@ Window {
         property real initialSpeedometerSize: 200
         x : 150
         y : 388
-        gaugeName: "Intake Pressure"
+        gaugeName: "IMP"
         width: initialSpeedometerSize
         height: initialSpeedometerSize
         startAngle: startAngle
@@ -319,27 +306,27 @@ Window {
                 easing.type: Easing.Linear
             }
         }
-        arcWidth: initialSpeedometerSize / 60
+//        arcWidth: initialSpeedometerSize / 60
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        innerArcWidth : initialSpeedometerSize / 60
-        innerArcPos : initialSpeedometerSize / 6.67
-        progressBarPos: initialSpeedometerSize / 4.5
-        progressBarThickness: initialSpeedometerSize / 10
-        innerCircleSize: initialSpeedometerSize / 4.5
-        textBarSize: initialSpeedometerSize / 30
-        tickPosOffset: -initialSpeedometerSize / 50
-        textPosOffset: initialSpeedometerSize / 15
-        tickMarkLength: initialSpeedometerSize / 15
-        arcTextSize: initialSpeedometerSize / 37.5
-        progBarArcPos: initialSpeedometerSize / 5.75
-        unit: "km/h"
-        unitOffset: initialSpeedometerSize / 5
-        gaugeNameOffset: initialSpeedometerSize / 2
-        unitTextSize: initialSpeedometerSize / 43
-        gaugeNameTextSize: initialSpeedometerSize / 30
+    //     innerArcWidth : initialSpeedometerSize / 60
+    //     innerArcPos : initialSpeedometerSize / 6.67
+        progressBarPos: 22.5
+        progressBarThickness: 38
+    //     innerCircleSize: initialSpeedometerSize / 4.5
+        textBarSize: 10
+    //     tickPosOffset: -initialSpeedometerSize / 50
+        textPosOffset: 20
+    //     tickMarkLength: initialSpeedometerSize / 15
+        arcTextSize: 6
+        progBarArcPos: 42.5
+        unit: "kPa"
+        unitTextSize: 8
+        unitOffset: 40
+        gaugeNameOffset: 120
+        gaugeNameTextSize: 7.5
     }
 
     Dashboard
@@ -347,7 +334,7 @@ Window {
         property real initialSpeedometerSize: 200
         x : 674
         y : 12
-        gaugeName: "Intake Temp"
+        gaugeName: "IAT"
         width: initialSpeedometerSize
         height: initialSpeedometerSize
         startAngle: startAngle
@@ -355,27 +342,27 @@ Window {
         highestRange: 255
         interval: 20
         val: tcpClient.intaketemp
-        arcWidth: initialSpeedometerSize / 60
+        // arcWidth: initialSpeedometerSize / 60
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        innerArcWidth : initialSpeedometerSize / 60
-        innerArcPos : initialSpeedometerSize / 6.67
-        progressBarPos: initialSpeedometerSize / 4.5
-        progressBarThickness: initialSpeedometerSize / 10
-        innerCircleSize: initialSpeedometerSize / 4.5
-        textBarSize: initialSpeedometerSize / 30
-        tickPosOffset: -initialSpeedometerSize / 50
-        textPosOffset: initialSpeedometerSize / 15
-        tickMarkLength: initialSpeedometerSize / 15
-        arcTextSize: initialSpeedometerSize / 37.5
-        progBarArcPos: initialSpeedometerSize / 5.75
-        unit: "km/h"
-        unitOffset: initialSpeedometerSize / 5
-        gaugeNameOffset: initialSpeedometerSize / 2
-        unitTextSize: initialSpeedometerSize / 43
-        gaugeNameTextSize: initialSpeedometerSize / 30
+        // innerArcWidth : initialSpeedometerSize / 60
+        // innerArcPos : initialSpeedometerSize / 6.67
+        progressBarPos: 22.5
+        progressBarThickness: 38
+        // innerCircleSize: initialSpeedometerSize / 4.5
+        textBarSize: 10
+        // tickPosOffset: -initialSpeedometerSize / 50
+        textPosOffset: 20
+        // tickMarkLength: initialSpeedometerSize / 15
+        arcTextSize: 6
+        progBarArcPos: 42.5
+        unit: "°C"
+        unitTextSize: 8
+        unitOffset: 40
+        gaugeNameOffset: 120
+        gaugeNameTextSize: 7.5
     }
 
     Dashboard
@@ -383,7 +370,7 @@ Window {
         property real initialSpeedometerSize: 200
         x : 762
         y : 200
-        gaugeName: "Maf"
+        gaugeName: "MAF"
         width: initialSpeedometerSize
         height: initialSpeedometerSize
         startAngle: startAngle
@@ -397,27 +384,27 @@ Window {
                 easing.type: Easing.Linear
             }
         }
-        arcWidth: initialSpeedometerSize / 60
+//        arcWidth: initialSpeedometerSize / 60
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        innerArcWidth : initialSpeedometerSize / 60
-        innerArcPos : initialSpeedometerSize / 6.67
-        progressBarPos: initialSpeedometerSize / 4.5
-        progressBarThickness: initialSpeedometerSize / 10
-        innerCircleSize: initialSpeedometerSize / 4.5
-        textBarSize: initialSpeedometerSize / 30
-        tickPosOffset: -initialSpeedometerSize / 50
-        textPosOffset: initialSpeedometerSize / 15
-        tickMarkLength: initialSpeedometerSize / 15
-        arcTextSize: initialSpeedometerSize / 37.5
-        progBarArcPos: initialSpeedometerSize / 5.75
-        unit: "km/h"
-        unitOffset: initialSpeedometerSize / 5
-        gaugeNameOffset: initialSpeedometerSize / 2
-        unitTextSize: initialSpeedometerSize / 43
-        gaugeNameTextSize: initialSpeedometerSize / 30
+        // innerArcWidth : initialSpeedometerSize / 60
+        // innerArcPos : initialSpeedometerSize / 6.67
+        progressBarPos: 22.5
+        progressBarThickness: 38
+        // innerCircleSize: initialSpeedometerSize / 4.5
+        textBarSize: 10
+        // tickPosOffset: -initialSpeedometerSize / 50
+        textPosOffset: 20
+        // tickMarkLength: initialSpeedometerSize / 15
+        arcTextSize: 6
+        progBarArcPos: 42.5
+        unit: "g/s"
+        unitTextSize: 8
+        unitOffset: 40
+        gaugeNameOffset: 120
+        gaugeNameTextSize: 7.5
     }
 
     Dashboard
@@ -425,7 +412,7 @@ Window {
         property real initialSpeedometerSize: 200
         x : 674
         y : 388
-        gaugeName: "Throttle Pos"
+        gaugeName: "THROTTLE"
         width: initialSpeedometerSize
         height: initialSpeedometerSize
         startAngle: startAngle
@@ -439,27 +426,27 @@ Window {
                 easing.type: Easing.Linear
             }
         }
-        arcWidth: initialSpeedometerSize / 60
+//        arcWidth: initialSpeedometerSize / 60
         outerColor: outerColor
         innerColor: innerColor
         textColor: textColor
         backgroundColor: backgroundColor
-        innerArcWidth : initialSpeedometerSize / 60
-        innerArcPos : initialSpeedometerSize / 6.67
-        progressBarPos: initialSpeedometerSize / 4.5
-        progressBarThickness: initialSpeedometerSize / 23.0
-        innerCircleSize: initialSpeedometerSize / 4.5
-        textBarSize: initialSpeedometerSize / 30
-        tickPosOffset: -initialSpeedometerSize / 50
-        textPosOffset: initialSpeedometerSize / 15
-        tickMarkLength: initialSpeedometerSize / 15
-        arcTextSize: initialSpeedometerSize / 37.5
-        progBarArcPos: initialSpeedometerSize / 5.75
-        unit: "km/h"
-        unitOffset: initialSpeedometerSize / 5
-        gaugeNameOffset: initialSpeedometerSize / 2
-        unitTextSize: initialSpeedometerSize / 43
-        gaugeNameTextSize: initialSpeedometerSize / 30
+        // innerArcWidth : initialSpeedometerSize / 60
+        // innerArcPos : initialSpeedometerSize / 6.67
+        progressBarPos: 22.5
+        progressBarThickness: 38
+        // innerCircleSize: initialSpeedometerSize / 4.5
+        textBarSize: 10
+        // tickPosOffset: -initialSpeedometerSize / 50
+        textPosOffset: 20
+        // tickMarkLength: initialSpeedometerSize / 15
+        arcTextSize: 6
+        progBarArcPos: 42.5
+        unit: "%"
+        unitTextSize: 8
+        unitOffset: 40
+        gaugeNameOffset: 120
+        gaugeNameTextSize: 7.5
 
     }
 

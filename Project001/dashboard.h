@@ -17,21 +17,21 @@ class Dashboard : public QQuickPaintedItem
     Q_PROPERTY(qreal alignAngle READ getAlignAngle WRITE setAlignAngle NOTIFY alignAngleChanged)
     Q_PROPERTY(qreal lowestRange READ getLowestRange WRITE setLowestRange NOTIFY lowestRangeChanged)
     Q_PROPERTY(qreal highestRange READ getHighestRange WRITE setHighestRange NOTIFY highestRangeChanged)
-    Q_PROPERTY(int arcWidth READ getArcWidth WRITE setArcWidth NOTIFY arcWidthChanged)
+    // Q_PROPERTY(int arcWidth READ getArcWidth WRITE setArcWidth NOTIFY arcWidthChanged)
     Q_PROPERTY(QColor outerColor READ getOuterColor WRITE setOuterColor NOTIFY outerColorChanged)
     Q_PROPERTY(QColor innerColor READ getInnerColor WRITE setInnerColor NOTIFY innerColorChanged)
     Q_PROPERTY(QColor textColor READ getTextColor WRITE setTextColor NOTIFY textColorChanged)
     Q_PROPERTY(QColor backgroundColor READ getBackgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
-    Q_PROPERTY(int   innerArcWidth READ getInnerArcWidth WRITE setInnerArcWidth NOTIFY innerArcWidthChanged)
-    Q_PROPERTY(int   innerArcPos READ getInnerArcPos WRITE setInnerArcPos NOTIFY innerArcPosChanged)
+    // Q_PROPERTY(int   innerArcWidth READ getInnerArcWidth WRITE setInnerArcWidth NOTIFY innerArcWidthChanged)
+    // Q_PROPERTY(int   innerArcPos READ getInnerArcPos WRITE setInnerArcPos NOTIFY innerArcPosChanged)
     Q_PROPERTY(qreal progressBarPos READ getProgressBarPos WRITE setProgressBarPos NOTIFY progressBarPosChanged)
     Q_PROPERTY(qreal progressBarThickness READ getProgressBarThickness WRITE setProgressBarThickness NOTIFY progressBarThicknessChanged)
-    Q_PROPERTY(qreal innerCircleSize READ getInnerCircleSize WRITE setInnerCircleSize NOTIFY innerCircleSizeChanged)
+    // Q_PROPERTY(qreal innerCircleSize READ getInnerCircleSize WRITE setInnerCircleSize NOTIFY innerCircleSizeChanged)
     Q_PROPERTY(int   interval READ getInterval WRITE setInterval NOTIFY intervalChanged)
     Q_PROPERTY(qreal textBarSize READ getTextBarSize WRITE setTextBarSize NOTIFY textBarSizeChanged)
-    Q_PROPERTY(qreal tickPosOffset READ getTickPosOffset WRITE setTickPosOffset NOTIFY tickPosOffsetChanged)
+    // Q_PROPERTY(qreal tickPosOffset READ getTickPosOffset WRITE setTickPosOffset NOTIFY tickPosOffsetChanged)
     Q_PROPERTY(qreal textPosOffset READ getTextPosOffset WRITE setTextPosOffset NOTIFY textPosOffsetChanged)
-    Q_PROPERTY(qreal tickMarkLength READ getTickMarkLength WRITE setTickMarkLength NOTIFY tickMarkLengthChanged)
+    // Q_PROPERTY(qreal tickMarkLength READ getTickMarkLength WRITE setTickMarkLength NOTIFY tickMarkLengthChanged)
     Q_PROPERTY(qreal arcTextSize READ getArcTextSize WRITE setArcTextSize NOTIFY arcTextSizeChanged)
     Q_PROPERTY(qreal progBarArcPos READ getProgBarArcPos WRITE setProgBarArcPos NOTIFY progBarArcPosChanged)
     Q_PROPERTY(QString unit READ getUnit WRITE setUnit NOTIFY unitChanged)
@@ -54,22 +54,22 @@ public:
     qreal   getAlignAngle() const;
     qreal   getLowestRange() const;
     qreal   getHighestRange() const;
-    int     getArcWidth() const;
+    // int     getArcWidth() const;
     QColor  getOuterColor() const;
     QColor  getInnerColor() const;
     QColor  getTextColor() const;
     QColor  getBackgroundColor() const;
 
-    int     getInnerArcWidth() const;
-    int     getInnerArcPos() const;
+    // int     getInnerArcWidth() const;
+    // int     getInnerArcPos() const;
     qreal   getProgressBarPos() const;
     qreal   getProgressBarThickness() const;
-    qreal   getInnerCircleSize() const;
+    // qreal   getInnerCircleSize() const;
     int     getInterval() const;
     qreal   getTextBarSize() const;
-    qreal   getTickPosOffset() const;
+    // qreal   getTickPosOffset() const;
     qreal   getTextPosOffset() const;
-    qreal   getTickMarkLength() const;
+    // qreal   getTickMarkLength() const;
     qreal   getArcTextSize() const;
     qreal   getProgBarArcPos() const;
     QString getUnit() const;
@@ -90,22 +90,22 @@ public:
     void    setAlignAngle(const qreal &angle);
     void    setLowestRange(const qreal &lowestRange);
     void    setHighestRange(const qreal &highestRange);
-    void    setArcWidth(const int &arcWidth);
+    // void    setArcWidth(const int &arcWidth);
     void    setOuterColor(const QColor &outerColor);
     void    setInnerColor(const QColor &innerColor);
     void    setTextColor(const QColor &textColor);
     void    setBackgroundColor(const QColor &backgroundColor);
 
-    void    setInnerArcWidth(const int &InnerArcWidth);
-    void    setInnerArcPos(const int &InnerArcPos);
+    // void    setInnerArcWidth(const int &InnerArcWidth);
+    // void    setInnerArcPos(const int &InnerArcPos);
     void    setProgressBarPos(const qreal &ProgressBarPos);
     void    setProgressBarThickness(const qreal &ProgressBarThickness);
-    void    setInnerCircleSize(const qreal &InnerCircleSize);
+    // void    setInnerCircleSize(const qreal &InnerCircleSize);
     void    setInterval(const int &Interval);
     void    setTextBarSize(const qreal &TextBarSize);
-    void    setTickPosOffset(const qreal &TickPosOffset);
+    // void    setTickPosOffset(const qreal &TickPosOffset);
     void    setTextPosOffset(const qreal &TextPosOffset);
-    void    setTickMarkLength(const qreal &TickMarkLength);
+    // void    setTickMarkLength(const qreal &TickMarkLength);
     void    setArcTextSize(const qreal &ArcTextSize);
     void    setProgBarArcPos(const qreal &ProgBarArcPos);
     void    setUnit(const QString &unit);
@@ -121,8 +121,10 @@ public:
     void    drawBackgroundPixmap();
     void    drawNeedlePixmap();
 
-public slots:
 
+
+public slots:
+    void    handleUpdatePixmap();
 signals:
     void    speedometerSizeChanged();
     void    startAngleChanged();
@@ -156,6 +158,8 @@ signals:
     void    valChanged();
     void    valTextChanged();
     void    minorTicksChanged();
+
+    void    updatePixmap();
 
 private:
     qreal   m_val;

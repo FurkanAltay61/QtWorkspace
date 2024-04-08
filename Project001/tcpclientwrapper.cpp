@@ -235,7 +235,7 @@ void TcpClientWrapper::setRpmDuration(const qreal &_RpmDuration)
         return;
 
     m_RpmDuration = _RpmDuration;
-    qDebug()<< "m_RpmDuration :" << m_RpmDuration;
+    //qDebug()<< "m_RpmDuration :" << m_RpmDuration;
     emit rpmDurationChanged();
 }
 
@@ -318,7 +318,7 @@ void TcpClientWrapper::intakePressureDurationReceived(const qreal &_intakepressu
     setIntakePressureDuration(_intakepressureduration);
 }
 void TcpClientWrapper::rpmDurationReceived(const qreal &_rpmduration){
-    qDebug() << "Geldi :" << _rpmduration;
+    //qDebug() << "Geldi :" << _rpmduration;
     setRpmDuration(_rpmduration);
 }
 void TcpClientWrapper::speedDurationReceived(const qreal &_speedduration){

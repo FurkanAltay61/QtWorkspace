@@ -98,7 +98,7 @@ void TcpClient::processMessage(const QByteArray& message) {
                 m_EngineLoadStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
                 m_EngineLoadStruct->data = (100.0 * parsedstr[2].toInt(nullptr, 16)) / 255.0;
                 m_EngineLoadStruct->duration = m_EngineLoadStruct->currTime - m_EngineLoadStruct->prevTime;
-                qDebug() << "Engine load :" << m_EngineLoadStruct->data << "duration :" << m_EngineLoadStruct->duration;
+                //qDebug() << "Engine load :" << m_EngineLoadStruct->data << "duration :" << m_EngineLoadStruct->duration;
                 m_EngineLoadStruct->prevTime = m_EngineLoadStruct->currTime;
                 if(m_EngineLoadStruct->duration < 10000)
                 emit engineLoadDurationSent(m_EngineLoadStruct->duration);
@@ -107,7 +107,7 @@ void TcpClient::processMessage(const QByteArray& message) {
                 m_CoolantTempStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
                 m_CoolantTempStruct->data = parsedstr[2].toInt(nullptr, 16) - 40;
                 m_CoolantTempStruct->duration = m_CoolantTempStruct->currTime - m_CoolantTempStruct->prevTime;
-                qDebug() << "Coolant temperature :" << m_CoolantTempStruct->data << "°C" << "duration :" << m_CoolantTempStruct->duration;
+                //qDebug() << "Coolant temperature :" << m_CoolantTempStruct->data << "°C" << "duration :" << m_CoolantTempStruct->duration;
                 m_CoolantTempStruct->prevTime = m_CoolantTempStruct->currTime;
                 if(m_CoolantTempStruct->duration < 10000)
                 emit coolantTempDurationSent(m_CoolantTempStruct->duration);
@@ -116,7 +116,7 @@ void TcpClient::processMessage(const QByteArray& message) {
                 m_IntakePressStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
                 m_IntakePressStruct->data = parsedstr[2].toInt(nullptr, 16);
                 m_IntakePressStruct->duration = m_IntakePressStruct->currTime - m_IntakePressStruct->prevTime;
-                qDebug() << "Intake manifold absolute pressure :" << m_IntakePressStruct->data << "kPa" << "duration :" << m_IntakePressStruct->duration;
+                //qDebug() << "Intake manifold absolute pressure :" << m_IntakePressStruct->data << "kPa" << "duration :" << m_IntakePressStruct->duration;
                 m_IntakePressStruct->prevTime = m_IntakePressStruct->currTime;
                 if(m_IntakePressStruct->duration < 10000)
                 emit intakePressureDurationSent(m_IntakePressStruct->duration);
@@ -125,7 +125,7 @@ void TcpClient::processMessage(const QByteArray& message) {
                 m_RpmStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
                 m_RpmStruct->data = (256 * parsedstr[2].toInt(nullptr, 16) + parsedstr[3].toInt(nullptr, 16)) / 4.0;
                 m_RpmStruct->duration = m_RpmStruct->currTime - m_RpmStruct->prevTime;
-                qDebug() << "Engine rpm :" << m_RpmStruct->data << "rpm" << "duration :" << m_RpmStruct->duration;
+                //qDebug() << "Engine rpm :" << m_RpmStruct->data << "rpm" << "duration :" << m_RpmStruct->duration;
                 m_RpmStruct->prevTime = m_RpmStruct->currTime;
                 if(m_RpmStruct->duration < 10000)
                 emit rpmDurationSent(m_RpmStruct->duration);
@@ -134,7 +134,7 @@ void TcpClient::processMessage(const QByteArray& message) {
                 m_SpeedStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
                 m_SpeedStruct->data = parsedstr[2].toInt(nullptr, 16);
                 m_SpeedStruct->duration = m_SpeedStruct->currTime - m_SpeedStruct->prevTime;
-                qDebug() << "Vehicle speed :" << m_SpeedStruct->data << "km/h" << "duration :" << m_SpeedStruct->duration;
+                //qDebug() << "Vehicle speed :" << m_SpeedStruct->data << "km/h" << "duration :" << m_SpeedStruct->duration;
                 m_SpeedStruct->prevTime = m_SpeedStruct->currTime;
                 if(m_SpeedStruct->duration < 10000)
                 emit speedDurationSent(m_SpeedStruct->duration);
@@ -143,7 +143,7 @@ void TcpClient::processMessage(const QByteArray& message) {
                 m_IntakeTempStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
                 m_IntakeTempStruct->data = parsedstr[2].toInt(nullptr, 16) - 40;
                 m_IntakeTempStruct->duration = m_IntakeTempStruct->currTime - m_IntakeTempStruct->prevTime;
-                qDebug() << "Intake air temperature :" << m_IntakeTempStruct->data << "°C" << "duration :" << m_IntakeTempStruct->duration;
+                //qDebug() << "Intake air temperature :" << m_IntakeTempStruct->data << "°C" << "duration :" << m_IntakeTempStruct->duration;
                 m_IntakeTempStruct->prevTime = m_IntakeTempStruct->currTime;
                 if(m_IntakeTempStruct->duration < 10000)
                 emit intakeTempDurationSent(m_IntakeTempStruct->duration);
@@ -152,7 +152,7 @@ void TcpClient::processMessage(const QByteArray& message) {
                 m_FlowRateStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
                 m_FlowRateStruct->data = (256 * parsedstr[2].toInt(nullptr, 16) + parsedstr[3].toInt(nullptr, 16)) / 100.0;
                 m_FlowRateStruct->duration = m_FlowRateStruct->currTime - m_FlowRateStruct->prevTime;
-                qDebug() << "Mass air flow-rate :" << m_FlowRateStruct->data << "g/s" << "duration :" << m_FlowRateStruct->duration;
+                //qDebug() << "Mass air flow-rate :" << m_FlowRateStruct->data << "g/s" << "duration :" << m_FlowRateStruct->duration;
                 m_FlowRateStruct->prevTime = m_FlowRateStruct->currTime;
                 if(m_FlowRateStruct->duration < 10000)
                 emit mafDurationSent(m_FlowRateStruct->duration);
@@ -161,7 +161,7 @@ void TcpClient::processMessage(const QByteArray& message) {
                 m_ThrottlePosStruct->currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
                 m_ThrottlePosStruct->data = (100.0 * parsedstr[2].toInt(nullptr, 16)) / 255.0;
                 m_ThrottlePosStruct->duration = m_ThrottlePosStruct->currTime - m_ThrottlePosStruct->prevTime;
-                qDebug() << "Throttle position :" << m_ThrottlePosStruct->data << "duration :" << m_ThrottlePosStruct->duration;
+                //qDebug() << "Throttle position :" << m_ThrottlePosStruct->data << "duration :" << m_ThrottlePosStruct->duration;
                 m_ThrottlePosStruct->prevTime = m_ThrottlePosStruct->currTime;
                 if(m_ThrottlePosStruct->duration < 10000)
                 emit throttlePosDurationSent(m_ThrottlePosStruct->duration);
