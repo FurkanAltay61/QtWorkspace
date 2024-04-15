@@ -13,7 +13,7 @@ Window {
     color: "black"
     //visibility:  "FullScreen"
 
-    property int animationDuration : 1600
+    property int animationDuration : 500
 
     Shape {
         width: 1024
@@ -155,7 +155,7 @@ Window {
         val: tcpClient.rpm
         Behavior on val {
             PropertyAnimation {
-                duration : tcpClient.testMode ? tcpClient.sendingPeriod : tcpClient.rpm_duration
+                duration : tcpClient.rpm_duration
                 easing.type: Easing.Linear
                 // onDurationChanged: {
                 //     console.log("Duration changed to:", tcpClient.rpm_duration);
@@ -165,7 +165,7 @@ Window {
         valtext: tcpClient.speed
         Behavior on valtext {
             PropertyAnimation {
-                duration : tcpClient.testMode ? tcpClient.sendingPeriod : tcpClient.speed_duration
+                duration : tcpClient.speed_duration
                 easing.type: Easing.Linear
                 // onDurationChanged: {
                 //     console.log("Duration changed to:", tcpClient.rpm_duration);
@@ -227,6 +227,7 @@ Window {
                 easing.type: Easing.Linear
             }
         }
+        valtext: tcpClient.engineload
 //        arcWidth: arcWidth
         outerColor: outerColor
         innerColor: innerColor
@@ -263,6 +264,12 @@ Window {
         lowestRange: lowestRange
         highestRange: 120
         val: tcpClient.coolanttemp
+        Behavior on val {
+            PropertyAnimation {
+                duration : tcpClient.coolanttemp_duration
+                easing.type: Easing.Linear
+            }
+        }
         interval: 30
 //        arcWidth: initialSpeedometerSize / 60
         outerColor: outerColor
@@ -342,6 +349,12 @@ Window {
         highestRange: 255
         interval: 20
         val: tcpClient.intaketemp
+        Behavior on val {
+            PropertyAnimation {
+                duration : tcpClient.intaketemp_duration
+                easing.type: Easing.Linear
+            }
+        }
         // arcWidth: initialSpeedometerSize / 60
         outerColor: outerColor
         innerColor: innerColor

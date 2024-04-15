@@ -251,7 +251,7 @@ void Dashboard::paint(QPainter *painter){
     painter->setPen(pen);
     painter->drawText(rect.adjusted(m_TextBarSize, m_TextBarSize,
                                     -m_TextBarSize, -m_TextBarSize),
-                                    Qt::AlignCenter, QString::number((m_ValText),'f',1));
+                                    Qt::AlignCenter, QString::number((m_GaugeName == "RPM" ? m_ValText : m_Val),'f',1));
     painter->restore();
 
     // Apply transformations for needle
