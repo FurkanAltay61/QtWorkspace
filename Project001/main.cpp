@@ -8,6 +8,10 @@
 #include <QQmlContext>
 #include <tcpclientwrapper.h>
 
+#ifdef TEST_MODE
+#include <tcpserver.h>
+#endif
+
 int main(int argc, char *argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -16,9 +20,20 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
     Dashboard mydashboard;
+#ifdef TEST_MODE
+    TcpClient *client = new TcpClient("127.0.0.1", (quint16)35000);
+#else
     TcpClient *client = new TcpClient("192.168.0.10", (quint16)35000);
+#endif
     QThread clientThread;
     TcpClientWrapper *clientWrapper = new TcpClientWrapper(client);
+
+#ifdef TEST_MODE
+    TcpServer *server = new TcpServer;
+    QThread serverThread;
+    server->moveToThread(&serverThread);
+    serverThread.start();
+#endif
 
     qmlRegisterType<Dashboard>("Dashboardqml", 1, 0, "Dashboard");
 

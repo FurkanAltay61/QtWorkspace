@@ -18,23 +18,12 @@
 
 #include <QTcpSocket>
 #include <QTimer>
-#include <QObject>
-#include <chrono>
-#include <QStringList>
-#include <QByteArray>
-#include <QCoreApplication>
 #include <QDateTime>
-#include <memory>
-#include <cmath>
-#include <QThread>
 #include <QProcess>
-#include <QMutex>
-#include <QWaitCondition>
+#include <QMap>
+#include <QString>
 
-
-class Worker;
-
-//#define TEST_MODE
+#define TEST_MODE
 
 class TcpClient : public QObject {
     Q_OBJECT
@@ -47,24 +36,14 @@ public:
     struct Datapoint
     {
         uint64_t prevTime;
-        uint64_t currTime;
-        qreal duration;
         qreal    data;
     };
-
 
 private slots:
     void onConnected();
     void onReadyRead();
     void onError(QAbstractSocket::SocketError socketError);
-    void requestEngineLoad();
-    void requestCoolTemp();
-    void requestMap();
-    void requestRpm();
-    void requestSpeed();
-    void requestIat();
-    void requestMaf();
-    void requestThrotPos();
+    void updateData();
 
 public slots:
     void handleResetSignal();
@@ -97,15 +76,10 @@ private:
     QString serverIP;
     quint16 serverPort;
     QByteArray buffer;
-    QStringList datas{"0104\r", "0105\r", "010B\r", "010C\r",
-                     "010D\r", "010F\r", "0110\r", "0111\r"};
-
-    std::chrono::high_resolution_clock::time_point prevtime;
 
     void processMessage(const QByteArray& message);
     void writeData(const QString& data);
     void configureOBDII();
-    qreal m_counter;
 
     std::shared_ptr<Datapoint> m_EngineLoadStruct;
     std::shared_ptr<Datapoint> m_CoolantTempStruct;
@@ -116,20 +90,24 @@ private:
     std::shared_ptr<Datapoint> m_FlowRateStruct;
     std::shared_ptr<Datapoint> m_ThrottlePosStruct;
 
-    QTimer *engineLoadTimer;
-    QTimer *coolTempTimer;
-    QTimer *mapTimer;
-    QTimer *rpmTimer;
-    QTimer *speedTimer;
-    QTimer *iatTimer;
-    QTimer *mafTimer;
-    QTimer *throtPosTimer;
+    QTimer *timer;
 
-    void setupTimers();
-    void startTimers();
-    void stopTimers();
-    void deleteTimers();
+    struct Request {
+        QString type;
+        QString command;
+        qint64 lastRequested;
+        int interval;
+        int retryCount;
+        bool isSent;
 
+        Request(QString t, QString cmd, qint64 lr, int i, int rtrcount) :
+            type(t), command(cmd), lastRequested(lr), interval(i), retryCount(rtrcount) {
+            isSent = true;
+        }
+    };
+
+    std::vector<Request> requests;
+    size_t currentRequestIndex = 0; // Tracks the current request index
 };
 
 #endif // TCPCLIENT_H
